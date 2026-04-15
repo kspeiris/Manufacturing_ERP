@@ -1,17 +1,26 @@
-<Window x:Class="ManufacturingERP.Desktop.Views.RouteDialogWindow" xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation" xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml" Title="Route" Height="430" Width="460" WindowStartupLocation="CenterOwner" ResizeMode="NoResize">
-    <Grid Margin="20">
-        <Grid.RowDefinitions><RowDefinition Height="*"/><RowDefinition Height="Auto"/></Grid.RowDefinitions>
+<Window x:Class="ManufacturingERP.Desktop.Views.RouteDialogWindow" xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation" xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml" Title="Route" Height="540" Width="520" WindowStartupLocation="CenterOwner" ResizeMode="NoResize" Background="{StaticResource AppBackgroundBrush}">
+    <Border Margin="20" Style="{StaticResource ViewRootCard}">
         <Grid>
-            <Grid.RowDefinitions><RowDefinition Height="Auto"/><RowDefinition Height="Auto"/><RowDefinition Height="Auto"/><RowDefinition Height="Auto"/><RowDefinition Height="Auto"/></Grid.RowDefinitions>
-            <TextBlock Text="Code"/><TextBox Margin="0,20,0,8" Text="{Binding Code}" />
-            <TextBlock Grid.Row="1" Text="Name"/><TextBox Grid.Row="1" Margin="0,20,0,8" Text="{Binding Name}" />
-            <TextBlock Grid.Row="2" Text="Territory"/><TextBox Grid.Row="2" Margin="0,20,0,8" Text="{Binding Territory}" />
-            <TextBlock Grid.Row="3" Text="Notes"/><TextBox Grid.Row="3" Margin="0,20,0,8" Height="80" AcceptsReturn="True" TextWrapping="Wrap" Text="{Binding Notes}" />
-            <CheckBox Grid.Row="4" Content="Active" IsChecked="{Binding IsActive}" Margin="0,16,0,0"/>
+            <Grid.RowDefinitions><RowDefinition Height="*"/><RowDefinition Height="Auto"/></Grid.RowDefinitions>
+            <ScrollViewer VerticalScrollBarVisibility="Auto">
+                <StackPanel>
+                    <TextBlock Text="Route" Style="{StaticResource PageTitleText}" />
+                    <TextBlock Text="Define route identity, territory, and operating notes with consistent spacing." Style="{StaticResource PageSubtitleText}" Margin="0,0,0,20" />
+                    <TextBlock Text="Code" Style="{StaticResource FormLabel}" />
+                    <TextBox Text="{Binding Code}" />
+                    <TextBlock Text="Name" Style="{StaticResource FormLabel}" Margin="0,12,0,6" />
+                    <TextBox Text="{Binding Name}" />
+                    <TextBlock Text="Territory" Style="{StaticResource FormLabel}" Margin="0,12,0,6" />
+                    <TextBox Text="{Binding Territory}" />
+                    <TextBlock Text="Notes" Style="{StaticResource FormLabel}" Margin="0,12,0,6" />
+                    <TextBox Height="96" AcceptsReturn="True" TextWrapping="Wrap" Text="{Binding Notes}" />
+                    <CheckBox Content="Active" IsChecked="{Binding IsActive}" />
+                </StackPanel>
+            </ScrollViewer>
+            <WrapPanel Grid.Row="1" HorizontalAlignment="Right" Margin="0,20,0,0">
+                <Button Content="Save" Width="110" Style="{StaticResource PrimaryActionButton}" Click="Save_Click" />
+                <Button Content="Cancel" Width="110" Style="{StaticResource SecondaryActionButton}" Margin="0" Click="Cancel_Click" />
+            </WrapPanel>
         </Grid>
-        <StackPanel Grid.Row="1" Orientation="Horizontal" HorizontalAlignment="Right">
-            <Button Content="Save" Width="100" Margin="0,12,8,0" Click="Save_Click"/>
-            <Button Content="Cancel" Width="100" Margin="0,12,0,0" Click="Cancel_Click"/>
-        </StackPanel>
-    </Grid>
+    </Border>
 </Window>

@@ -2679,7 +2679,7 @@
     ]
   },
   "packageFolders": {
-    "c:\\Projects\\ManufacturingERP\\.nuget\\packages": {}
+    "C:\\Users\\kavin\\.nuget\\packages\\": {}
   },
   "project": {
     "version": "1.0.0",
@@ -2687,7 +2687,7 @@
       "projectUniqueName": "C:\\Projects\\ManufacturingERP\\src\\ManufacturingERP.Infrastructure\\ManufacturingERP.Infrastructure.csproj",
       "projectName": "ManufacturingERP.Infrastructure",
       "projectPath": "C:\\Projects\\ManufacturingERP\\src\\ManufacturingERP.Infrastructure\\ManufacturingERP.Infrastructure.csproj",
-      "packagesPath": "c:\\Projects\\ManufacturingERP\\.nuget\\packages",
+      "packagesPath": "C:\\Users\\kavin\\.nuget\\packages\\",
       "outputPath": "C:\\Projects\\ManufacturingERP\\src\\ManufacturingERP.Infrastructure\\obj\\",
       "projectStyle": "PackageReference",
       "configFilePaths": [

@@ -8,14 +8,14 @@
             <StackPanel>
                 <WrapPanel Margin="0,0,0,12">
                     <TextBlock Text="Report Center" Style="{StaticResource CardTitleText}" Margin="0,0,8,0" />
-                    <Button Content="Refresh" Command="{Binding LoadCommand}" />
+                    <Button Content="Refresh" Command="{Binding LoadCommand}" Style="{StaticResource SecondaryActionButton}" Margin="0" />
                 </WrapPanel>
                 <TextBlock Text="Exported Files" Style="{StaticResource FormLabel}" />
                 <ListBox x:Name="ExportFilesList" ItemsSource="{Binding ExportFiles}" SelectedItem="{Binding SelectedFilePath}" SelectionChanged="ExportFilesList_OnSelectionChanged" Height="220" Margin="0,0,0,12" />
                 <TextBlock Text="Templates" Style="{StaticResource FormLabel}" />
                 <ListBox ItemsSource="{Binding TemplateFiles}" Height="180" />
-                <Button Content="Select File" Command="{Binding OpenSelectedFileCommand}" Margin="0,12,0,0" />
-                <TextBlock Text="{Binding StatusMessage}" Margin="0,12,0,0" Foreground="#2563EB" TextWrapping="Wrap"/>
+                <Button Content="Select File" Command="{Binding OpenSelectedFileCommand}" Style="{StaticResource PrimaryActionButton}" Margin="0,12,0,0" />
+                <TextBlock Text="{Binding StatusMessage}" Style="{StaticResource StatusMessageText}" />
             </StackPanel>
         </Border>
         <Border Grid.Column="1" Style="{StaticResource SectionCard}">
