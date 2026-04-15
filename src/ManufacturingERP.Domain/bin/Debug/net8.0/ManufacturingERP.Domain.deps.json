@@ -1,0 +1,39 @@
+{
+  "runtimeTarget": {
+    "name": ".NETCoreApp,Version=v8.0",
+    "signature": ""
+  },
+  "compilationOptions": {},
+  "targets": {
+    ".NETCoreApp,Version=v8.0": {
+      "ManufacturingERP.Domain/1.0.0": {
+        "dependencies": {
+          "ManufacturingERP.Shared": "1.0.0"
+        },
+        "runtime": {
+          "ManufacturingERP.Domain.dll": {}
+        }
+      },
+      "ManufacturingERP.Shared/1.0.0": {
+        "runtime": {
+          "ManufacturingERP.Shared.dll": {
+            "assemblyVersion": "1.0.0.0",
+            "fileVersion": "1.0.0.0"
+          }
+        }
+      }
+    }
+  },
+  "libraries": {
+    "ManufacturingERP.Domain/1.0.0": {
+      "type": "project",
+      "serviceable": false,
+      "sha512": ""
+    },
+    "ManufacturingERP.Shared/1.0.0": {
+      "type": "project",
+      "serviceable": false,
+      "sha512": ""
+    }
+  }
+}

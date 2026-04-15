@@ -1,0 +1,15 @@
+C:\Projects\ManufacturingERP\src\ManufacturingERP.Domain\bin\Debug\net8.0\ManufacturingERP.Domain.deps.json
+C:\Projects\ManufacturingERP\src\ManufacturingERP.Domain\bin\Debug\net8.0\ManufacturingERP.Domain.dll
+C:\Projects\ManufacturingERP\src\ManufacturingERP.Domain\bin\Debug\net8.0\ManufacturingERP.Domain.pdb
+C:\Projects\ManufacturingERP\src\ManufacturingERP.Domain\bin\Debug\net8.0\ManufacturingERP.Shared.dll
+C:\Projects\ManufacturingERP\src\ManufacturingERP.Domain\bin\Debug\net8.0\ManufacturingERP.Shared.pdb
+C:\Projects\ManufacturingERP\src\ManufacturingERP.Domain\obj\Debug\net8.0\ManufacturingERP.Domain.csproj.AssemblyReference.cache
+C:\Projects\ManufacturingERP\src\ManufacturingERP.Domain\obj\Debug\net8.0\ManufacturingERP.Domain.GeneratedMSBuildEditorConfig.editorconfig
+C:\Projects\ManufacturingERP\src\ManufacturingERP.Domain\obj\Debug\net8.0\ManufacturingERP.Domain.AssemblyInfoInputs.cache
+C:\Projects\ManufacturingERP\src\ManufacturingERP.Domain\obj\Debug\net8.0\ManufacturingERP.Domain.AssemblyInfo.cs
+C:\Projects\ManufacturingERP\src\ManufacturingERP.Domain\obj\Debug\net8.0\ManufacturingERP.Domain.csproj.CoreCompileInputs.cache
+C:\Projects\ManufacturingERP\src\ManufacturingERP.Domain\obj\Debug\net8.0\Manufact.A44397ED.Up2Date
+C:\Projects\ManufacturingERP\src\ManufacturingERP.Domain\obj\Debug\net8.0\ManufacturingERP.Domain.dll
+C:\Projects\ManufacturingERP\src\ManufacturingERP.Domain\obj\Debug\net8.0\refint\ManufacturingERP.Domain.dll
+C:\Projects\ManufacturingERP\src\ManufacturingERP.Domain\obj\Debug\net8.0\ManufacturingERP.Domain.pdb
+C:\Projects\ManufacturingERP\src\ManufacturingERP.Domain\obj\Debug\net8.0\ref\ManufacturingERP.Domain.dll

@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Report ScriptLanguage="CSharp">
+  <Dictionary/>
+  <ReportPage Name="Page1">
+    <ReportTitleBand Name="ReportTitle1" Width="718.2" Height="56.7">
+      <TextObject Name="Text1" Left="18.9" Top="9.45" Width="340.2" Height="28.35" Text="Purchase Order Template" Font="Segoe UI, 18pt, style=Bold"/>
+    </ReportTitleBand>
+  </ReportPage>
+</Report>

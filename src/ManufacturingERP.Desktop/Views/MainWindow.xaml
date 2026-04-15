@@ -1,0 +1,85 @@
+<Window x:Class="ManufacturingERP.Desktop.Views.MainWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:vm="clr-namespace:ManufacturingERP.Desktop.ViewModels"
+        xmlns:views="clr-namespace:ManufacturingERP.Desktop.Views"
+        Title="Manufacturing ERP" Height="920" Width="1620" WindowStartupLocation="CenterScreen"
+        Background="#0F172A">
+    <Window.Resources>
+        <DataTemplate DataType="{x:Type vm:DashboardViewModel}"><views:DashboardView /></DataTemplate>
+        <DataTemplate DataType="{x:Type vm:ProductsViewModel}"><views:ProductsView /></DataTemplate>
+        <DataTemplate DataType="{x:Type vm:CustomersViewModel}"><views:CustomersView /></DataTemplate>
+        <DataTemplate DataType="{x:Type vm:SuppliersViewModel}"><views:SuppliersView /></DataTemplate>
+        <DataTemplate DataType="{x:Type vm:VehiclesViewModel}"><views:VehiclesView /></DataTemplate>
+        <DataTemplate DataType="{x:Type vm:WarehousesViewModel}"><views:WarehousesView /></DataTemplate>
+        <DataTemplate DataType="{x:Type vm:RoutesViewModel}"><views:RoutesView /></DataTemplate>
+        <DataTemplate DataType="{x:Type vm:VehicleSalesViewModel}"><views:VehicleSalesView /></DataTemplate>
+        <DataTemplate DataType="{x:Type vm:PosSalesViewModel}"><views:PosSalesView /></DataTemplate>
+        <DataTemplate DataType="{x:Type vm:CollectionsViewModel}"><views:CollectionsView /></DataTemplate>
+        <DataTemplate DataType="{x:Type vm:MobileSyncViewModel}"><views:MobileSyncView /></DataTemplate>
+        <DataTemplate DataType="{x:Type vm:ProcurementViewModel}"><views:ProcurementView /></DataTemplate>
+        <DataTemplate DataType="{x:Type vm:Phase3ProcurementViewModel}"><views:Phase3ProcurementView /></DataTemplate>
+        <DataTemplate DataType="{x:Type vm:SupplierPaymentsViewModel}"><views:SupplierPaymentsView /></DataTemplate>
+        <DataTemplate DataType="{x:Type vm:WarehouseViewModel}"><views:WarehouseView /></DataTemplate>
+        <DataTemplate DataType="{x:Type vm:ProductionViewModel}"><views:ProductionView /></DataTemplate>
+        <DataTemplate DataType="{x:Type vm:ProductionCostingViewModel}"><views:ProductionCostingView /></DataTemplate>
+        <DataTemplate DataType="{x:Type vm:AccountingViewModel}"><views:AccountingView /></DataTemplate>
+        <DataTemplate DataType="{x:Type vm:LedgersViewModel}"><views:LedgersView /></DataTemplate>
+        <DataTemplate DataType="{x:Type vm:ReportsViewModel}"><views:ReportsView /></DataTemplate>
+        <DataTemplate DataType="{x:Type vm:ReportViewerViewModel}"><views:ReportViewerView /></DataTemplate>
+        <DataTemplate DataType="{x:Type vm:UserManagementViewModel}"><views:UserManagementView /></DataTemplate>
+        <DataTemplate DataType="{x:Type vm:AuditLogsViewModel}"><views:AuditLogsView /></DataTemplate>
+    </Window.Resources>
+
+    <Grid>
+        <Grid.ColumnDefinitions><ColumnDefinition Width="330" /><ColumnDefinition Width="*" /></Grid.ColumnDefinitions>
+
+        <Border Grid.Column="0" Margin="18" CornerRadius="24" Background="#111827" Padding="22">
+            <DockPanel>
+                <StackPanel DockPanel.Dock="Top">
+                    <TextBlock Text="Manufacturing ERP" Foreground="White" FontSize="26" FontWeight="Bold" />
+                    <TextBlock Text="{Binding CurrentUserDisplay}" Foreground="#94A3B8" Margin="0,4,0,16" />
+                </StackPanel>
+
+                <ScrollViewer VerticalScrollBarVisibility="Auto">
+                    <StackPanel>
+                        <TextBlock Style="{StaticResource SidebarSectionText}" Text="Sales &amp; Distribution" />
+                        <Button Content="Dashboard" Style="{StaticResource SidebarButton}" Command="{Binding ShowDashboardCommand}" />
+                        <Button Content="Products" Style="{StaticResource SidebarButton}" Command="{Binding ShowProductsCommand}" Visibility="{Binding CanManageSales, Converter={StaticResource BoolToVisibilityConverter}}" />
+                        <Button Content="Customers" Style="{StaticResource SidebarButton}" Command="{Binding ShowCustomersCommand}" Visibility="{Binding CanManageSales, Converter={StaticResource BoolToVisibilityConverter}}" />
+                        <Button Content="Vehicle Sales" Style="{StaticResource SidebarButton}" Command="{Binding ShowVehicleSalesCommand}" Visibility="{Binding CanManageSales, Converter={StaticResource BoolToVisibilityConverter}}" />
+                        <Button Content="POS Sales" Style="{StaticResource SidebarButton}" Command="{Binding ShowPosSalesCommand}" Visibility="{Binding CanManageSales, Converter={StaticResource BoolToVisibilityConverter}}" />
+                        <Button Content="Collections" Style="{StaticResource SidebarButton}" Command="{Binding ShowCollectionsCommand}" Visibility="{Binding CanManageSales, Converter={StaticResource BoolToVisibilityConverter}}" />
+
+                        <TextBlock Style="{StaticResource SidebarSectionText}" Text="Master Data" />
+                        <Button Content="Suppliers" Style="{StaticResource SidebarButton}" Command="{Binding ShowSuppliersCommand}" Visibility="{Binding CanManageAdmin, Converter={StaticResource BoolToVisibilityConverter}}" />
+                        <Button Content="Vehicles" Style="{StaticResource SidebarButton}" Command="{Binding ShowVehiclesCommand}" Visibility="{Binding CanManageAdmin, Converter={StaticResource BoolToVisibilityConverter}}" />
+                        <Button Content="Warehouses" Style="{StaticResource SidebarButton}" Command="{Binding ShowWarehousesCommand}" Visibility="{Binding CanManageAdmin, Converter={StaticResource BoolToVisibilityConverter}}" />
+                        <Button Content="Routes" Style="{StaticResource SidebarButton}" Command="{Binding ShowRoutesCommand}" Visibility="{Binding CanManageAdmin, Converter={StaticResource BoolToVisibilityConverter}}" />
+
+                        <TextBlock Style="{StaticResource SidebarSectionText}" Text="Supply &amp; Production" />
+                        <Button Content="Procurement" Style="{StaticResource SidebarButton}" Command="{Binding ShowProcurementCommand}" Visibility="{Binding CanManageAdmin, Converter={StaticResource BoolToVisibilityConverter}}" />
+                        <Button Content="Supplier Invoices &amp; Returns" Style="{StaticResource SidebarButton}" Command="{Binding ShowSupplierFinanceCommand}" Visibility="{Binding CanManageAccounting, Converter={StaticResource BoolToVisibilityConverter}}" />
+                        <Button Content="Supplier Payments" Style="{StaticResource SidebarButton}" Command="{Binding ShowSupplierPaymentsCommand}" Visibility="{Binding CanManageAccounting, Converter={StaticResource BoolToVisibilityConverter}}" />
+                        <Button Content="Warehouse" Style="{StaticResource SidebarButton}" Command="{Binding ShowWarehouseCommand}" Visibility="{Binding CanManageWarehouse, Converter={StaticResource BoolToVisibilityConverter}}" />
+                        <Button Content="Production" Style="{StaticResource SidebarButton}" Command="{Binding ShowProductionCommand}" Visibility="{Binding CanManageProduction, Converter={StaticResource BoolToVisibilityConverter}}" />
+                        <Button Content="Production Costing" Style="{StaticResource SidebarButton}" Command="{Binding ShowProductionCostingCommand}" Visibility="{Binding CanManageProduction, Converter={StaticResource BoolToVisibilityConverter}}" />
+                        <Button Content="Mobile Sync" Style="{StaticResource SidebarButton}" Command="{Binding ShowMobileSyncCommand}" Visibility="{Binding CanManageSales, Converter={StaticResource BoolToVisibilityConverter}}" />
+
+                        <TextBlock Style="{StaticResource SidebarSectionText}" Text="Finance &amp; Admin" />
+                        <Button Content="Accounting" Style="{StaticResource SidebarButton}" Command="{Binding ShowAccountingCommand}" Visibility="{Binding CanManageAccounting, Converter={StaticResource BoolToVisibilityConverter}}" />
+                        <Button Content="Ledgers" Style="{StaticResource SidebarButton}" Command="{Binding ShowLedgersCommand}" Visibility="{Binding CanManageAccounting, Converter={StaticResource BoolToVisibilityConverter}}" />
+                        <Button Content="Reports" Style="{StaticResource SidebarButton}" Command="{Binding ShowReportsCommand}" Visibility="{Binding CanViewReports, Converter={StaticResource BoolToVisibilityConverter}}" />
+                        <Button Content="Report Center" Style="{StaticResource SidebarButton}" Command="{Binding ShowReportViewerCommand}" Visibility="{Binding CanViewReports, Converter={StaticResource BoolToVisibilityConverter}}" />
+                        <Button Content="Users" Style="{StaticResource SidebarButton}" Command="{Binding ShowUsersCommand}" Visibility="{Binding CanManageAdmin, Converter={StaticResource BoolToVisibilityConverter}}" />
+                        <Button Content="Audit Logs" Style="{StaticResource SidebarButton}" Command="{Binding ShowAuditLogsCommand}" Visibility="{Binding CanManageAdmin, Converter={StaticResource BoolToVisibilityConverter}}" />
+                    </StackPanel>
+                </ScrollViewer>
+            </DockPanel>
+        </Border>
+
+        <Grid Grid.Column="1" Background="#E5E7EB">
+            <ContentControl Content="{Binding CurrentView}" Margin="18" />
+        </Grid>
+    </Grid>
+</Window>

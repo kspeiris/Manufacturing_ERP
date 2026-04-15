@@ -1,0 +1,197 @@
+using ManufacturingERP.Application.Services;
+using ManufacturingERP.Domain.Entities;
+using ManufacturingERP.Domain.Enums;
+using ManufacturingERP.Shared.Constants;
+
+namespace ManufacturingERP.Infrastructure.Persistence;
+
+public static class DbSeeder
+{
+    public static async Task SeedAsync(AppDbContext db)
+    {
+        var hasher = new PasswordHasherService();
+
+        if (!db.Users.Any())
+        {
+            db.Users.AddRange(
+                new User { Username = AppConstants.DefaultAdminUser, PasswordHash = hasher.Hash(AppConstants.DefaultAdminPassword), FullName = "System Administrator", Role = UserRole.Admin },
+                new User { Username = "manager", PasswordHash = hasher.Hash("1234"), FullName = "Operations Manager", Role = UserRole.Manager },
+                new User { Username = "accounts", PasswordHash = hasher.Hash("1234"), FullName = "Accounts User", Role = UserRole.Accounts },
+                new User { Username = "sales", PasswordHash = hasher.Hash("1234"), FullName = "Sales User", Role = UserRole.Sales }
+            );
+        }
+
+
+        if (!db.Accounts.Any())
+        {
+            db.Accounts.AddRange(
+                new Account { AccountCode = "1000", AccountName = "Cash", AccountType = "Asset" },
+                new Account { AccountCode = "1100", AccountName = "Accounts Receivable", AccountType = "Asset" },
+                new Account { AccountCode = "1200", AccountName = "Inventory", AccountType = "Asset" },
+                new Account { AccountCode = "2000", AccountName = "Accounts Payable", AccountType = "Liability" },
+                new Account { AccountCode = "3000", AccountName = "Capital", AccountType = "Equity" },
+                new Account { AccountCode = "4000", AccountName = "Sales Revenue", AccountType = "Revenue" },
+                new Account { AccountCode = "5000", AccountName = "Cost of Sales", AccountType = "Cost" },
+                new Account { AccountCode = "6000", AccountName = "Operating Expenses", AccountType = "Expense" }
+            );
+        }
+
+        if (!db.ProductCategories.Any())
+        {
+            var fg = new ProductCategory { Name = "Finished Goods" };
+            var rm = new ProductCategory { Name = "Raw Materials" };
+            db.ProductCategories.AddRange(fg, rm);
+            await db.SaveChangesAsync();
+
+            db.Products.AddRange(
+                new Product { Code = "FG-001", Name = "Sample Product A", ProductCategoryId = fg.Id, CostPrice = 100, SellingPrice = 140, Unit = "PCS" },
+                new Product { Code = "FG-002", Name = "Sample Product B", ProductCategoryId = fg.Id, CostPrice = 80, SellingPrice = 120, Unit = "PCS" },
+                new Product { Code = "RM-001", Name = "Raw Material X", ProductCategoryId = rm.Id, CostPrice = 30, SellingPrice = 0, Unit = "KG" },
+                new Product { Code = "RM-002", Name = "Packing Material Y", ProductCategoryId = rm.Id, CostPrice = 10, SellingPrice = 0, Unit = "PCS" }
+            );
+        }
+
+        if (!db.RoutePlans.Any())
+            db.RoutePlans.AddRange(
+                new RoutePlan { Code = "R001", Name = "Colombo Town Route", Territory = "Colombo" },
+                new RoutePlan { Code = "R002", Name = "Gampaha Route", Territory = "Gampaha" }
+            );
+
+        if (!db.Customers.Any())
+            db.Customers.AddRange(
+                new Customer { CustomerCode = "C001", ShopName = "Nimal Stores", OwnerName = "Nimal", Route = "Colombo Town Route", Address = "Colombo", ContactNumber = "0771234567", CreditLimit = 50000, OutstandingBalance = 18000 },
+                new Customer { CustomerCode = "C002", ShopName = "Kamal Traders", OwnerName = "Kamal", Route = "Gampaha Route", Address = "Gampaha", ContactNumber = "0777654321", CreditLimit = 40000, OutstandingBalance = 9500 }
+            );
+
+        if (!db.Suppliers.Any())
+            db.Suppliers.AddRange(
+                new Supplier { SupplierCode = "S001", Name = "ABC Raw Materials", ContactNumber = "0112233445", Address = "Colombo" },
+                new Supplier { SupplierCode = "S002", Name = "Premier Packaging", ContactNumber = "0116677889", Address = "Ja-Ela" }
+            );
+
+        if (!db.Vehicles.Any())
+            db.Vehicles.Add(new Vehicle { VehicleNumber = "CAB-1234", Description = "Van 01", DriverName = "Sunil", SalesRepName = "Kasun" });
+
+        if (!db.Warehouses.Any())
+        {
+            db.Warehouses.AddRange(
+                new Warehouse { Name = "Main Warehouse", Location = "Factory Premises" },
+                new Warehouse { Name = "Transit Warehouse", Location = "Distribution Yard" }
+            );
+            await db.SaveChangesAsync();
+        }
+
+        await db.SaveChangesAsync();
+
+        if (!db.StockBalances.Any())
+        {
+            var warehouseId = db.Warehouses.First().Id;
+            foreach (var product in db.Products)
+                db.StockBalances.Add(new StockBalance { ProductId = product.Id, WarehouseId = warehouseId, QuantityOnHand = product.Code.StartsWith("RM-") ? 500 : 250 });
+        }
+
+        if (!db.BomHeaders.Any())
+        {
+            var finished = db.Products.First(x => x.Code == "FG-001");
+            var rawX = db.Products.First(x => x.Code == "RM-001");
+            var packY = db.Products.First(x => x.Code == "RM-002");
+            db.BomHeaders.Add(new BomHeader
+            {
+                ProductId = finished.Id,
+                Version = "V1",
+                Lines = new List<BomLine>
+                {
+                    new() { MaterialProductId = rawX.Id, QuantityRequired = 2.50m },
+                    new() { MaterialProductId = packY.Id, QuantityRequired = 1.00m }
+                }
+            });
+        }
+
+        if (!db.ExpenseEntries.Any())
+            db.ExpenseEntries.Add(new ExpenseEntry { ExpenseDate = DateTime.Today, ExpenseType = "Fuel", Amount = 8500, Description = "Route vehicle fuel" });
+
+        if (!db.JournalEntries.Any())
+            if (!db.ProductionOrders.Any())
+            db.ProductionOrders.Add(new ProductionOrder { OrderNo = "PROD-SEED-001", OrderDate = DateTime.Today, FinishedProductId = db.Products.First(x => x.Code == "FG-001").Id, PlannedQuantity = 100, ProducedQuantity = 100, MaterialCost = 5000, LaborCost = 1200, OverheadCost = 800, Status = "Completed" });
+
+        db.JournalEntries.Add(new JournalEntry
+            {
+                EntryNo = "JV-OPEN-001",
+                EntryDate = DateTime.Today,
+                Description = "Opening capital",
+                TotalDebit = 100000,
+                TotalCredit = 100000,
+                Lines = new List<JournalLine>
+                {
+                    new() { AccountCode = "1000", AccountName = "Cash", Debit = 100000, Credit = 0 },
+                    new() { AccountCode = "3000", AccountName = "Capital", Debit = 0, Credit = 100000 }
+                }
+            });
+
+        await db.SaveChangesAsync();
+
+        if (!db.SupplierInvoices.Any())
+        {
+            var supplier = db.Suppliers.First();
+            db.SupplierInvoices.Add(new SupplierInvoice
+            {
+                InvoiceNo = "SINV-0001",
+                InvoiceDate = DateTime.Today,
+                SupplierId = supplier.Id,
+                TotalAmount = 25000,
+                PaidAmount = 5000,
+                BalanceAmount = 20000,
+                DueDate = DateTime.Today.AddDays(14),
+                Status = "Open"
+            });
+        }
+
+        if (!db.SupplierPayments.Any())
+        {
+            var supplier = db.Suppliers.First();
+            db.SupplierPayments.Add(new SupplierPayment
+            {
+                PaymentNo = "SPAY-0001",
+                PaymentDate = DateTime.Today,
+                SupplierId = supplier.Id,
+                ReferenceInvoiceNo = "SINV-0001",
+                Amount = 5000,
+                PaymentMethod = "Cash",
+                Notes = "Opening sample supplier payment"
+            });
+        }
+
+        if (!db.CollectionEntries.Any())
+        {
+            var customer = db.Customers.First();
+            db.CollectionEntries.Add(new CollectionEntry
+            {
+                CustomerId = customer.Id,
+                Amount = 5000,
+                ReferenceNo = "RCPT-0001",
+                Notes = "Opening sample collection",
+                CollectionDate = DateTime.Now
+            });
+        }
+
+        if (!db.SystemReports.Any())
+            db.SystemReports.AddRange(
+                new SystemReport { ReportCode = "RPT-SALES", ReportName = "Sales Register", ReportType = "FastReport-Ready", TemplatePath = "Reports/Templates/SalesRegister.frx" },
+                new SystemReport { ReportCode = "RPT-PO", ReportName = "Purchase Order Register", ReportType = "FastReport-Ready", TemplatePath = "Reports/Templates/PurchaseOrders.frx" },
+                new SystemReport { ReportCode = "RPT-INV", ReportName = "Invoice Print", ReportType = "FastReport-Ready", TemplatePath = "Reports/Templates/Invoice.frx" }
+            );
+
+        if (!db.AuditLogs.Any())
+            db.AuditLogs.Add(new AuditLog
+            {
+                UserId = db.Users.First().Id,
+                Action = "Seed",
+                EntityName = "Database",
+                EntityKey = "Init",
+                NewValues = "Initial sample data created",
+                ActionAtUtc = DateTime.UtcNow
+            });
+
+        await db.SaveChangesAsync();
+    }
+}

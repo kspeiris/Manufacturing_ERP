@@ -1,0 +1,35 @@
+<UserControl x:Class="ManufacturingERP.Desktop.Views.MobileSyncView"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes">
+    <Grid>
+        <Grid.ColumnDefinitions><ColumnDefinition Width="1*"/><ColumnDefinition Width="2*"/></Grid.ColumnDefinitions>
+        <Border Grid.Column="0" Style="{StaticResource SectionCard}" Margin="0,0,16,0">
+            <StackPanel>
+                <TextBlock Text="Vehicle Mobile Sync" Style="{StaticResource CardTitleText}" />
+                <TextBlock Text="Device ID" Style="{StaticResource FormLabel}" />
+                <TextBox Text="{Binding DeviceId}" />
+                <WrapPanel Margin="0,16,0,0">
+                    <Button Content="Run Sync" Command="{Binding RunSyncCommand}" Margin="0,0,8,0" />
+                    <Button Content="Refresh" Command="{Binding LoadCommand}" />
+                </WrapPanel>
+                <TextBlock Text="{Binding StatusMessage}" Margin="0,12,0,0" Foreground="#2563EB" />
+            </StackPanel>
+        </Border>
+        <Border Grid.Column="1" Style="{StaticResource SectionCard}">
+            <DockPanel>
+                <TextBlock Text="Sync Log" Style="{StaticResource CardTitleText}" DockPanel.Dock="Top" />
+                <DataGrid ItemsSource="{Binding SyncLogs}" AutoGenerateColumns="False" CanUserAddRows="False">
+                    <DataGrid.Columns>
+                        <DataGridTextColumn Header="Type" Binding="{Binding SyncType}" Width="140" />
+                        <DataGridTextColumn Header="Device" Binding="{Binding DeviceId}" Width="140" />
+                        <DataGridTextColumn Header="Started" Binding="{Binding SyncStartedAt}" Width="170" />
+                        <DataGridTextColumn Header="Completed" Binding="{Binding SyncCompletedAt}" Width="170" />
+                        <DataGridTextColumn Header="Status" Binding="{Binding Status}" Width="100" />
+                        <DataGridTextColumn Header="Notes" Binding="{Binding Notes}" Width="*" />
+                    </DataGrid.Columns>
+                </DataGrid>
+            </DockPanel>
+        </Border>
+    </Grid>
+</UserControl>

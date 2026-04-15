@@ -1,0 +1,66 @@
+<UserControl x:Class="ManufacturingERP.Desktop.Views.VehicleSalesView"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes">
+    <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="*" />
+        </Grid.RowDefinitions>
+
+        <TextBlock Text="Vehicle Sales Invoice" FontSize="28" FontWeight="Bold" Margin="0,0,0,16" />
+
+        <Border Grid.Row="1" Background="White" CornerRadius="18" Padding="18">
+            <Grid>
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="Auto" />
+                    <RowDefinition Height="*" />
+                    <RowDefinition Height="Auto" />
+                    <RowDefinition Height="Auto" />
+                </Grid.RowDefinitions>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="*" />
+                    <ColumnDefinition Width="*" />
+                    <ColumnDefinition Width="180" />
+                    <ColumnDefinition Width="180" />
+                </Grid.ColumnDefinitions>
+
+                <ComboBox Grid.Column="0" Margin="0,0,12,12" ItemsSource="{Binding Customers}" SelectedItem="{Binding SelectedCustomer}" DisplayMemberPath="ShopName" materialDesign:HintAssist.Hint="Customer / Shop" />
+                <ComboBox Grid.Column="1" Margin="0,0,12,12" ItemsSource="{Binding Vehicles}" SelectedItem="{Binding SelectedVehicle}" DisplayMemberPath="VehicleNumber" materialDesign:HintAssist.Hint="Vehicle" />
+                <ComboBox Grid.Column="2" Margin="0,0,12,12" ItemsSource="{Binding SaleTypes}" SelectedItem="{Binding SaleType}" materialDesign:HintAssist.Hint="Sale Type" />
+                <TextBox Grid.Column="3" Margin="0,0,0,12" Text="{Binding PaidAmount}" materialDesign:HintAssist.Hint="Paid Amount" />
+
+                <DataGrid Grid.Row="1" Grid.ColumnSpan="4" ItemsSource="{Binding Lines}" AutoGenerateColumns="False" CanUserAddRows="False">
+                    <DataGrid.Columns>
+                        <DataGridTemplateColumn Header="Product" Width="*">
+                            <DataGridTemplateColumn.CellTemplate>
+                                <DataTemplate>
+                                    <ComboBox ItemsSource="{Binding DataContext.Products, RelativeSource={RelativeSource AncestorType=UserControl}}"
+                                              SelectedItem="{Binding Product}" DisplayMemberPath="Name" />
+                                </DataTemplate>
+                            </DataGridTemplateColumn.CellTemplate>
+                        </DataGridTemplateColumn>
+                        <DataGridTextColumn Header="Qty" Binding="{Binding Quantity}" Width="120" />
+                        <DataGridTextColumn Header="Unit Price" Binding="{Binding UnitPrice}" Width="140" />
+                        <DataGridTextColumn Header="Line Total" Binding="{Binding LineTotal}" Width="140" IsReadOnly="True" />
+                    </DataGrid.Columns>
+                </DataGrid>
+
+                <Grid Grid.Row="2" Grid.ColumnSpan="4" Margin="0,14,0,0">
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="*" />
+                        <ColumnDefinition Width="Auto" />
+                    </Grid.ColumnDefinitions>
+                    <TextBlock Text="{Binding BalanceDue, StringFormat=Balance Due: {0:N2}}" VerticalAlignment="Center" Foreground="#1F2937" />
+                    <TextBlock Grid.Column="1" Text="{Binding InvoiceTotal, StringFormat=Invoice Total: {0:N2}}" FontSize="22" FontWeight="Bold" Foreground="#111827" />
+                </Grid>
+
+                <StackPanel Grid.Row="3" Grid.ColumnSpan="4" Orientation="Horizontal" HorizontalAlignment="Right" Margin="0,14,0,0">
+                    <TextBlock Text="{Binding StatusMessage}" VerticalAlignment="Center" Margin="0,0,16,0" Foreground="#1F2937" />
+                    <Button Content="Add Line" Command="{Binding AddLineCommand}" Style="{StaticResource MaterialDesignOutlinedButton}" Margin="0,0,10,0" />
+                    <Button Content="Save Invoice" Command="{Binding SaveInvoiceCommand}" Style="{StaticResource MaterialDesignRaisedButton}" />
+                </StackPanel>
+            </Grid>
+        </Border>
+    </Grid>
+</UserControl>

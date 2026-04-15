@@ -1,0 +1,11 @@
+C:\Projects\ManufacturingERP\src\ManufacturingERP.Shared\bin\Debug\net8.0\ManufacturingERP.Shared.deps.json
+C:\Projects\ManufacturingERP\src\ManufacturingERP.Shared\bin\Debug\net8.0\ManufacturingERP.Shared.dll
+C:\Projects\ManufacturingERP\src\ManufacturingERP.Shared\bin\Debug\net8.0\ManufacturingERP.Shared.pdb
+C:\Projects\ManufacturingERP\src\ManufacturingERP.Shared\obj\Debug\net8.0\ManufacturingERP.Shared.GeneratedMSBuildEditorConfig.editorconfig
+C:\Projects\ManufacturingERP\src\ManufacturingERP.Shared\obj\Debug\net8.0\ManufacturingERP.Shared.AssemblyInfoInputs.cache
+C:\Projects\ManufacturingERP\src\ManufacturingERP.Shared\obj\Debug\net8.0\ManufacturingERP.Shared.AssemblyInfo.cs
+C:\Projects\ManufacturingERP\src\ManufacturingERP.Shared\obj\Debug\net8.0\ManufacturingERP.Shared.csproj.CoreCompileInputs.cache
+C:\Projects\ManufacturingERP\src\ManufacturingERP.Shared\obj\Debug\net8.0\ManufacturingERP.Shared.dll
+C:\Projects\ManufacturingERP\src\ManufacturingERP.Shared\obj\Debug\net8.0\refint\ManufacturingERP.Shared.dll
+C:\Projects\ManufacturingERP\src\ManufacturingERP.Shared\obj\Debug\net8.0\ManufacturingERP.Shared.pdb
+C:\Projects\ManufacturingERP\src\ManufacturingERP.Shared\obj\Debug\net8.0\ref\ManufacturingERP.Shared.dll

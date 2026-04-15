@@ -1,0 +1,27 @@
+<Project Sdk="Microsoft.NET.Sdk">
+  <PropertyGroup>
+    <OutputType>WinExe</OutputType>
+    <TargetFramework>net8.0-windows</TargetFramework>
+    <Nullable>enable</Nullable>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <UseWPF>true</UseWPF>
+  </PropertyGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\ManufacturingERP.Application\ManufacturingERP.Application.csproj" />
+    <ProjectReference Include="..\ManufacturingERP.Infrastructure\ManufacturingERP.Infrastructure.csproj" />
+    <ProjectReference Include="..\ManufacturingERP.Shared\ManufacturingERP.Shared.csproj" />
+  </ItemGroup>
+  <ItemGroup>
+    <PackageReference Include="CommunityToolkit.Mvvm" Version="8.2.2" />
+    <PackageReference Include="MaterialDesignThemes" Version="5.1.0" />
+    <PackageReference Include="MaterialDesignColors" Version="3.1.0" />
+    <PackageReference Include="Microsoft.CodeAnalysis.VisualBasic" Version="4.5.0" PrivateAssets="all" />
+    <PackageReference Include="Microsoft.EntityFrameworkCore.Design" Version="8.0.4">
+      <PrivateAssets>all</PrivateAssets>
+      <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+    </PackageReference>
+    <PackageReference Include="Microsoft.Extensions.DependencyInjection" Version="8.0.0" />
+    <PackageReference Include="FastReport.OpenSource" Version="2024.2.0" />
+    <PackageReference Include="FastReport.OpenSource.Export.PdfSimple" Version="2024.2.0" />
+  </ItemGroup>
+</Project>
