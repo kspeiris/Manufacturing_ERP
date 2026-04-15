@@ -4,7 +4,8 @@
              xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes">
     <ScrollViewer VerticalScrollBarVisibility="Auto">
         <StackPanel>
-            <TextBlock Text="Procurement Workspace" FontSize="30" FontWeight="Bold" Margin="0,0,0,18" />
+            <TextBlock Text="Procurement Workspace" Style="{StaticResource PageTitleText}" />
+            <TextBlock Text="Create purchase orders, receive goods, and manage line items without cramped table space." Style="{StaticResource PageSubtitleText}" Margin="0,0,0,18" />
 
             <Grid Margin="0,0,0,16">
                 <Grid.ColumnDefinitions>
@@ -28,19 +29,19 @@
                         <TextBox Text="{Binding Notes}" Height="80" AcceptsReturn="True" TextWrapping="Wrap" />
 
                         <WrapPanel Margin="0,16,0,0">
-                            <Button Content="Add Line" Command="{Binding AddLineCommand}" Margin="0,0,8,0" />
-                            <Button Content="Save Purchase Order" Command="{Binding SavePurchaseOrderCommand}" Margin="0,0,8,0" />
-                            <Button Content="Receive Goods" Command="{Binding ReceiveGoodsCommand}" />
+                            <Button Content="Add Line" Command="{Binding AddLineCommand}" Style="{StaticResource SecondaryActionButton}" />
+                            <Button Content="Save Purchase Order" Command="{Binding SavePurchaseOrderCommand}" Style="{StaticResource PrimaryActionButton}" />
+                            <Button Content="Receive Goods" Command="{Binding ReceiveGoodsCommand}" Style="{StaticResource SecondaryActionButton}" Margin="0" />
                         </WrapPanel>
 
-                        <TextBlock Text="{Binding StatusMessage}" Margin="0,14,0,0" Foreground="#2563EB" TextWrapping="Wrap" />
+                        <TextBlock Text="{Binding StatusMessage}" Style="{StaticResource StatusMessageText}" />
                     </StackPanel>
                 </Border>
 
                 <Border Grid.Column="1" Style="{StaticResource SectionCard}">
                     <StackPanel>
                         <TextBlock Text="Line Items" Style="{StaticResource CardTitleText}" />
-                        <DataGrid ItemsSource="{Binding Lines}" AutoGenerateColumns="False" CanUserAddRows="False" Height="420">
+                        <DataGrid ItemsSource="{Binding Lines}" MinHeight="420">
                             <DataGrid.Columns>
                                 <DataGridComboBoxColumn Header="Product" Width="*" SelectedItemBinding="{Binding Product}" DisplayMemberPath="Name"
                                                         SelectedValuePath="."

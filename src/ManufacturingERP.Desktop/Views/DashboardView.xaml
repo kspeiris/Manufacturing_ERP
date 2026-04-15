@@ -4,18 +4,21 @@
              xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes">
     <ScrollViewer VerticalScrollBarVisibility="Auto">
         <StackPanel>
-            <TextBlock Text="Executive Dashboard" FontSize="30" FontWeight="Bold" Margin="0,0,0,18" />
+            <TextBlock Text="Executive Dashboard" Style="{StaticResource PageTitleText}" />
+            <TextBlock Text="Keep an eye on customer reach, sales velocity, stock value, and finance signals from a single snapshot."
+                       Style="{StaticResource PageSubtitleText}"
+                       Margin="0,0,0,18" />
             <UniformGrid Columns="4" Margin="0,0,0,18">
-                <Border Background="White" CornerRadius="18" Padding="18" Margin="0,0,12,0"><StackPanel><TextBlock Text="Customers" Style="{StaticResource CardTitleText}" /><TextBlock Text="{Binding Summary.TotalCustomers}" Style="{StaticResource MetricValueText}" /></StackPanel></Border>
-                <Border Background="White" CornerRadius="18" Padding="18" Margin="0,0,12,0"><StackPanel><TextBlock Text="Products" Style="{StaticResource CardTitleText}" /><TextBlock Text="{Binding Summary.TotalProducts}" Style="{StaticResource MetricValueText}" /></StackPanel></Border>
-                <Border Background="White" CornerRadius="18" Padding="18" Margin="0,0,12,0"><StackPanel><TextBlock Text="Vehicles" Style="{StaticResource CardTitleText}" /><TextBlock Text="{Binding Summary.TotalVehicles}" Style="{StaticResource MetricValueText}" /></StackPanel></Border>
-                <Border Background="White" CornerRadius="18" Padding="18"><StackPanel><TextBlock Text="Today Sales" Style="{StaticResource CardTitleText}" /><TextBlock Text="{Binding Summary.TodaySales, StringFormat=N2}" Style="{StaticResource MetricValueText}" /></StackPanel></Border>
+                <Border Style="{StaticResource SectionCard}" Margin="0,0,12,0"><StackPanel><TextBlock Text="Customers" Style="{StaticResource CardTitleText}" /><TextBlock Text="{Binding Summary.TotalCustomers}" Style="{StaticResource MetricValueText}" /></StackPanel></Border>
+                <Border Style="{StaticResource SectionCard}" Margin="0,0,12,0"><StackPanel><TextBlock Text="Products" Style="{StaticResource CardTitleText}" /><TextBlock Text="{Binding Summary.TotalProducts}" Style="{StaticResource MetricValueText}" /></StackPanel></Border>
+                <Border Style="{StaticResource SectionCard}" Margin="0,0,12,0"><StackPanel><TextBlock Text="Vehicles" Style="{StaticResource CardTitleText}" /><TextBlock Text="{Binding Summary.TotalVehicles}" Style="{StaticResource MetricValueText}" /></StackPanel></Border>
+                <Border Style="{StaticResource SectionCard}"><StackPanel><TextBlock Text="Today Sales" Style="{StaticResource CardTitleText}" /><TextBlock Text="{Binding Summary.TodaySales, StringFormat=N2}" Style="{StaticResource MetricValueText}" /></StackPanel></Border>
             </UniformGrid>
 
             <Grid>
                 <Grid.ColumnDefinitions><ColumnDefinition Width="1*"/><ColumnDefinition Width="1*"/><ColumnDefinition Width="1*"/></Grid.ColumnDefinitions>
-                <Border Grid.Column="0" Style="{StaticResource SectionCard}" Margin="0,0,16,16"><StackPanel><TextBlock Text="Monthly Sales" Style="{StaticResource CardTitleText}" /><TextBlock Text="{Binding Summary.Analytics.MonthlySales, StringFormat=N2}" Style="{StaticResource MetricValueText}" /></StackPanel></Border>
-                <Border Grid.Column="1" Style="{StaticResource SectionCard}" Margin="0,0,16,16"><StackPanel><TextBlock Text="Collections This Month" Style="{StaticResource CardTitleText}" /><TextBlock Text="{Binding Summary.Analytics.CollectionsThisMonth, StringFormat=N2}" Style="{StaticResource MetricValueText}" /></StackPanel></Border>
+                <Border Grid.Column="0" Style="{StaticResource SectionCard}" Margin="0,0,16,16"><StackPanel><TextBlock Text="Monthly Sales" Style="{StaticResource CardTitleText}" /><TextBlock Text="{Binding Summary.Analytics.MonthlySales, StringFormat=N2}" Style="{StaticResource MetricValueText}" /><TextBlock Text="Revenue recorded this month across all sales channels." Style="{StaticResource CaptionText}" Margin="0,10,0,0" /></StackPanel></Border>
+                <Border Grid.Column="1" Style="{StaticResource SectionCard}" Margin="0,0,16,16"><StackPanel><TextBlock Text="Collections This Month" Style="{StaticResource CardTitleText}" /><TextBlock Text="{Binding Summary.Analytics.CollectionsThisMonth, StringFormat=N2}" Style="{StaticResource MetricValueText}" /><TextBlock Text="Cash collected from receivables during the current month." Style="{StaticResource CaptionText}" Margin="0,10,0,0" /></StackPanel></Border>
                 <Border Grid.Column="2" Style="{StaticResource SectionCard}" Margin="0,0,0,16"><StackPanel><TextBlock Text="Inventory Value" Style="{StaticResource CardTitleText}" /><TextBlock Text="{Binding Summary.Analytics.InventoryValue, StringFormat=N2}" Style="{StaticResource MetricValueText}" /></StackPanel></Border>
             </Grid>
 
@@ -23,7 +26,7 @@
                 <Grid.ColumnDefinitions><ColumnDefinition Width="1*"/><ColumnDefinition Width="1*"/><ColumnDefinition Width="1*"/></Grid.ColumnDefinitions>
                 <Border Grid.Column="0" Style="{StaticResource SectionCard}" Margin="0,0,16,0"><StackPanel><TextBlock Text="Customer Receivables" Style="{StaticResource CardTitleText}" /><TextBlock Text="{Binding Summary.Analytics.CustomerReceivables, StringFormat=N2}" Style="{StaticResource MetricValueText}" /></StackPanel></Border>
                 <Border Grid.Column="1" Style="{StaticResource SectionCard}" Margin="0,0,16,0"><StackPanel><TextBlock Text="Supplier Payables" Style="{StaticResource CardTitleText}" /><TextBlock Text="{Binding Summary.Analytics.SupplierPayables, StringFormat=N2}" Style="{StaticResource MetricValueText}" /></StackPanel></Border>
-                <Border Grid.Column="2" Style="{StaticResource SectionCard}"><StackPanel><TextBlock Text="Production Cost This Month" Style="{StaticResource CardTitleText}" /><TextBlock Text="{Binding Summary.Analytics.ProductionCostThisMonth, StringFormat=N2}" Style="{StaticResource MetricValueText}" /></StackPanel></Border>
+                <Border Grid.Column="2" Style="{StaticResource SectionCard}"><StackPanel><TextBlock Text="Production Cost This Month" Style="{StaticResource CardTitleText}" /><TextBlock Text="{Binding Summary.Analytics.ProductionCostThisMonth, StringFormat=N2}" Style="{StaticResource MetricValueText}" /><TextBlock Text="Tracked material, labor, and overhead costs for completed orders." Style="{StaticResource CaptionText}" Margin="0,10,0,0" /></StackPanel></Border>
             </Grid>
         </StackPanel>
     </ScrollViewer>
