@@ -10,12 +10,15 @@
             <ColumnDefinition Width="0.9*" />
         </Grid.ColumnDefinitions>
 
-        <Border Background="#183B78" CornerRadius="28,0,0,28" Padding="42">
+        <Border Background="{StaticResource HeroBrush}" CornerRadius="28,0,0,28" Padding="42">
             <StackPanel VerticalAlignment="Center">
-                <TextBlock Text="Manufacturing ERP" FontSize="36" FontWeight="Bold" Foreground="White" />
+                <Border Background="#1FFFFFFF" CornerRadius="14" Padding="10,6" HorizontalAlignment="Left">
+                    <TextBlock Text="ERP Workspace" Foreground="White" FontWeight="SemiBold" />
+                </Border>
+                <TextBlock Text="Manufacturing ERP" FontSize="36" FontWeight="Bold" Foreground="White" Margin="0,18,0,0" />
                 <TextBlock Text="Factory, warehouse, van sales, collections and reporting in one desktop system." 
                            Margin="0,14,0,0" Foreground="#DDE4FF" TextWrapping="Wrap" FontSize="16" />
-                <Border Background="#2D5AA0" CornerRadius="20" Padding="18" Margin="0,26,0,0">
+                <Border Background="#1FFFFFFF" CornerRadius="20" Padding="18" Margin="0,26,0,0">
                     <StackPanel>
                         <TextBlock Text="What you can do here" Foreground="White" FontWeight="SemiBold" />
                         <TextBlock Text="Track inventory, process sales, manage procurement, record production, and review finance in one place."
@@ -29,7 +32,7 @@
 
         <Border Grid.Column="1"
                 Padding="34"
-                Background="White"
+                Background="#F5FFFFFF"
                 BorderBrush="{StaticResource BorderBrushSoft}"
                 BorderThickness="1"
                 CornerRadius="0,28,28,0">
@@ -40,6 +43,10 @@
                 <PasswordBox x:Name="PasswordBox" PasswordChanged="PasswordBox_OnPasswordChanged" Margin="0,0,0,14" materialDesign:HintAssist.Hint="Password" />
                 <TextBlock Text="{Binding ErrorMessage}" Foreground="Crimson" Margin="0,0,0,14" TextWrapping="Wrap" />
                 <Button Content="Login" Click="LoginButton_OnClick" Style="{StaticResource PrimaryActionButton}" Height="44" />
+                <TextBlock Text="Secure desktop access for operations, stock, production, and finance."
+                           Margin="0,16,0,0"
+                           Foreground="{StaticResource InkMutedBrush}"
+                           TextWrapping="Wrap" />
             </StackPanel>
         </Border>
     </Grid>

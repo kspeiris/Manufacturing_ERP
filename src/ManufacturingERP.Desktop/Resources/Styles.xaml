@@ -3,15 +3,46 @@
                     xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes">
     <BooleanToVisibilityConverter x:Key="BoolToVisibilityConverter" />
 
-    <SolidColorBrush x:Key="AppBackgroundBrush" Color="#F3F6FB" />
+    <LinearGradientBrush x:Key="AppBackgroundBrush" StartPoint="0,0" EndPoint="1,1">
+        <GradientStop Color="#F8FBFF" Offset="0" />
+        <GradientStop Color="#EEF4FA" Offset="0.45" />
+        <GradientStop Color="#E7EEF6" Offset="1" />
+    </LinearGradientBrush>
+    <LinearGradientBrush x:Key="ContentPanelBrush" StartPoint="0,0" EndPoint="1,1">
+        <GradientStop Color="#FCFDFE" Offset="0" />
+        <GradientStop Color="#F4F8FB" Offset="1" />
+    </LinearGradientBrush>
+    <LinearGradientBrush x:Key="SidebarBrush" StartPoint="0,0" EndPoint="0,1">
+        <GradientStop Color="#0E1A2B" Offset="0" />
+        <GradientStop Color="#13243A" Offset="0.5" />
+        <GradientStop Color="#0D1726" Offset="1" />
+    </LinearGradientBrush>
+    <LinearGradientBrush x:Key="SidebarAccentBrush" StartPoint="0,0" EndPoint="1,1">
+        <GradientStop Color="#20344F" Offset="0" />
+        <GradientStop Color="#1B2940" Offset="1" />
+    </LinearGradientBrush>
+    <LinearGradientBrush x:Key="HeroBrush" StartPoint="0,0" EndPoint="1,1">
+        <GradientStop Color="#143B66" Offset="0" />
+        <GradientStop Color="#20517A" Offset="0.55" />
+        <GradientStop Color="#1A7B86" Offset="1" />
+    </LinearGradientBrush>
+    <LinearGradientBrush x:Key="MetricCardBrush" StartPoint="0,0" EndPoint="1,1">
+        <GradientStop Color="#FFFFFF" Offset="0" />
+        <GradientStop Color="#F8FBFF" Offset="1" />
+    </LinearGradientBrush>
+
     <SolidColorBrush x:Key="SurfaceBrush" Color="#FFFFFFFF" />
-    <SolidColorBrush x:Key="SurfaceAltBrush" Color="#F8FAFC" />
-    <SolidColorBrush x:Key="BorderBrushSoft" Color="#D8E1EC" />
+    <SolidColorBrush x:Key="SurfaceAltBrush" Color="#F6F9FC" />
+    <SolidColorBrush x:Key="BorderBrushSoft" Color="#D7E2EC" />
     <SolidColorBrush x:Key="InkBrush" Color="#0F172A" />
-    <SolidColorBrush x:Key="InkMutedBrush" Color="#475569" />
-    <SolidColorBrush x:Key="StatusBrush" Color="#2563EB" />
-    <SolidColorBrush x:Key="SidebarBrush" Color="#0F172A" />
-    <SolidColorBrush x:Key="SidebarAccentBrush" Color="#1E293B" />
+    <SolidColorBrush x:Key="InkMutedBrush" Color="#526172" />
+    <SolidColorBrush x:Key="StatusBrush" Color="#0F766E" />
+    <SolidColorBrush x:Key="AccentBrush" Color="#145EA8" />
+    <SolidColorBrush x:Key="AccentSoftBrush" Color="#E7F0FB" />
+    <SolidColorBrush x:Key="SidebarHoverBrush" Color="#1F3046" />
+    <SolidColorBrush x:Key="SidebarPressedBrush" Color="#29405C" />
+    <SolidColorBrush x:Key="DangerBrush" Color="#B42318" />
+    <SolidColorBrush x:Key="DangerSoftBrush" Color="#FEE4E2" />
 
     <Style TargetType="TextBox" BasedOn="{StaticResource MaterialDesignOutlinedTextBox}">
         <Setter Property="Margin" Value="0,0,0,4" />
@@ -47,6 +78,41 @@
         <Setter Property="CanUserAddRows" Value="False" />
         <Setter Property="Background" Value="Transparent" />
         <Setter Property="AlternatingRowBackground" Value="{StaticResource SurfaceAltBrush}" />
+        <Setter Property="HorizontalScrollBarVisibility" Value="Auto" />
+        <Setter Property="VerticalScrollBarVisibility" Value="Auto" />
+        <Setter Property="SelectionMode" Value="Single" />
+        <Setter Property="SelectionUnit" Value="FullRow" />
+        <Setter Property="ClipboardCopyMode" Value="ExcludeHeader" />
+    </Style>
+
+    <Style TargetType="DataGridColumnHeader">
+        <Setter Property="Background" Value="#EEF4FA" />
+        <Setter Property="Foreground" Value="{StaticResource InkBrush}" />
+        <Setter Property="FontWeight" Value="SemiBold" />
+        <Setter Property="Padding" Value="14,0" />
+        <Setter Property="BorderThickness" Value="0,0,0,1" />
+        <Setter Property="BorderBrush" Value="#DCE5EF" />
+    </Style>
+
+    <Style TargetType="DataGridCell">
+        <Setter Property="Padding" Value="12,0" />
+        <Setter Property="BorderThickness" Value="0" />
+    </Style>
+
+    <Style TargetType="DataGridRow">
+        <Setter Property="Background" Value="Transparent" />
+        <Setter Property="BorderBrush" Value="#E8EEF5" />
+        <Setter Property="BorderThickness" Value="0,0,0,1" />
+        <Setter Property="Foreground" Value="{StaticResource InkBrush}" />
+        <Style.Triggers>
+            <Trigger Property="IsMouseOver" Value="True">
+                <Setter Property="Background" Value="#F3F8FE" />
+            </Trigger>
+            <Trigger Property="IsSelected" Value="True">
+                <Setter Property="Background" Value="#E4F0FD" />
+                <Setter Property="Foreground" Value="{StaticResource InkBrush}" />
+            </Trigger>
+        </Style.Triggers>
     </Style>
 
     <Style TargetType="ListBox" BasedOn="{StaticResource MaterialDesignListBox}">
@@ -54,10 +120,30 @@
         <Setter Property="BorderBrush" Value="{StaticResource BorderBrushSoft}" />
         <Setter Property="BorderThickness" Value="1" />
         <Setter Property="Padding" Value="6" />
+        <Setter Property="ScrollViewer.HorizontalScrollBarVisibility" Value="Disabled" />
+    </Style>
+
+    <Style TargetType="ListBoxItem">
+        <Setter Property="Padding" Value="12,10" />
+        <Setter Property="Margin" Value="0,0,0,6" />
+        <Setter Property="Background" Value="Transparent" />
+        <Setter Property="BorderThickness" Value="1" />
+        <Setter Property="BorderBrush" Value="Transparent" />
+        <Setter Property="HorizontalContentAlignment" Value="Stretch" />
+        <Style.Triggers>
+            <Trigger Property="IsMouseOver" Value="True">
+                <Setter Property="Background" Value="#EEF5FC" />
+                <Setter Property="BorderBrush" Value="#D8E6F5" />
+            </Trigger>
+            <Trigger Property="IsSelected" Value="True">
+                <Setter Property="Background" Value="#E4F0FD" />
+                <Setter Property="BorderBrush" Value="#B5D0F0" />
+            </Trigger>
+        </Style.Triggers>
     </Style>
 
     <Style x:Key="PageTitleText" TargetType="TextBlock">
-        <Setter Property="FontSize" Value="30" />
+        <Setter Property="FontSize" Value="32" />
         <Setter Property="FontWeight" Value="Bold" />
         <Setter Property="Foreground" Value="{StaticResource InkBrush}" />
         <Setter Property="TextWrapping" Value="Wrap" />
@@ -70,7 +156,7 @@
     </Style>
 
     <Style x:Key="CardTitleText" TargetType="TextBlock">
-        <Setter Property="FontSize" Value="19" />
+        <Setter Property="FontSize" Value="18" />
         <Setter Property="FontWeight" Value="SemiBold" />
         <Setter Property="Margin" Value="0,0,0,14" />
         <Setter Property="Foreground" Value="{StaticResource InkBrush}" />
@@ -78,7 +164,7 @@
     </Style>
 
     <Style x:Key="MetricValueText" TargetType="TextBlock">
-        <Setter Property="FontSize" Value="30" />
+        <Setter Property="FontSize" Value="31" />
         <Setter Property="FontWeight" Value="Bold" />
         <Setter Property="Foreground" Value="{StaticResource InkBrush}" />
     </Style>
@@ -86,21 +172,31 @@
     <Style x:Key="SidebarButton" TargetType="Button" BasedOn="{StaticResource MaterialDesignFlatButton}">
         <Setter Property="HorizontalContentAlignment" Value="Left" />
         <Setter Property="VerticalContentAlignment" Value="Center" />
-        <Setter Property="Margin" Value="0,4,0,0" />
-        <Setter Property="Padding" Value="16,10" />
-        <Setter Property="MinHeight" Value="44" />
-        <Setter Property="Height" Value="44" />
+        <Setter Property="Margin" Value="0,5,0,0" />
+        <Setter Property="Padding" Value="18,11" />
+        <Setter Property="MinHeight" Value="46" />
+        <Setter Property="Height" Value="46" />
         <Setter Property="FontSize" Value="15" />
         <Setter Property="Foreground" Value="#E2E8F0" />
         <Setter Property="Background" Value="Transparent" />
         <Setter Property="BorderBrush" Value="Transparent" />
         <Setter Property="FontWeight" Value="SemiBold" />
+        <Setter Property="Cursor" Value="Hand" />
+        <Style.Triggers>
+            <Trigger Property="IsMouseOver" Value="True">
+                <Setter Property="Background" Value="{StaticResource SidebarHoverBrush}" />
+            </Trigger>
+            <Trigger Property="IsPressed" Value="True">
+                <Setter Property="Background" Value="{StaticResource SidebarPressedBrush}" />
+            </Trigger>
+        </Style.Triggers>
     </Style>
 
     <Style x:Key="SidebarSectionText" TargetType="TextBlock">
-        <Setter Property="Margin" Value="0,18,0,8" />
+        <Setter Property="Margin" Value="0,22,0,10" />
         <Setter Property="Foreground" Value="#94A3B8" />
         <Setter Property="FontWeight" Value="SemiBold" />
+        <Setter Property="FontSize" Value="13" />
         <Setter Property="TextWrapping" Value="Wrap" />
     </Style>
 
@@ -108,13 +204,29 @@
         <Setter Property="Background" Value="{StaticResource SurfaceBrush}" />
         <Setter Property="BorderBrush" Value="{StaticResource BorderBrushSoft}" />
         <Setter Property="BorderThickness" Value="1" />
-        <Setter Property="CornerRadius" Value="24" />
+        <Setter Property="CornerRadius" Value="22" />
         <Setter Property="Padding" Value="24" />
         <Setter Property="Margin" Value="0,0,0,16" />
+        <Setter Property="SnapsToDevicePixels" Value="True" />
+        <Setter Property="Effect">
+            <Setter.Value>
+                <DropShadowEffect BlurRadius="20" ShadowDepth="0" Opacity="0.08" Color="#0F172A" />
+            </Setter.Value>
+        </Setter>
     </Style>
 
     <Style x:Key="ViewRootCard" TargetType="Border" BasedOn="{StaticResource SectionCard}">
         <Setter Property="Margin" Value="0" />
+    </Style>
+
+    <Style x:Key="HeroCard" TargetType="Border" BasedOn="{StaticResource SectionCard}">
+        <Setter Property="Background" Value="{StaticResource HeroBrush}" />
+        <Setter Property="BorderBrush" Value="#2A5F8C" />
+    </Style>
+
+    <Style x:Key="MetricCard" TargetType="Border" BasedOn="{StaticResource SectionCard}">
+        <Setter Property="Background" Value="{StaticResource MetricCardBrush}" />
+        <Setter Property="Padding" Value="20" />
     </Style>
 
     <Style x:Key="FormLabel" TargetType="TextBlock">
@@ -133,28 +245,38 @@
         <Setter Property="Foreground" Value="{StaticResource StatusBrush}" />
         <Setter Property="TextWrapping" Value="Wrap" />
         <Setter Property="Margin" Value="0,12,0,0" />
+        <Setter Property="FontWeight" Value="SemiBold" />
     </Style>
 
     <Style x:Key="PrimaryActionButton" TargetType="Button" BasedOn="{StaticResource MaterialDesignRaisedButton}">
-        <Setter Property="Padding" Value="18,10" />
+        <Setter Property="Padding" Value="18,11" />
         <Setter Property="Margin" Value="0,0,8,0" />
-        <Setter Property="MinHeight" Value="40" />
+        <Setter Property="MinHeight" Value="42" />
+        <Setter Property="Background" Value="{StaticResource AccentBrush}" />
+        <Setter Property="Foreground" Value="White" />
         <Setter Property="FontWeight" Value="SemiBold" />
+        <Setter Property="Cursor" Value="Hand" />
     </Style>
 
     <Style x:Key="SecondaryActionButton" TargetType="Button" BasedOn="{StaticResource MaterialDesignOutlinedButton}">
-        <Setter Property="Padding" Value="18,10" />
+        <Setter Property="Padding" Value="18,11" />
         <Setter Property="Margin" Value="0,0,8,0" />
-        <Setter Property="MinHeight" Value="40" />
+        <Setter Property="MinHeight" Value="42" />
+        <Setter Property="Background" Value="{StaticResource AccentSoftBrush}" />
+        <Setter Property="Foreground" Value="{StaticResource AccentBrush}" />
+        <Setter Property="BorderBrush" Value="#BED4EC" />
         <Setter Property="FontWeight" Value="SemiBold" />
+        <Setter Property="Cursor" Value="Hand" />
     </Style>
 
     <Style x:Key="DangerActionButton" TargetType="Button" BasedOn="{StaticResource MaterialDesignOutlinedButton}">
-        <Setter Property="Padding" Value="18,10" />
+        <Setter Property="Padding" Value="18,11" />
         <Setter Property="Margin" Value="0,0,8,0" />
-        <Setter Property="MinHeight" Value="40" />
+        <Setter Property="MinHeight" Value="42" />
         <Setter Property="FontWeight" Value="SemiBold" />
-        <Setter Property="Foreground" Value="#B91C1C" />
-        <Setter Property="BorderBrush" Value="#FECACA" />
+        <Setter Property="Foreground" Value="{StaticResource DangerBrush}" />
+        <Setter Property="Background" Value="{StaticResource DangerSoftBrush}" />
+        <Setter Property="BorderBrush" Value="#F7B4AE" />
+        <Setter Property="Cursor" Value="Hand" />
     </Style>
 </ResourceDictionary>

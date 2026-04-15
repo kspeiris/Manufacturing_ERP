@@ -8,11 +8,49 @@
             <TextBlock Text="Keep an eye on customer reach, sales velocity, stock value, and finance signals from a single snapshot."
                        Style="{StaticResource PageSubtitleText}"
                        Margin="0,0,0,18" />
+            <Border Style="{StaticResource HeroCard}" Margin="0,0,0,18">
+                <Grid>
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="2.2*" />
+                        <ColumnDefinition Width="1*" />
+                    </Grid.ColumnDefinitions>
+                    <StackPanel>
+                        <TextBlock Text="Business Health Overview" FontSize="15" FontWeight="SemiBold" Foreground="#D9ECFF" />
+                        <TextBlock Text="One place to review the strength of sales, stock, collections, and operational capacity."
+                                   FontSize="29"
+                                   FontWeight="Bold"
+                                   Foreground="White"
+                                   Margin="0,10,0,10"
+                                   TextWrapping="Wrap" />
+                        <TextBlock Text="Use this page as the morning control center before moving into sales, procurement, warehouse, and finance workflows."
+                                   Foreground="#E8F5FF"
+                                   TextWrapping="Wrap" />
+                    </StackPanel>
+                    <Grid Grid.Column="1" Margin="24,0,0,0">
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="Auto" />
+                            <RowDefinition Height="Auto" />
+                        </Grid.RowDefinitions>
+                        <Border Background="#1FFFFFFF" CornerRadius="18" Padding="16" Margin="0,0,0,12">
+                            <StackPanel>
+                                <TextBlock Text="Today Sales" Foreground="#D9ECFF" />
+                                <TextBlock Text="{Binding Summary.TodaySales, StringFormat=N2}" Foreground="White" FontSize="26" FontWeight="Bold" Margin="0,6,0,0" />
+                            </StackPanel>
+                        </Border>
+                        <Border Grid.Row="1" Background="#1FFFFFFF" CornerRadius="18" Padding="16">
+                            <StackPanel>
+                                <TextBlock Text="Inventory Value" Foreground="#D9ECFF" />
+                                <TextBlock Text="{Binding Summary.Analytics.InventoryValue, StringFormat=N2}" Foreground="White" FontSize="26" FontWeight="Bold" Margin="0,6,0,0" />
+                            </StackPanel>
+                        </Border>
+                    </Grid>
+                </Grid>
+            </Border>
             <UniformGrid Columns="4" Margin="0,0,0,18">
-                <Border Style="{StaticResource SectionCard}" Margin="0,0,12,0"><StackPanel><TextBlock Text="Customers" Style="{StaticResource CardTitleText}" /><TextBlock Text="{Binding Summary.TotalCustomers}" Style="{StaticResource MetricValueText}" /></StackPanel></Border>
-                <Border Style="{StaticResource SectionCard}" Margin="0,0,12,0"><StackPanel><TextBlock Text="Products" Style="{StaticResource CardTitleText}" /><TextBlock Text="{Binding Summary.TotalProducts}" Style="{StaticResource MetricValueText}" /></StackPanel></Border>
-                <Border Style="{StaticResource SectionCard}" Margin="0,0,12,0"><StackPanel><TextBlock Text="Vehicles" Style="{StaticResource CardTitleText}" /><TextBlock Text="{Binding Summary.TotalVehicles}" Style="{StaticResource MetricValueText}" /></StackPanel></Border>
-                <Border Style="{StaticResource SectionCard}"><StackPanel><TextBlock Text="Today Sales" Style="{StaticResource CardTitleText}" /><TextBlock Text="{Binding Summary.TodaySales, StringFormat=N2}" Style="{StaticResource MetricValueText}" /></StackPanel></Border>
+                <Border Style="{StaticResource MetricCard}" Margin="0,0,12,0"><StackPanel><TextBlock Text="Customers" Style="{StaticResource CardTitleText}" /><TextBlock Text="{Binding Summary.TotalCustomers}" Style="{StaticResource MetricValueText}" /><TextBlock Text="Active outlets in the customer base." Style="{StaticResource CaptionText}" Margin="0,8,0,0" /></StackPanel></Border>
+                <Border Style="{StaticResource MetricCard}" Margin="0,0,12,0"><StackPanel><TextBlock Text="Products" Style="{StaticResource CardTitleText}" /><TextBlock Text="{Binding Summary.TotalProducts}" Style="{StaticResource MetricValueText}" /><TextBlock Text="Items available across sales and stock workflows." Style="{StaticResource CaptionText}" Margin="0,8,0,0" /></StackPanel></Border>
+                <Border Style="{StaticResource MetricCard}" Margin="0,0,12,0"><StackPanel><TextBlock Text="Vehicles" Style="{StaticResource CardTitleText}" /><TextBlock Text="{Binding Summary.TotalVehicles}" Style="{StaticResource MetricValueText}" /><TextBlock Text="Fleet units configured for field operations." Style="{StaticResource CaptionText}" Margin="0,8,0,0" /></StackPanel></Border>
+                <Border Style="{StaticResource MetricCard}"><StackPanel><TextBlock Text="Today Sales" Style="{StaticResource CardTitleText}" /><TextBlock Text="{Binding Summary.TodaySales, StringFormat=N2}" Style="{StaticResource MetricValueText}" /><TextBlock Text="Cash and invoice activity posted today." Style="{StaticResource CaptionText}" Margin="0,8,0,0" /></StackPanel></Border>
             </UniformGrid>
 
             <Grid>
