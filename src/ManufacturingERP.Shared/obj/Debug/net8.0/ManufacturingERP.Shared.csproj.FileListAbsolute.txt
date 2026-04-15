@@ -9,3 +9,4 @@ C:\Projects\ManufacturingERP\src\ManufacturingERP.Shared\obj\Debug\net8.0\Manufa
 C:\Projects\ManufacturingERP\src\ManufacturingERP.Shared\obj\Debug\net8.0\refint\ManufacturingERP.Shared.dll
 C:\Projects\ManufacturingERP\src\ManufacturingERP.Shared\obj\Debug\net8.0\ManufacturingERP.Shared.pdb
 C:\Projects\ManufacturingERP\src\ManufacturingERP.Shared\obj\Debug\net8.0\ref\ManufacturingERP.Shared.dll
+C:\Projects\ManufacturingERP\src\ManufacturingERP.Shared\obj\Debug\net8.0\ManufacturingERP.Shared.sourcelink.json

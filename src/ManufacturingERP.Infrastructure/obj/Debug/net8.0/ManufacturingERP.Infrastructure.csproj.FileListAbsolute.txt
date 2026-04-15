@@ -19,3 +19,4 @@ C:\Projects\ManufacturingERP\src\ManufacturingERP.Infrastructure\obj\Debug\net8.
 C:\Projects\ManufacturingERP\src\ManufacturingERP.Infrastructure\obj\Debug\net8.0\ManufacturingERP.Infrastructure.pdb
 C:\Projects\ManufacturingERP\src\ManufacturingERP.Infrastructure\obj\Debug\net8.0\ManufacturingERP.Infrastructure.genruntimeconfig.cache
 C:\Projects\ManufacturingERP\src\ManufacturingERP.Infrastructure\obj\Debug\net8.0\ref\ManufacturingERP.Infrastructure.dll
+C:\Projects\ManufacturingERP\src\ManufacturingERP.Infrastructure\obj\Debug\net8.0\ManufacturingERP.Infrastructure.sourcelink.json

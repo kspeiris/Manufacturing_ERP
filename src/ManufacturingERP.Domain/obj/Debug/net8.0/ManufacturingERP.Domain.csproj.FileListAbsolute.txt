@@ -13,3 +13,4 @@ C:\Projects\ManufacturingERP\src\ManufacturingERP.Domain\obj\Debug\net8.0\Manufa
 C:\Projects\ManufacturingERP\src\ManufacturingERP.Domain\obj\Debug\net8.0\refint\ManufacturingERP.Domain.dll
 C:\Projects\ManufacturingERP\src\ManufacturingERP.Domain\obj\Debug\net8.0\ManufacturingERP.Domain.pdb
 C:\Projects\ManufacturingERP\src\ManufacturingERP.Domain\obj\Debug\net8.0\ref\ManufacturingERP.Domain.dll
+C:\Projects\ManufacturingERP\src\ManufacturingERP.Domain\obj\Debug\net8.0\ManufacturingERP.Domain.sourcelink.json
