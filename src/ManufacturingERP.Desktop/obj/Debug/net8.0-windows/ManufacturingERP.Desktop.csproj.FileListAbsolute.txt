@@ -216,3 +216,4 @@ C:\Projects\ManufacturingERP\src\ManufacturingERP.Desktop\bin\Debug\net8.0-windo
 C:\Projects\ManufacturingERP\src\ManufacturingERP.Desktop\bin\Debug\net8.0-windows\tr\Microsoft.CodeAnalysis.Workspaces.resources.dll
 C:\Projects\ManufacturingERP\src\ManufacturingERP.Desktop\bin\Debug\net8.0-windows\zh-Hans\Microsoft.CodeAnalysis.Workspaces.resources.dll
 C:\Projects\ManufacturingERP\src\ManufacturingERP.Desktop\bin\Debug\net8.0-windows\zh-Hant\Microsoft.CodeAnalysis.Workspaces.resources.dll
+C:\Projects\ManufacturingERP\src\ManufacturingERP.Desktop\obj\Debug\net8.0-windows\ManufacturingERP.Desktop.sourcelink.json

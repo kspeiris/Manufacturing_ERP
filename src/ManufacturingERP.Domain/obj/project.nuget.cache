@@ -1,12 +1,12 @@
 {
   "version": 2,
-  "dgSpecHash": "0MN4Okr8Vd4=",
+  "dgSpecHash": "eFgAGzJWz4Q=",
   "success": true,
   "projectFilePath": "C:\\Projects\\ManufacturingERP\\src\\ManufacturingERP.Domain\\ManufacturingERP.Domain.csproj",
   "expectedPackageFiles": [
-    "C:\\Users\\kavin\\.nuget\\packages\\microsoft.netcore.app.ref\\8.0.26\\microsoft.netcore.app.ref.8.0.26.nupkg.sha512",
-    "C:\\Users\\kavin\\.nuget\\packages\\microsoft.windowsdesktop.app.ref\\8.0.26\\microsoft.windowsdesktop.app.ref.8.0.26.nupkg.sha512",
-    "C:\\Users\\kavin\\.nuget\\packages\\microsoft.aspnetcore.app.ref\\8.0.26\\microsoft.aspnetcore.app.ref.8.0.26.nupkg.sha512"
+    "c:\\Projects\\ManufacturingERP\\.nuget\\packages\\microsoft.netcore.app.ref\\8.0.26\\microsoft.netcore.app.ref.8.0.26.nupkg.sha512",
+    "c:\\Projects\\ManufacturingERP\\.nuget\\packages\\microsoft.windowsdesktop.app.ref\\8.0.26\\microsoft.windowsdesktop.app.ref.8.0.26.nupkg.sha512",
+    "c:\\Projects\\ManufacturingERP\\.nuget\\packages\\microsoft.aspnetcore.app.ref\\8.0.26\\microsoft.aspnetcore.app.ref.8.0.26.nupkg.sha512"
   ],
   "logs": []
 }

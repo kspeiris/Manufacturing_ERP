@@ -10,7 +10,7 @@
         "projectUniqueName": "C:\\Projects\\ManufacturingERP\\src\\ManufacturingERP.Shared\\ManufacturingERP.Shared.csproj",
         "projectName": "ManufacturingERP.Shared",
         "projectPath": "C:\\Projects\\ManufacturingERP\\src\\ManufacturingERP.Shared\\ManufacturingERP.Shared.csproj",
-        "packagesPath": "C:\\Users\\kavin\\.nuget\\packages\\",
+        "packagesPath": "c:\\Projects\\ManufacturingERP\\.nuget\\packages",
         "outputPath": "C:\\Projects\\ManufacturingERP\\src\\ManufacturingERP.Shared\\obj\\",
         "projectStyle": "PackageReference",
         "configFilePaths": [
