@@ -39,6 +39,7 @@
                 <StackPanel DockPanel.Dock="Top">
                     <TextBlock Text="Manufacturing ERP" Foreground="White" FontSize="26" FontWeight="Bold" />
                     <TextBlock Text="{Binding CurrentUserDisplay}" Foreground="#94A3B8" Margin="0,4,0,16" />
+                    <TextBlock Text="{Binding StatusMessage}" Foreground="#FCA5A5" Margin="0,0,0,12" TextWrapping="Wrap" />
                 </StackPanel>
 
                 <ScrollViewer VerticalScrollBarVisibility="Auto">

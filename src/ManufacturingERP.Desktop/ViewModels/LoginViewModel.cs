@@ -26,10 +26,16 @@ public partial class LoginViewModel : ViewModelBase
     {
         using var scope = App.Services.CreateScope();
         var db = scope.ServiceProvider.GetRequiredService<AppDbContext>();
-        var user = await db.Users.FirstOrDefaultAsync(x => x.Username == Username && x.IsActive);
+        var user = await db.Users.FirstOrDefaultAsync(x => x.Username == Username);
         if (user is null || !_passwordHasherService.Verify(Password, user.PasswordHash))
         {
             ErrorMessage = "Invalid username or password.";
+            return false;
+        }
+
+        if (!user.IsActive)
+        {
+            ErrorMessage = "This user account is disabled.";
             return false;
         }
 

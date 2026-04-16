@@ -254,15 +254,18 @@ public class InventoryStockTests
             db.StockBalances.Add(stock);
             await db.SaveChangesAsync();
 
+            var currentUserService = new CurrentUserService();
+            currentUserService.Set(user);
+            var authorizationService = new AuthorizationService(currentUserService);
             var auditService = new AuditService(db);
 
             return new InventoryTestHarness(
                 tempDirectory,
                 db,
-                new WarehouseService(db),
-                new ProcurementService(db),
-                new Phase3ProcurementService(db, auditService),
-                new SalesService(db, auditService),
+                new WarehouseService(db, authorizationService, auditService, currentUserService),
+                new ProcurementService(db, authorizationService, auditService, currentUserService),
+                new Phase3ProcurementService(db, authorizationService, auditService, currentUserService),
+                new SalesService(db, authorizationService, auditService, currentUserService),
                 new InventoryService(db),
                 product,
                 warehouse,

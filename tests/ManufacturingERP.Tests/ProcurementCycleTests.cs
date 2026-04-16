@@ -272,8 +272,8 @@ public class ProcurementCycleTests
                 warehouse,
                 product,
                 stock,
-                new ProcurementService(db),
-                new Phase3ProcurementService(db, auditService),
+                new ProcurementService(db, authorizationService, auditService, currentUserService),
+                new Phase3ProcurementService(db, authorizationService, auditService, currentUserService),
                 new SupplierPaymentService(db, auditService, authorizationService),
                 new LedgerService(db));
         }

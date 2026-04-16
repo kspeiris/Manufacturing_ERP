@@ -9,16 +9,24 @@ namespace ManufacturingERP.Application.Services;
 public class Phase3ProcurementService
 {
     private readonly IAppDbContext _db;
+    private readonly AuthorizationService _authorizationService;
     private readonly AuditService _auditService;
+    private readonly CurrentUserService _currentUserService;
 
-    public Phase3ProcurementService(IAppDbContext db, AuditService auditService)
+    public Phase3ProcurementService(IAppDbContext db, AuthorizationService authorizationService, AuditService auditService, CurrentUserService currentUserService)
     {
         _db = db;
+        _authorizationService = authorizationService;
         _auditService = auditService;
+        _currentUserService = currentUserService;
     }
 
-    public async Task<Result<int>> CreateSupplierInvoiceAsync(CreateSupplierInvoiceRequest request, int actorUserId = 1)
+    public async Task<Result<int>> CreateSupplierInvoiceAsync(CreateSupplierInvoiceRequest request, int? actorUserId = null)
     {
+        var auth = _authorizationService.EnsureProcurementPostAccess();
+        if (!auth.IsSuccess)
+            return Result<int>.Failure(auth.Message);
+
         var supplier = await _db.Suppliers.FirstOrDefaultAsync(x => x.Id == request.SupplierId);
         if (supplier is null) return Result<int>.Failure("Supplier not found.");
 
@@ -73,12 +81,16 @@ public class Phase3ProcurementService
 
         _db.SupplierInvoices.Add(invoice);
         await _db.SaveChangesAsync();
-        await _auditService.LogAsync(actorUserId, "Create", "SupplierInvoice", invoice.Id.ToString(), null, invoice.InvoiceNo);
+        await _auditService.LogAsync(GetActorUserId(actorUserId), "Create", "SupplierInvoice", invoice.Id.ToString(), null, invoice.InvoiceNo);
         return Result<int>.Success(invoice.Id, invoice.InvoiceNo);
     }
 
-    public async Task<Result<int>> CreatePurchaseReturnAsync(CreatePurchaseReturnRequest request, int actorUserId = 1)
+    public async Task<Result<int>> CreatePurchaseReturnAsync(CreatePurchaseReturnRequest request, int? actorUserId = null)
     {
+        var auth = _authorizationService.EnsureProcurementPostAccess();
+        if (!auth.IsSuccess)
+            return Result<int>.Failure(auth.Message);
+
         if (!request.Items.Any())
             return Result<int>.Failure("Purchase return requires at least one line.");
 
@@ -146,7 +158,7 @@ public class Phase3ProcurementService
 
         _db.PurchaseReturns.Add(entity);
         await _db.SaveChangesAsync();
-        await _auditService.LogAsync(actorUserId, "Create", "PurchaseReturn", entity.Id.ToString(), null, entity.ReturnNo);
+        await _auditService.LogAsync(GetActorUserId(actorUserId), "Create", "PurchaseReturn", entity.Id.ToString(), null, entity.ReturnNo);
         return Result<int>.Success(entity.Id, entity.ReturnNo);
     }
 
@@ -155,4 +167,6 @@ public class Phase3ProcurementService
 
     public async Task<List<PurchaseReturn>> GetPurchaseReturnsAsync()
         => await _db.PurchaseReturns.Include(x => x.Supplier).Include(x => x.Warehouse).OrderByDescending(x => x.ReturnDate).ToListAsync();
+
+    private int? GetActorUserId(int? actorUserId) => actorUserId ?? _currentUserService.CurrentUserId;
 }

@@ -17,14 +17,22 @@ public class AccountingService
     private const string ExpenseAccount = "6000";
 
     private readonly IAppDbContext _db;
+    private readonly AuthorizationService _authorizationService;
+    private readonly AuditService _auditService;
+    private readonly CurrentUserService _currentUserService;
 
-    public AccountingService(IAppDbContext db)
+    public AccountingService(IAppDbContext db, AuthorizationService authorizationService, AuditService auditService, CurrentUserService currentUserService)
     {
         _db = db;
+        _authorizationService = authorizationService;
+        _auditService = auditService;
+        _currentUserService = currentUserService;
     }
 
-    public async Task<Result<int>> CreateJournalEntryAsync(CreateJournalEntryRequest request)
+    public async Task<Result<int>> CreateJournalEntryAsync(CreateJournalEntryRequest request, int? actorUserId = null)
     {
+        var auth = _authorizationService.EnsureAccountingPostAccess();
+        if (!auth.IsSuccess) return Result<int>.Failure(auth.Message);
         if (!request.Lines.Any()) return Result<int>.Failure("Journal entry requires at least one line.");
         if (request.Lines.Any(x => string.IsNullOrWhiteSpace(x.AccountCode) || x.Debit < 0 || x.Credit < 0 || (x.Debit > 0 && x.Credit > 0) || (x.Debit == 0 && x.Credit == 0))) return Result<int>.Failure("Each journal line must have an account and either a debit or a credit amount.");
         var accounts = await _db.Accounts.Where(x => x.IsActive).ToDictionaryAsync(x => x.AccountCode, x => x.AccountName);
@@ -42,6 +50,7 @@ public class AccountingService
         };
         _db.JournalEntries.Add(entry);
         await _db.SaveChangesAsync();
+        await _auditService.LogAsync(GetActorUserId(actorUserId), "Create", "JournalEntry", entry.Id.ToString(), null, entry.EntryNo);
         return Result<int>.Success(entry.Id, entry.EntryNo);
     }
 
@@ -56,10 +65,16 @@ public class AccountingService
     }
 
     public async Task<List<Account>> GetAccountsAsync()
-        => await _db.Accounts.Where(x => x.IsActive).OrderBy(x => x.AccountCode).ToListAsync();
+    {
+        var auth = _authorizationService.EnsureAccountingAccess();
+        if (!auth.IsSuccess) return [];
+        return await _db.Accounts.Where(x => x.IsActive).OrderBy(x => x.AccountCode).ToListAsync();
+    }
 
     public async Task<List<TrialBalanceRowDto>> GetTrialBalanceAsync()
     {
+        var auth = _authorizationService.EnsureAccountingAccess();
+        if (!auth.IsSuccess) return [];
         await SyncSystemPostingsAsync();
         var lines = await _db.JournalLines.OrderBy(x => x.AccountCode).ToListAsync();
         return lines.GroupBy(x => new { x.AccountCode, x.AccountName }).Select(g => new TrialBalanceRowDto { AccountCode = g.Key.AccountCode, AccountName = g.Key.AccountName, Debit = g.Sum(x => x.Debit), Credit = g.Sum(x => x.Credit) }).OrderBy(x => x.AccountCode).ToList();
@@ -67,6 +82,8 @@ public class AccountingService
 
     public async Task<List<ProfitLossRowDto>> GetProfitLossAsync()
     {
+        var auth = _authorizationService.EnsureAccountingAccess();
+        if (!auth.IsSuccess) return [];
         var trial = await GetTrialBalanceAsync();
         return new List<ProfitLossRowDto>
         {
@@ -78,6 +95,8 @@ public class AccountingService
 
     public async Task<List<BalanceSheetRowDto>> GetBalanceSheetAsync()
     {
+        var auth = _authorizationService.EnsureAccountingAccess();
+        if (!auth.IsSuccess) return [];
         var trial = await GetTrialBalanceAsync();
         return new List<BalanceSheetRowDto>
         {
@@ -167,4 +186,6 @@ public class AccountingService
             await CreateJournalEntryAsync(new CreateJournalEntryRequest { Description = description, Lines = lines });
         }
     }
+
+    private int? GetActorUserId(int? actorUserId) => actorUserId ?? _currentUserService.CurrentUserId;
 }

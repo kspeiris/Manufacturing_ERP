@@ -9,10 +9,16 @@ namespace ManufacturingERP.Application.Services;
 public class WarehouseService
 {
     private readonly IAppDbContext _db;
+    private readonly AuthorizationService _authorizationService;
+    private readonly AuditService _auditService;
+    private readonly CurrentUserService _currentUserService;
 
-    public WarehouseService(IAppDbContext db)
+    public WarehouseService(IAppDbContext db, AuthorizationService authorizationService, AuditService auditService, CurrentUserService currentUserService)
     {
         _db = db;
+        _authorizationService = authorizationService;
+        _auditService = auditService;
+        _currentUserService = currentUserService;
     }
 
     public async Task<List<StockRowDto>> GetStockAsync()
@@ -64,8 +70,12 @@ public class WarehouseService
             .ToListAsync();
     }
 
-    public async Task<Result> CreateAdjustmentAsync(int productId, int warehouseId, decimal quantityChange, string reason)
+    public async Task<Result> CreateAdjustmentAsync(int productId, int warehouseId, decimal quantityChange, string reason, int? actorUserId = null)
     {
+        var auth = _authorizationService.EnsureWarehousePostAccess();
+        if (!auth.IsSuccess)
+            return Result.Failure(auth.Message);
+
         if (quantityChange == 0)
             return Result.Failure("Adjustment quantity cannot be zero.");
         if (string.IsNullOrWhiteSpace(reason))
@@ -91,6 +101,7 @@ public class WarehouseService
             return Result.Failure("Adjustment would create negative stock.");
 
         stock.QuantityOnHand = newQty;
+        var referenceNo = $"ADJ-{DateTime.Now:yyyyMMdd-HHmmssfff}";
         _db.WarehouseTransactions.Add(new WarehouseTransaction
         {
             ProductId = productId,
@@ -98,11 +109,14 @@ public class WarehouseService
             TransactionType = quantityChange >= 0 ? "ADJ-IN" : "ADJ-OUT",
             QuantityIn = quantityChange >= 0 ? quantityChange : 0,
             QuantityOut = quantityChange < 0 ? Math.Abs(quantityChange) : 0,
-            ReferenceNo = $"ADJ-{DateTime.Now:yyyyMMdd-HHmmssfff}",
+            ReferenceNo = referenceNo,
             Remarks = reason.Trim()
         });
 
         await _db.SaveChangesAsync();
+        await _auditService.LogAsync(GetActorUserId(actorUserId), "Create", "WarehouseAdjustment", referenceNo, null, $"{productId}|{warehouseId}|{quantityChange}|{reason.Trim()}");
         return Result.Success("Stock adjustment saved.");
     }
+
+    private int? GetActorUserId(int? actorUserId) => actorUserId ?? _currentUserService.CurrentUserId;
 }
