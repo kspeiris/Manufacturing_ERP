@@ -4,7 +4,8 @@
              xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes">
     <ScrollViewer VerticalScrollBarVisibility="Auto">
         <StackPanel>
-            <TextBlock Text="Supplier Invoices &amp; Purchase Returns" FontSize="30" FontWeight="Bold" Margin="0,0,0,18" />
+            <TextBlock Text="Supplier Invoices &amp; Purchase Returns" Style="{StaticResource PageTitleText}" />
+            <TextBlock Text="Record supplier finance documents and returns with the supporting references close at hand." Style="{StaticResource PageSubtitleText}" Margin="0,0,0,18" />
 
             <Grid Margin="0,0,0,16">
                 <Grid.ColumnDefinitions><ColumnDefinition Width="1*"/><ColumnDefinition Width="1*"/></Grid.ColumnDefinitions>
@@ -18,12 +19,12 @@
                         <TextBox Text="{Binding ReferencePoNo}" />
                         <TextBlock Text="Reference GRN" Style="{StaticResource FormLabel}" Margin="0,12,0,4" />
                         <TextBox Text="{Binding ReferenceGrnNo}" />
-                        <TextBlock Text="Latest GRNs appear automatically when you pick a supplier." Foreground="#64748B" TextWrapping="Wrap" Margin="0,6,0,0" />
+                        <TextBlock Text="Latest GRNs appear automatically when you pick a supplier." Style="{StaticResource CaptionText}" Margin="0,6,0,0" />
                         <TextBlock Text="Invoice Amount" Style="{StaticResource FormLabel}" Margin="0,12,0,4" />
                         <TextBox Text="{Binding InvoiceAmount}" />
                         <TextBlock Text="Paid Amount" Style="{StaticResource FormLabel}" Margin="0,12,0,4" />
                         <TextBox Text="{Binding PaidAmount}" />
-                        <Button Content="Save Supplier Invoice" Command="{Binding SaveSupplierInvoiceCommand}" Margin="0,16,0,0" />
+                        <Button Content="Save Supplier Invoice" Command="{Binding SaveSupplierInvoiceCommand}" Style="{StaticResource PrimaryActionButton}" Margin="0,16,0,0" />
                     </StackPanel>
                 </Border>
 
@@ -37,10 +38,10 @@
                         <TextBlock Text="Reason" Style="{StaticResource FormLabel}" Margin="0,12,0,4" />
                         <TextBox Text="{Binding Reason}" />
                         <WrapPanel Margin="0,12,0,8">
-                            <Button Content="Add Return Line" Command="{Binding AddReturnLineCommand}" Margin="0,0,8,0" />
-                            <Button Content="Save Purchase Return" Command="{Binding SavePurchaseReturnCommand}" />
+                            <Button Content="Add Return Line" Command="{Binding AddReturnLineCommand}" Style="{StaticResource SecondaryActionButton}" />
+                            <Button Content="Save Purchase Return" Command="{Binding SavePurchaseReturnCommand}" Style="{StaticResource PrimaryActionButton}" Margin="0" />
                         </WrapPanel>
-                        <DataGrid ItemsSource="{Binding ReturnLines}" AutoGenerateColumns="False" CanUserAddRows="False" Height="220">
+                        <DataGrid ItemsSource="{Binding ReturnLines}" MinHeight="220">
                             <DataGrid.Columns>
                                 <DataGridComboBoxColumn Header="Product" Width="*" SelectedItemBinding="{Binding Product}" DisplayMemberPath="Name"
                                                         SelectedValuePath="."
@@ -53,14 +54,14 @@
                 </Border>
             </Grid>
 
-            <TextBlock Text="{Binding StatusMessage}" Foreground="#2563EB" Margin="0,0,0,12" />
+            <TextBlock Text="{Binding StatusMessage}" Style="{StaticResource StatusMessageText}" Margin="0,0,0,12" />
 
             <Grid>
                 <Grid.ColumnDefinitions><ColumnDefinition Width="1*"/><ColumnDefinition Width="1*"/></Grid.ColumnDefinitions>
                 <Border Grid.Column="0" Style="{StaticResource SectionCard}" Margin="0,0,16,0">
                     <DockPanel>
                         <TextBlock Text="Supplier Invoices" Style="{StaticResource CardTitleText}" DockPanel.Dock="Top" />
-                        <DataGrid ItemsSource="{Binding SupplierInvoices}" AutoGenerateColumns="False" CanUserAddRows="False" Height="260">
+                        <DataGrid ItemsSource="{Binding SupplierInvoices}" MinHeight="260">
                             <DataGrid.Columns>
                                 <DataGridTextColumn Header="Invoice No" Binding="{Binding InvoiceNo}" Width="160" />
                                 <DataGridTextColumn Header="Date" Binding="{Binding InvoiceDate}" Width="140" />
@@ -76,7 +77,7 @@
                 <Border Grid.Column="1" Style="{StaticResource SectionCard}">
                     <DockPanel>
                         <TextBlock Text="Purchase Returns" Style="{StaticResource CardTitleText}" DockPanel.Dock="Top" />
-                        <DataGrid ItemsSource="{Binding PurchaseReturns}" AutoGenerateColumns="False" CanUserAddRows="False" Height="260">
+                        <DataGrid ItemsSource="{Binding PurchaseReturns}" MinHeight="260">
                             <DataGrid.Columns>
                                 <DataGridTextColumn Header="Return No" Binding="{Binding ReturnNo}" Width="160" />
                                 <DataGridTextColumn Header="Date" Binding="{Binding ReturnDate}" Width="140" />

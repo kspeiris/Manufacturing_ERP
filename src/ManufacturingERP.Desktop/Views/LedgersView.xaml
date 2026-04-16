@@ -4,7 +4,8 @@
              xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes">
     <ScrollViewer VerticalScrollBarVisibility="Auto">
         <StackPanel>
-            <TextBlock Text="Customer &amp; Supplier Ledgers" FontSize="30" FontWeight="Bold" Margin="0,0,0,18" />
+            <TextBlock Text="Customer &amp; Supplier Ledgers" Style="{StaticResource PageTitleText}" />
+            <TextBlock Text="Load either party ledger without leaving the page so balances and references stay easy to compare." Style="{StaticResource PageSubtitleText}" Margin="0,0,0,18" />
             <Grid>
                 <Grid.ColumnDefinitions><ColumnDefinition Width="1*"/><ColumnDefinition Width="1*"/></Grid.ColumnDefinitions>
                 <Border Grid.Column="0" Style="{StaticResource SectionCard}" Margin="0,0,16,0">
@@ -13,10 +14,10 @@
                             <TextBlock Text="Customer Ledger" Style="{StaticResource CardTitleText}" />
                             <WrapPanel>
                                 <ComboBox Width="240" ItemsSource="{Binding Customers}" SelectedItem="{Binding SelectedCustomer}" DisplayMemberPath="ShopName" Margin="0,0,8,0" />
-                                <Button Content="Load" Command="{Binding LoadCustomerLedgerCommand}" />
+                                <Button Content="Load" Command="{Binding LoadCustomerLedgerCommand}" Style="{StaticResource SecondaryActionButton}" Margin="0" />
                             </WrapPanel>
                         </StackPanel>
-                        <DataGrid ItemsSource="{Binding CustomerRows}" AutoGenerateColumns="False" CanUserAddRows="False" Height="300">
+                        <DataGrid ItemsSource="{Binding CustomerRows}" MinHeight="320">
                             <DataGrid.Columns>
                                 <DataGridTextColumn Header="Date" Binding="{Binding EntryDate}" Width="140" />
                                 <DataGridTextColumn Header="Type" Binding="{Binding EntryType}" Width="120" />
@@ -34,10 +35,10 @@
                             <TextBlock Text="Supplier Ledger" Style="{StaticResource CardTitleText}" />
                             <WrapPanel>
                                 <ComboBox Width="240" ItemsSource="{Binding Suppliers}" SelectedItem="{Binding SelectedSupplier}" DisplayMemberPath="Name" Margin="0,0,8,0" />
-                                <Button Content="Load" Command="{Binding LoadSupplierLedgerCommand}" />
+                                <Button Content="Load" Command="{Binding LoadSupplierLedgerCommand}" Style="{StaticResource SecondaryActionButton}" Margin="0" />
                             </WrapPanel>
                         </StackPanel>
-                        <DataGrid ItemsSource="{Binding SupplierRows}" AutoGenerateColumns="False" CanUserAddRows="False" Height="300">
+                        <DataGrid ItemsSource="{Binding SupplierRows}" MinHeight="320">
                             <DataGrid.Columns>
                                 <DataGridTextColumn Header="Date" Binding="{Binding EntryDate}" Width="140" />
                                 <DataGridTextColumn Header="Type" Binding="{Binding EntryType}" Width="120" />
