@@ -5,7 +5,7 @@
     <ScrollViewer VerticalScrollBarVisibility="Auto">
         <StackPanel>
             <WrapPanel Margin="0,0,0,18">
-                <TextBlock Text="Reporting Workspace" FontSize="30" FontWeight="Bold" Margin="0,0,18,0" />
+                <TextBlock Text="Reporting Workspace" Style="{StaticResource PageTitleText}" Margin="0,0,18,0" />
                 <StackPanel Orientation="Horizontal" Margin="0,0,18,0" VerticalAlignment="Center">
                     <TextBlock Text="From" VerticalAlignment="Center" Margin="0,0,6,0" />
                     <DatePicker SelectedDate="{Binding FromDate}" Width="130" Margin="0,0,12,0" />
@@ -25,6 +25,8 @@
                 <Button Content="Customer Summary HTML" Command="{Binding ExportCustomerLedgerSummaryCommand}" Margin="0,0,8,8" />
                 <Button Content="Supplier Summary HTML" Command="{Binding ExportSupplierLedgerSummaryCommand}" Margin="0,0,8,8" />
             </WrapPanel>
+
+            <ProgressBar IsIndeterminate="True" Visibility="{Binding IsBusy, Converter={StaticResource BoolToVisibilityConverter}}" />
 
             <Border Style="{StaticResource SectionCard}">
                 <DockPanel>
@@ -124,7 +126,7 @@
                 </Border>
             </Grid>
 
-            <TextBlock Text="{Binding StatusMessage}" Foreground="#2563EB" TextWrapping="Wrap" />
+            <TextBlock Text="{Binding StatusMessage}" Style="{StaticResource StatusTextStyle}" />
         </StackPanel>
     </ScrollViewer>
 </UserControl>

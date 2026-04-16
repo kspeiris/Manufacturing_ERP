@@ -32,6 +32,9 @@ public partial class ReportsViewModel : ViewModelBase
     [RelayCommand]
     public async Task LoadAsync()
     {
+        IsBusy = true;
+        try
+        {
         LoadRows(SalesRows, await _reportingService.GetSalesRegisterAsync(FromDate, ToDate));
         LoadRows(PurchaseRows, await _reportingService.GetPurchaseRegisterAsync(FromDate, ToDate));
         LoadRows(StockRows, await _reportingService.GetStockReportAsync());
@@ -41,11 +44,19 @@ public partial class ReportsViewModel : ViewModelBase
 
         StatusMessage =
             $"Loaded {SalesRows.Count} sales, {PurchaseRows.Count} purchases, {StockRows.Count} stock rows, {ProductionRows.Count} production rows.";
+        }
+        finally
+        {
+            IsBusy = false;
+        }
     }
 
     [RelayCommand]
     public async Task ExportSalesRegisterHtmlAsync()
     {
+        IsBusy = true;
+        try
+        {
         var output = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "Exports", "sales_register.html");
         var result = await _printingService.ExportHtmlTableReportAsync(
             new PrintReportRequest
@@ -67,11 +78,19 @@ public partial class ReportsViewModel : ViewModelBase
             }),
             "Printable sales activity register");
         StatusMessage = result.Message;
+        }
+        finally
+        {
+            IsBusy = false;
+        }
     }
 
     [RelayCommand]
     public async Task ExportPurchaseRegisterHtmlAsync()
     {
+        IsBusy = true;
+        try
+        {
         var output = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "Exports", "purchase_register.html");
         var result = await _printingService.ExportHtmlTableReportAsync(
             new PrintReportRequest
@@ -91,11 +110,19 @@ public partial class ReportsViewModel : ViewModelBase
             }),
             "Procurement orders by date");
         StatusMessage = result.Message;
+        }
+        finally
+        {
+            IsBusy = false;
+        }
     }
 
     [RelayCommand]
     public async Task ExportStockReportHtmlAsync()
     {
+        IsBusy = true;
+        try
+        {
         var output = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "Exports", "stock_report.html");
         var result = await _printingService.ExportHtmlTableReportAsync(
             new PrintReportRequest
@@ -116,11 +143,19 @@ public partial class ReportsViewModel : ViewModelBase
             }),
             "Snapshot of available stock");
         StatusMessage = result.Message;
+        }
+        finally
+        {
+            IsBusy = false;
+        }
     }
 
     [RelayCommand]
     public async Task ExportProductionReportHtmlAsync()
     {
+        IsBusy = true;
+        try
+        {
         var output = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "Exports", "production_report.html");
         var result = await _printingService.ExportHtmlTableReportAsync(
             new PrintReportRequest
@@ -144,11 +179,19 @@ public partial class ReportsViewModel : ViewModelBase
             }),
             "Finished goods and costing summary");
         StatusMessage = result.Message;
+        }
+        finally
+        {
+            IsBusy = false;
+        }
     }
 
     [RelayCommand]
     public async Task ExportCustomerLedgerSummaryAsync()
     {
+        IsBusy = true;
+        try
+        {
         var output = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "Exports", "customer_ledger_summary.html");
         var result = await _printingService.ExportHtmlTableReportAsync(
             new PrintReportRequest
@@ -165,11 +208,19 @@ public partial class ReportsViewModel : ViewModelBase
             }),
             "Open receivables by customer");
         StatusMessage = result.Message;
+        }
+        finally
+        {
+            IsBusy = false;
+        }
     }
 
     [RelayCommand]
     public async Task ExportSupplierLedgerSummaryAsync()
     {
+        IsBusy = true;
+        try
+        {
         var output = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "Exports", "supplier_ledger_summary.html");
         var result = await _printingService.ExportHtmlTableReportAsync(
             new PrintReportRequest
@@ -186,22 +237,43 @@ public partial class ReportsViewModel : ViewModelBase
             }),
             "Open payables by supplier");
         StatusMessage = result.Message;
+        }
+        finally
+        {
+            IsBusy = false;
+        }
     }
 
     [RelayCommand]
     public async Task ExportInvoiceHtmlAsync()
     {
+        IsBusy = true;
+        try
+        {
         var output = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "Exports", "latest_invoice.html");
         var result = await _printingService.ExportLatestInvoiceHtmlAsync(output);
         StatusMessage = result.Message;
+        }
+        finally
+        {
+            IsBusy = false;
+        }
     }
 
     [RelayCommand]
     public async Task ExportPurchaseOrderHtmlAsync()
     {
+        IsBusy = true;
+        try
+        {
         var output = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "Exports", "latest_purchase_order.html");
         var result = await _printingService.ExportLatestPurchaseOrderHtmlAsync(output);
         StatusMessage = result.Message;
+        }
+        finally
+        {
+            IsBusy = false;
+        }
     }
 
     private static void LoadRows<T>(ObservableCollection<T> target, IEnumerable<T> source)

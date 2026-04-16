@@ -36,6 +36,9 @@ public partial class PosSalesViewModel : ViewModelBase
     [RelayCommand]
     public async Task LoadAsync()
     {
+        IsBusy = true;
+        try
+        {
         using var scope = App.Services.CreateScope();
         var db = scope.ServiceProvider.GetRequiredService<AppDbContext>();
         Customers.Clear();
@@ -45,6 +48,11 @@ public partial class PosSalesViewModel : ViewModelBase
         Products.Clear();
         foreach (var x in await db.Products.Where(x => x.IsActive && x.SellingPrice > 0).OrderBy(x => x.Name).ToListAsync()) Products.Add(x);
         if (!Lines.Any()) AddEmptyLine();
+        }
+        finally
+        {
+            IsBusy = false;
+        }
     }
 
     [RelayCommand] private void AddLine() => AddEmptyLine();
@@ -52,6 +60,9 @@ public partial class PosSalesViewModel : ViewModelBase
     [RelayCommand]
     private async Task CheckoutAsync()
     {
+        IsBusy = true;
+        try
+        {
         if (SelectedCustomer is null || SelectedVehicle is null)
         {
             StatusMessage = "Select customer and vehicle.";
@@ -76,6 +87,11 @@ public partial class PosSalesViewModel : ViewModelBase
             AddEmptyLine();
             await LoadAsync();
             NotifyTotalsChanged();
+        }
+        }
+        finally
+        {
+            IsBusy = false;
         }
     }
 
