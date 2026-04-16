@@ -5,23 +5,57 @@
     <Grid>
         <Grid.ColumnDefinitions><ColumnDefinition Width="1.1*"/><ColumnDefinition Width="1.9*"/></Grid.ColumnDefinitions>
         <Border Grid.Column="0" Style="{StaticResource SectionCard}" Margin="0,0,16,0">
-            <StackPanel>
-                <WrapPanel Margin="0,0,0,12">
-                    <TextBlock Text="Report Center" Style="{StaticResource CardTitleText}" Margin="0,0,8,0" />
-                    <Button Content="Refresh" Command="{Binding LoadCommand}" Style="{StaticResource SecondaryActionButton}" Margin="0" />
-                </WrapPanel>
-                <TextBlock Text="Exported Files" Style="{StaticResource FormLabel}" />
-                <ListBox x:Name="ExportFilesList" ItemsSource="{Binding ExportFiles}" SelectedItem="{Binding SelectedFilePath}" SelectionChanged="ExportFilesList_OnSelectionChanged" Height="220" Margin="0,0,0,12" />
-                <TextBlock Text="Templates" Style="{StaticResource FormLabel}" />
-                <ListBox ItemsSource="{Binding TemplateFiles}" Height="180" />
-                <Button Content="Select File" Command="{Binding OpenSelectedFileCommand}" Style="{StaticResource PrimaryActionButton}" Margin="0,12,0,0" />
-                <TextBlock Text="{Binding StatusMessage}" Style="{StaticResource StatusMessageText}" />
-            </StackPanel>
+            <Grid>
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="Auto" />
+                    <RowDefinition Height="*" />
+                </Grid.RowDefinitions>
+
+                <StackPanel Grid.Row="0">
+                    <WrapPanel Margin="0,0,0,10">
+                        <TextBlock Text="Report Center" Style="{StaticResource PageTitleText}" Margin="0,0,12,0" />
+                        <Button Content="Refresh" Command="{Binding LoadCommand}" Style="{StaticResource SecondaryActionButton}" Margin="0" />
+                    </WrapPanel>
+                    <TextBlock Text="Browse generated reports and starter templates with embedded preview." Style="{StaticResource PageSubtitleText}" />
+                    <TextBox Style="{StaticResource SearchTextBox}"
+                             Text="{Binding SearchText, UpdateSourceTrigger=PropertyChanged}"
+                             materialDesign:HintAssist.Hint="Search exports or templates" />
+                    <TextBlock Text="{Binding StatusMessage}" Style="{StaticResource StatusMessageText}" />
+                </StackPanel>
+
+                <Grid Grid.Row="1" Margin="0,12,0,0">
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="Auto" />
+                        <RowDefinition Height="*" />
+                    </Grid.RowDefinitions>
+                    <ProgressBar Grid.Row="0" IsIndeterminate="True" Visibility="{Binding IsBusy, Converter={StaticResource BoolToVisibilityConverter}}" />
+                    <Grid Grid.Row="1">
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="Auto" />
+                            <RowDefinition Height="*" />
+                            <RowDefinition Height="Auto" />
+                            <RowDefinition Height="*" />
+                            <RowDefinition Height="Auto" />
+                        </Grid.RowDefinitions>
+                        <TextBlock Grid.Row="0" Text="Exported Files" Style="{StaticResource FormLabel}" Margin="0" />
+                        <ListBox Grid.Row="1" x:Name="ExportFilesList" ItemsSource="{Binding ExportFiles}" SelectedItem="{Binding SelectedFilePath}" SelectionChanged="ExportFilesList_OnSelectionChanged" MinHeight="220" Margin="0,8,0,12" />
+                        <TextBlock Grid.Row="2" Text="Templates" Style="{StaticResource FormLabel}" Margin="0" />
+                        <ListBox Grid.Row="3" ItemsSource="{Binding TemplateFiles}" MinHeight="180" Margin="0,8,0,12" />
+                        <Button Grid.Row="4" Content="Select File" Command="{Binding OpenSelectedFileCommand}" Style="{StaticResource PrimaryActionButton}" Margin="0" />
+                    </Grid>
+                </Grid>
+            </Grid>
         </Border>
+
         <Border Grid.Column="1" Style="{StaticResource SectionCard}">
             <DockPanel>
-                <TextBlock Text="Embedded Preview" Style="{StaticResource CardTitleText}" DockPanel.Dock="Top" />
-                <WebBrowser x:Name="PreviewBrowser" />
+                <StackPanel DockPanel.Dock="Top" Margin="0,0,0,12">
+                    <TextBlock Text="Embedded Preview" Style="{StaticResource CardTitleText}" />
+                    <TextBlock Text="{Binding SelectedFilePath}" Style="{StaticResource CaptionText}" TextWrapping="Wrap" />
+                </StackPanel>
+                <Border Background="#F8FAFC" BorderBrush="#E2E8F0" BorderThickness="1" CornerRadius="16" Padding="8">
+                    <WebBrowser x:Name="PreviewBrowser" />
+                </Border>
             </DockPanel>
         </Border>
     </Grid>

@@ -55,7 +55,7 @@ public partial class UserManagementViewModel : ViewModelBase
     [RelayCommand]
     private async Task SaveAsync()
     {
-        var auth = _authorizationService.EnsureAdminAccess();
+        var auth = _authorizationService.EnsureAdminWriteAccess();
         if (!auth.IsSuccess) { StatusMessage = auth.Message; return; }
 
         var validationMessage = ValidateUser();
@@ -86,7 +86,7 @@ public partial class UserManagementViewModel : ViewModelBase
     [RelayCommand]
     private async Task DeleteAsync()
     {
-        var auth = _authorizationService.EnsureAdminAccess();
+        var auth = _authorizationService.EnsureAdminWriteAccess();
         if (!auth.IsSuccess) { StatusMessage = auth.Message; return; }
         if (SelectedUser is null)
         {

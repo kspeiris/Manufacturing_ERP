@@ -160,10 +160,11 @@ public class SalesCycleTests
     {
         private readonly string _tempDirectory;
 
-        private SalesTestHarness(string tempDirectory, AppDbContext db, Customer customer, Vehicle vehicle, Product productA, Product productB, StockBalance stockA, StockBalance stockB)
+        private SalesTestHarness(string tempDirectory, AppDbContext db, User user, Customer customer, Vehicle vehicle, Product productA, Product productB, StockBalance stockA, StockBalance stockB)
         {
             _tempDirectory = tempDirectory;
             Db = db;
+            User = user;
             Customer = customer;
             Vehicle = vehicle;
             ProductA = productA;
@@ -173,6 +174,7 @@ public class SalesCycleTests
         }
 
         public AppDbContext Db { get; }
+        public User User { get; }
         public Customer Customer { get; private set; }
         public Vehicle Vehicle { get; private set; }
         public Product ProductA { get; private set; }
@@ -244,11 +246,15 @@ public class SalesCycleTests
             db.StockBalances.AddRange(stockA, stockB);
             await db.SaveChangesAsync();
 
-            return new SalesTestHarness(tempDirectory, db, customer, vehicle, productA, productB, stockA, stockB);
+            return new SalesTestHarness(tempDirectory, db, user, customer, vehicle, productA, productB, stockA, stockB);
         }
 
         public SalesService CreateSalesService()
-            => new(Db, new AuditService(Db));
+        {
+            var currentUserService = new CurrentUserService();
+            currentUserService.Set(User);
+            return new SalesService(Db, new AuthorizationService(currentUserService), new AuditService(Db), currentUserService);
+        }
 
         public async Task ReloadAsync()
         {

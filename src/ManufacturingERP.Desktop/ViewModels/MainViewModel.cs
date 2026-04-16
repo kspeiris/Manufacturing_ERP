@@ -6,8 +6,10 @@ namespace ManufacturingERP.Desktop.ViewModels;
 
 public partial class MainViewModel : ViewModelBase
 {
+    private readonly AuthorizationService _authorizationService;
     private readonly CurrentUserService _currentUserService;
     [ObservableProperty] private object? _currentView;
+    [ObservableProperty] private string _statusMessage = string.Empty;
 
     public DashboardViewModel Dashboard { get; }
     public ProductsViewModel Products { get; }
@@ -41,7 +43,7 @@ public partial class MainViewModel : ViewModelBase
     public bool CanManageProduction => _currentUserService.IsInRole("Admin", "Manager", "Production");
     public bool CanViewReports => _currentUserService.CurrentUser is not null;
 
-    public MainViewModel(CurrentUserService currentUserService, DashboardViewModel dashboard, ProductsViewModel products, CustomersViewModel customers,
+    public MainViewModel(CurrentUserService currentUserService, AuthorizationService authorizationService, DashboardViewModel dashboard, ProductsViewModel products, CustomersViewModel customers,
         SuppliersViewModel suppliers, VehiclesViewModel vehicles, WarehousesViewModel warehouses, RoutesViewModel routes,
         VehicleSalesViewModel vehicleSales, PosSalesViewModel posSales, CollectionsViewModel collections, ProcurementViewModel procurement,
         Phase3ProcurementViewModel supplierFinance, SupplierPaymentsViewModel supplierPayments, WarehouseViewModel warehouse,
@@ -50,6 +52,7 @@ public partial class MainViewModel : ViewModelBase
         UserManagementViewModel users, AuditLogsViewModel auditLogs)
     {
         _currentUserService = currentUserService;
+        _authorizationService = authorizationService;
         Dashboard = dashboard; Products = products; Customers = customers; Suppliers = suppliers; Vehicles = vehicles;
         Warehouses = warehouses; Routes = routes; VehicleSales = vehicleSales; PosSales = posSales; Collections = collections;
         Procurement = procurement; SupplierFinance = supplierFinance; SupplierPayments = supplierPayments; Warehouse = warehouse;
@@ -58,27 +61,44 @@ public partial class MainViewModel : ViewModelBase
         CurrentView = Dashboard;
     }
 
-    [RelayCommand] private void ShowDashboard() => CurrentView = Dashboard;
-    [RelayCommand] private void ShowProducts() => CurrentView = Products;
-    [RelayCommand] private void ShowCustomers() => CurrentView = Customers;
-    [RelayCommand] private void ShowSuppliers() => CurrentView = Suppliers;
-    [RelayCommand] private void ShowVehicles() => CurrentView = Vehicles;
-    [RelayCommand] private void ShowWarehouses() => CurrentView = Warehouses;
-    [RelayCommand] private void ShowRoutes() => CurrentView = Routes;
-    [RelayCommand] private void ShowVehicleSales() => CurrentView = VehicleSales;
-    [RelayCommand] private void ShowPosSales() => CurrentView = PosSales;
-    [RelayCommand] private void ShowCollections() => CurrentView = Collections;
-    [RelayCommand] private void ShowProcurement() => CurrentView = Procurement;
-    [RelayCommand] private void ShowSupplierFinance() => CurrentView = SupplierFinance;
-    [RelayCommand] private void ShowSupplierPayments() => CurrentView = SupplierPayments;
-    [RelayCommand] private void ShowWarehouse() => CurrentView = Warehouse;
-    [RelayCommand] private void ShowProduction() => CurrentView = Production;
-    [RelayCommand] private void ShowProductionCosting() => CurrentView = ProductionCosting;
-    [RelayCommand] private void ShowMobileSync() => CurrentView = MobileSync;
-    [RelayCommand] private void ShowAccounting() => CurrentView = Accounting;
-    [RelayCommand] private void ShowLedgers() => CurrentView = Ledgers;
-    [RelayCommand] private void ShowReports() => CurrentView = Reports;
-    [RelayCommand] private void ShowReportViewer() => CurrentView = ReportViewer;
-    [RelayCommand] private void ShowUsers() => CurrentView = Users;
-    [RelayCommand] private void ShowAuditLogs() => CurrentView = AuditLogs;
+    [RelayCommand]
+    private void ShowDashboard()
+    {
+        StatusMessage = string.Empty;
+        CurrentView = Dashboard;
+    }
+    [RelayCommand] private void ShowProducts() => NavigateTo(Products, _authorizationService.EnsureSalesAccess());
+    [RelayCommand] private void ShowCustomers() => NavigateTo(Customers, _authorizationService.EnsureSalesAccess());
+    [RelayCommand] private void ShowSuppliers() => NavigateTo(Suppliers, _authorizationService.EnsureAdminAccess());
+    [RelayCommand] private void ShowVehicles() => NavigateTo(Vehicles, _authorizationService.EnsureAdminAccess());
+    [RelayCommand] private void ShowWarehouses() => NavigateTo(Warehouses, _authorizationService.EnsureAdminAccess());
+    [RelayCommand] private void ShowRoutes() => NavigateTo(Routes, _authorizationService.EnsureAdminAccess());
+    [RelayCommand] private void ShowVehicleSales() => NavigateTo(VehicleSales, _authorizationService.EnsureSalesAccess());
+    [RelayCommand] private void ShowPosSales() => NavigateTo(PosSales, _authorizationService.EnsureSalesAccess());
+    [RelayCommand] private void ShowCollections() => NavigateTo(Collections, _authorizationService.EnsureSalesAccess());
+    [RelayCommand] private void ShowProcurement() => NavigateTo(Procurement, _authorizationService.EnsureProcurementAccess());
+    [RelayCommand] private void ShowSupplierFinance() => NavigateTo(SupplierFinance, _authorizationService.EnsureProcurementAccess());
+    [RelayCommand] private void ShowSupplierPayments() => NavigateTo(SupplierPayments, _authorizationService.EnsureAccountingAccess());
+    [RelayCommand] private void ShowWarehouse() => NavigateTo(Warehouse, _authorizationService.EnsureWarehouseAccess());
+    [RelayCommand] private void ShowProduction() => NavigateTo(Production, _authorizationService.EnsureProductionAccess());
+    [RelayCommand] private void ShowProductionCosting() => NavigateTo(ProductionCosting, _authorizationService.EnsureProductionAccess());
+    [RelayCommand] private void ShowMobileSync() => NavigateTo(MobileSync, _authorizationService.EnsureSalesAccess());
+    [RelayCommand] private void ShowAccounting() => NavigateTo(Accounting, _authorizationService.EnsureAccountingAccess());
+    [RelayCommand] private void ShowLedgers() => NavigateTo(Ledgers, _authorizationService.EnsureLedgersAccess());
+    [RelayCommand] private void ShowReports() => NavigateTo(Reports, _authorizationService.EnsureReportsAccess());
+    [RelayCommand] private void ShowReportViewer() => NavigateTo(ReportViewer, _authorizationService.EnsureReportsAccess());
+    [RelayCommand] private void ShowUsers() => NavigateTo(Users, _authorizationService.EnsureAdminAccess());
+    [RelayCommand] private void ShowAuditLogs() => NavigateTo(AuditLogs, _authorizationService.EnsureAdminAccess());
+
+    private void NavigateTo(object targetView, ManufacturingERP.Shared.Results.Result authResult)
+    {
+        if (!authResult.IsSuccess)
+        {
+            StatusMessage = authResult.Message;
+            return;
+        }
+
+        StatusMessage = string.Empty;
+        CurrentView = targetView;
+    }
 }

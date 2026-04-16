@@ -1,0 +1,16 @@
+# Build outputs
+**/bin/
+**/obj/
+
+# Local databases
+*.db
+*.db-shm
+*.db-wal
+
+# Local .NET CLI and package caches
+.dotnetcli/
+.nuget/
+
+# Diagnostic and temporary files
+*.log
+tmp_*.txt

@@ -6,11 +6,15 @@ namespace ManufacturingERP.Desktop.ViewModels;
 
 public partial class ReportViewerViewModel : ViewModelBase
 {
+    private readonly List<string> _allExportFiles = [];
+    private readonly List<string> _allTemplateFiles = [];
+
     public ObservableCollection<string> ExportFiles { get; } = new();
     public ObservableCollection<string> TemplateFiles { get; } = new();
 
     [ObservableProperty] private string _selectedFilePath = string.Empty;
     [ObservableProperty] private string _statusMessage = string.Empty;
+    [ObservableProperty] private string _searchText = string.Empty;
 
     public ReportViewerViewModel()
     {
@@ -20,24 +24,35 @@ public partial class ReportViewerViewModel : ViewModelBase
     [RelayCommand]
     public Task LoadAsync()
     {
-        ExportFiles.Clear();
-        TemplateFiles.Clear();
-
-        var exportDir = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "Exports");
-        if (Directory.Exists(exportDir))
+        IsBusy = true;
+        try
         {
-            foreach (var file in Directory.GetFiles(exportDir).OrderByDescending(x => x))
-                ExportFiles.Add(file);
+            _allExportFiles.Clear();
+            _allTemplateFiles.Clear();
+
+            var exportDir = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "Exports");
+            if (Directory.Exists(exportDir))
+            {
+                _allExportFiles.AddRange(new DirectoryInfo(exportDir).GetFiles()
+                    .OrderByDescending(x => x.LastWriteTimeUtc)
+                    .Select(x => x.FullName));
+            }
+
+            var templateDir = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "Reports", "Templates");
+            if (Directory.Exists(templateDir))
+            {
+                _allTemplateFiles.AddRange(Directory.GetFiles(templateDir).OrderBy(x => x));
+            }
+
+            ApplyFilter();
+            SelectedFilePath = ExportFiles.FirstOrDefault() ?? TemplateFiles.FirstOrDefault() ?? string.Empty;
+            StatusMessage = $"Found {ExportFiles.Count} exported files and {TemplateFiles.Count} templates.";
+        }
+        finally
+        {
+            IsBusy = false;
         }
 
-        var templateDir = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "Reports", "Templates");
-        if (Directory.Exists(templateDir))
-        {
-            foreach (var file in Directory.GetFiles(templateDir).OrderBy(x => x))
-                TemplateFiles.Add(file);
-        }
-
-        StatusMessage = $"Found {ExportFiles.Count} exported files and {TemplateFiles.Count} templates.";
         return Task.CompletedTask;
     }
 
@@ -50,6 +65,27 @@ public partial class ReportViewerViewModel : ViewModelBase
             return;
         }
 
-        StatusMessage = $"Selected: {SelectedFilePath}";
+        StatusMessage = $"Previewing {Path.GetFileName(SelectedFilePath)}";
+    }
+
+    partial void OnSearchTextChanged(string value) => ApplyFilter();
+
+    private void ApplyFilter()
+    {
+        var term = SearchText.Trim();
+        var exportFiles = string.IsNullOrWhiteSpace(term)
+            ? _allExportFiles
+            : _allExportFiles.Where(x => Path.GetFileName(x).Contains(term, StringComparison.OrdinalIgnoreCase)).ToList();
+        var templateFiles = string.IsNullOrWhiteSpace(term)
+            ? _allTemplateFiles
+            : _allTemplateFiles.Where(x => Path.GetFileName(x).Contains(term, StringComparison.OrdinalIgnoreCase)).ToList();
+
+        ExportFiles.Clear();
+        foreach (var file in exportFiles)
+            ExportFiles.Add(file);
+
+        TemplateFiles.Clear();
+        foreach (var file in templateFiles)
+            TemplateFiles.Add(file);
     }
 }

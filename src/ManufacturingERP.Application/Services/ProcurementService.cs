@@ -9,14 +9,24 @@ namespace ManufacturingERP.Application.Services;
 public class ProcurementService
 {
     private readonly IAppDbContext _db;
+    private readonly AuthorizationService _authorizationService;
+    private readonly AuditService _auditService;
+    private readonly CurrentUserService _currentUserService;
 
-    public ProcurementService(IAppDbContext db)
+    public ProcurementService(IAppDbContext db, AuthorizationService authorizationService, AuditService auditService, CurrentUserService currentUserService)
     {
         _db = db;
+        _authorizationService = authorizationService;
+        _auditService = auditService;
+        _currentUserService = currentUserService;
     }
 
-    public async Task<Result<int>> CreatePurchaseOrderAsync(CreatePurchaseOrderRequest request)
+    public async Task<Result<int>> CreatePurchaseOrderAsync(CreatePurchaseOrderRequest request, int? actorUserId = null)
     {
+        var auth = _authorizationService.EnsureProcurementPostAccess();
+        if (!auth.IsSuccess)
+            return Result<int>.Failure(auth.Message);
+
         if (!request.Items.Any())
             return Result<int>.Failure("Purchase order requires at least one line.");
 
@@ -52,11 +62,16 @@ public class ProcurementService
         po.TotalAmount = po.Items.Sum(x => x.LineTotal);
         _db.PurchaseOrders.Add(po);
         await _db.SaveChangesAsync();
+        await _auditService.LogAsync(GetActorUserId(actorUserId), "Create", "PurchaseOrder", po.Id.ToString(), null, po.OrderNo);
         return Result<int>.Success(po.Id, po.OrderNo);
     }
 
-    public async Task<Result<int>> CreateGoodsReceiptAsync(CreateGoodsReceiptRequest request)
+    public async Task<Result<int>> CreateGoodsReceiptAsync(CreateGoodsReceiptRequest request, int? actorUserId = null)
     {
+        var auth = _authorizationService.EnsureProcurementPostAccess();
+        if (!auth.IsSuccess)
+            return Result<int>.Failure(auth.Message);
+
         if (!request.Items.Any())
             return Result<int>.Failure("Goods receipt requires at least one line.");
 
@@ -161,6 +176,7 @@ public class ProcurementService
 
         _db.GoodsReceipts.Add(receipt);
         await _db.SaveChangesAsync();
+        await _auditService.LogAsync(GetActorUserId(actorUserId), "Create", "GoodsReceipt", receipt.Id.ToString(), null, receipt.ReceiptNo);
 
         if (purchaseOrder is not null)
         {
@@ -180,4 +196,6 @@ public class ProcurementService
 
         return Result<int>.Success(receipt.Id, receipt.ReceiptNo);
     }
+
+    private int? GetActorUserId(int? actorUserId) => actorUserId ?? _currentUserService.CurrentUserId;
 }

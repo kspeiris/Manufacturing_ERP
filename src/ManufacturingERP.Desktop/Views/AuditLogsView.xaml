@@ -3,25 +3,44 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes">
     <Border Style="{StaticResource ViewRootCard}">
-        <DockPanel>
-            <DockPanel DockPanel.Dock="Top" LastChildFill="False" Margin="0,0,0,14">
+        <Grid>
+            <Grid.RowDefinitions>
+                <RowDefinition Height="Auto" />
+                <RowDefinition Height="*" />
+            </Grid.RowDefinitions>
+
+            <DockPanel Grid.Row="0" LastChildFill="False" Margin="0,0,0,14">
                 <StackPanel DockPanel.Dock="Left">
                     <TextBlock Text="Audit Logs" Style="{StaticResource PageTitleText}" />
                     <TextBlock Text="Review who changed what and when across the ERP workspace." Style="{StaticResource PageSubtitleText}" />
+                    <TextBox Style="{StaticResource SearchTextBox}"
+                             Text="{Binding SearchText, UpdateSourceTrigger=PropertyChanged}"
+                             materialDesign:HintAssist.Hint="Search by user, action, entity, or values" />
+                    <TextBlock Text="{Binding StatusMessage}" Style="{StaticResource StatusMessageText}" />
                 </StackPanel>
                 <Button Content="Refresh" Command="{Binding LoadCommand}" Style="{StaticResource SecondaryActionButton}" Margin="0" />
             </DockPanel>
-            <DataGrid ItemsSource="{Binding AuditLogs}">
-                <DataGrid.Columns>
-                    <DataGridTextColumn Header="When (UTC)" Binding="{Binding ActionAtUtc}" Width="180" />
-                    <DataGridTextColumn Header="User" Binding="{Binding User.Username}" Width="120" />
-                    <DataGridTextColumn Header="Action" Binding="{Binding Action}" Width="100" />
-                    <DataGridTextColumn Header="Entity" Binding="{Binding EntityName}" Width="120" />
-                    <DataGridTextColumn Header="Key" Binding="{Binding EntityKey}" Width="100" />
-                    <DataGridTextColumn Header="Old Values" Binding="{Binding OldValues}" Width="*" />
-                    <DataGridTextColumn Header="New Values" Binding="{Binding NewValues}" Width="*" />
-                </DataGrid.Columns>
-            </DataGrid>
-        </DockPanel>
+
+            <Grid Grid.Row="1">
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="Auto" />
+                    <RowDefinition Height="*" />
+                </Grid.RowDefinitions>
+                <ProgressBar Grid.Row="0"
+                             IsIndeterminate="True"
+                             Visibility="{Binding IsBusy, Converter={StaticResource BoolToVisibilityConverter}}" />
+                <DataGrid Grid.Row="1" ItemsSource="{Binding AuditLogs}">
+                    <DataGrid.Columns>
+                        <DataGridTextColumn Header="When (UTC)" Binding="{Binding ActionAtUtc, StringFormat=yyyy-MM-dd HH:mm:ss}" Width="180" />
+                        <DataGridTextColumn Header="User" Binding="{Binding User.Username}" Width="120" />
+                        <DataGridTextColumn Header="Action" Binding="{Binding Action}" Width="110" />
+                        <DataGridTextColumn Header="Entity" Binding="{Binding EntityName}" Width="140" />
+                        <DataGridTextColumn Header="Key" Binding="{Binding EntityKey}" Width="120" />
+                        <DataGridTextColumn Header="Old Values" Binding="{Binding OldValues}" Width="*" />
+                        <DataGridTextColumn Header="New Values" Binding="{Binding NewValues}" Width="*" />
+                    </DataGrid.Columns>
+                </DataGrid>
+            </Grid>
+        </Grid>
     </Border>
 </UserControl>

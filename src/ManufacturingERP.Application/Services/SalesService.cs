@@ -10,16 +10,24 @@ namespace ManufacturingERP.Application.Services;
 public class SalesService
 {
     private readonly IAppDbContext _db;
+    private readonly AuthorizationService _authorizationService;
     private readonly AuditService _auditService;
+    private readonly CurrentUserService _currentUserService;
 
-    public SalesService(IAppDbContext db, AuditService auditService)
+    public SalesService(IAppDbContext db, AuthorizationService authorizationService, AuditService auditService, CurrentUserService currentUserService)
     {
         _db = db;
+        _authorizationService = authorizationService;
         _auditService = auditService;
+        _currentUserService = currentUserService;
     }
 
-    public async Task<Result<int>> CreateInvoiceAsync(CreateInvoiceRequest request, int actorUserId = 1)
+    public async Task<Result<int>> CreateInvoiceAsync(CreateInvoiceRequest request, int? actorUserId = null)
     {
+        var auth = _authorizationService.EnsureSalesPostAccess();
+        if (!auth.IsSuccess)
+            return Result<int>.Failure(auth.Message);
+
         if (!request.Items.Any())
             return Result<int>.Failure("Invoice must contain at least one item.");
 
@@ -91,12 +99,16 @@ public class SalesService
         customer.OutstandingBalance += outstandingIncrease;
 
         await _db.SaveChangesAsync();
-        await _auditService.LogAsync(actorUserId, "Create", "SalesInvoice", invoice.Id.ToString(), null, invoice.InvoiceNo);
+        await _auditService.LogAsync(GetActorUserId(actorUserId), "Create", "SalesInvoice", invoice.Id.ToString(), null, invoice.InvoiceNo);
         return Result<int>.Success(invoice.Id, invoice.InvoiceNo);
     }
 
-    public async Task<Result> RegisterCollectionAsync(int customerId, decimal amount, string referenceNo, string notes, int actorUserId = 1)
+    public async Task<Result> RegisterCollectionAsync(int customerId, decimal amount, string referenceNo, string notes, int? actorUserId = null)
     {
+        var auth = _authorizationService.EnsureSalesPostAccess();
+        if (!auth.IsSuccess)
+            return Result.Failure(auth.Message);
+
         if (amount <= 0)
             return Result.Failure("Collection amount must be greater than zero.");
         if (string.IsNullOrWhiteSpace(referenceNo))
@@ -122,7 +134,7 @@ public class SalesService
         });
 
         await _db.SaveChangesAsync();
-        await _auditService.LogAsync(actorUserId, "Create", "CollectionEntry", customerId.ToString(), null, $"{amount}|{referenceNo}");
+        await _auditService.LogAsync(GetActorUserId(actorUserId), "Create", "CollectionEntry", customerId.ToString(), null, $"{amount}|{referenceNo}");
         return Result.Success("Collection recorded.");
     }
 
@@ -187,4 +199,6 @@ public class SalesService
 
     private static string GenerateInvoiceNumber()
         => $"INV-{DateTime.Now:yyyyMMdd-HHmmssfff}";
+
+    private int? GetActorUserId(int? actorUserId) => actorUserId ?? _currentUserService.CurrentUserId;
 }

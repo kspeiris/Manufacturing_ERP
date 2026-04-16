@@ -20,6 +20,30 @@ public class ProcurementReportRowDto
     public decimal TotalAmount { get; set; }
 }
 
+public class StockReportRowDto
+{
+    public string ProductCode { get; set; } = string.Empty;
+    public string ProductName { get; set; } = string.Empty;
+    public string WarehouseName { get; set; } = string.Empty;
+    public decimal QuantityOnHand { get; set; }
+    public decimal UnitCost { get; set; }
+    public decimal StockValue { get; set; }
+}
+
+public class ProductionReportRowDto
+{
+    public string OrderNo { get; set; } = string.Empty;
+    public DateTime OrderDate { get; set; }
+    public string ProductName { get; set; } = string.Empty;
+    public string BatchNo { get; set; } = string.Empty;
+    public decimal PlannedQuantity { get; set; }
+    public decimal ProducedQuantity { get; set; }
+    public decimal ScrapQuantity { get; set; }
+    public decimal TotalCost { get; set; }
+    public decimal UnitCost { get; set; }
+    public string Status { get; set; } = string.Empty;
+}
+
 public class TrialBalanceRowDto
 {
     public string AccountCode { get; set; } = string.Empty;

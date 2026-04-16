@@ -1,7 +1,9 @@
-﻿using ManufacturingERP.Application.DTOs;
+using ManufacturingERP.Application.DTOs;
 using ManufacturingERP.Application.Services;
 using ManufacturingERP.Domain.Entities;
+using ManufacturingERP.Domain.Enums;
 using ManufacturingERP.Infrastructure.Persistence;
+using ManufacturingERP.Shared.Constants;
 using Microsoft.Data.Sqlite;
 using Microsoft.EntityFrameworkCore;
 using Xunit;
@@ -134,11 +136,20 @@ public class ProductionWorkflowTests
 
             var fgCategory = new ProductCategory { Name = "Finished Goods" };
             var rmCategory = new ProductCategory { Name = "Raw Materials" };
+            var user = new User
+            {
+                Username = AppConstants.DefaultAdminUser,
+                PasswordHash = "hash",
+                FullName = "Admin User",
+                Role = UserRole.Admin,
+                IsActive = true
+            };
             var finishedProduct = new Product { Code = "FG-T01", Name = "Finished Good", ProductCategory = fgCategory, Unit = "PCS", CostPrice = 12m, SellingPrice = 20m, IsActive = true };
             var rawMaterialA = new Product { Code = "RM-T01", Name = "Raw A", ProductCategory = rmCategory, Unit = "KG", CostPrice = 2m, SellingPrice = 3m, IsActive = true };
             var rawMaterialB = new Product { Code = "RM-T02", Name = "Raw B", ProductCategory = rmCategory, Unit = "PCS", CostPrice = 1.5m, SellingPrice = 2m, IsActive = true };
             var warehouse = new Warehouse { Name = "Main Warehouse", Location = "Plant", IsActive = true };
 
+            db.Users.Add(user);
             db.ProductCategories.AddRange(fgCategory, rmCategory);
             db.Products.AddRange(finishedProduct, rawMaterialA, rawMaterialB);
             db.Warehouses.Add(warehouse);
@@ -150,7 +161,23 @@ public class ProductionWorkflowTests
             db.StockBalances.AddRange(fgStock, rawStockA, rawStockB);
             await db.SaveChangesAsync();
 
-            return new ProductionTestHarness(tempDirectory, db, new ProductionService(db), new AnalyticsService(db), finishedProduct, rawMaterialA, rawMaterialB, warehouse, fgStock, rawStockA, rawStockB);
+            var currentUserService = new CurrentUserService();
+            currentUserService.Set(user);
+            var authorizationService = new AuthorizationService(currentUserService);
+            var auditService = new AuditService(db);
+
+            return new ProductionTestHarness(
+                tempDirectory,
+                db,
+                new ProductionService(db, authorizationService, auditService, currentUserService),
+                new AnalyticsService(db),
+                finishedProduct,
+                rawMaterialA,
+                rawMaterialB,
+                warehouse,
+                fgStock,
+                rawStockA,
+                rawStockB);
         }
 
         public async Task ReloadAsync()

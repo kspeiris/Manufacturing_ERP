@@ -9,14 +9,22 @@ namespace ManufacturingERP.Application.Services;
 public class ProductionService
 {
     private readonly IAppDbContext _db;
+    private readonly AuthorizationService _authorizationService;
+    private readonly AuditService _auditService;
+    private readonly CurrentUserService _currentUserService;
 
-    public ProductionService(IAppDbContext db)
+    public ProductionService(IAppDbContext db, AuthorizationService authorizationService, AuditService auditService, CurrentUserService currentUserService)
     {
         _db = db;
+        _authorizationService = authorizationService;
+        _auditService = auditService;
+        _currentUserService = currentUserService;
     }
 
-    public async Task<Result<int>> CreateProductionOrderAsync(CreateProductionOrderRequest request)
+    public async Task<Result<int>> CreateProductionOrderAsync(CreateProductionOrderRequest request, int? actorUserId = null)
     {
+        var auth = _authorizationService.EnsureProductionPostAccess();
+        if (!auth.IsSuccess) return Result<int>.Failure(auth.Message);
         if (request.PlannedQuantity <= 0) return Result<int>.Failure("Planned quantity must be greater than zero.");
         var product = await _db.Products.Include(x => x.ProductCategory).FirstOrDefaultAsync(x => x.Id == request.FinishedProductId && x.IsActive);
         if (product is null) return Result<int>.Failure("Finished product not found.");
@@ -24,11 +32,14 @@ public class ProductionService
         var entity = new ProductionOrder { OrderNo = $"PROD-{DateTime.Now:yyyyMMdd-HHmmssfff}", OrderDate = DateTime.Now, FinishedProductId = request.FinishedProductId, PlannedQuantity = request.PlannedQuantity, Status = "Planned" };
         _db.ProductionOrders.Add(entity);
         await _db.SaveChangesAsync();
+        await _auditService.LogAsync(GetActorUserId(actorUserId), "Create", "ProductionOrder", entity.Id.ToString(), null, entity.OrderNo);
         return Result<int>.Success(entity.Id, entity.OrderNo);
     }
 
-    public async Task<Result<int>> SaveBomAsync(SaveBomRequest request)
+    public async Task<Result<int>> SaveBomAsync(SaveBomRequest request, int? actorUserId = null)
     {
+        var auth = _authorizationService.EnsureProductionPostAccess();
+        if (!auth.IsSuccess) return Result<int>.Failure(auth.Message);
         if (request.Lines.Count == 0) return Result<int>.Failure("BOM requires at least one material line.");
         var product = await _db.Products.Include(x => x.ProductCategory).FirstOrDefaultAsync(x => x.Id == request.FinishedProductId && x.IsActive);
         if (product is null) return Result<int>.Failure("Finished product not found.");
@@ -53,14 +64,17 @@ public class ProductionService
         }
         foreach (var line in request.Lines) existing.Lines.Add(new BomLine { MaterialProductId = line.MaterialProductId, QuantityRequired = line.QuantityRequired });
         await _db.SaveChangesAsync();
+        await _auditService.LogAsync(GetActorUserId(actorUserId), "SaveBom", "BomHeader", existing.Id.ToString(), null, $"{request.FinishedProductId}|{existing.Version}|{request.Lines.Count}");
         return Result<int>.Success(existing.Id, "BOM saved.");
     }
 
     public Task<BomHeader?> GetBomAsync(int finishedProductId)
         => _db.BomHeaders.Include(x => x.Product).Include(x => x.Lines).ThenInclude(x => x.MaterialProduct).FirstOrDefaultAsync(x => x.ProductId == finishedProductId);
 
-    public async Task<Result> IssueMaterialsAsync(int productionOrderId, int warehouseId, decimal basisQuantity)
+    public async Task<Result> IssueMaterialsAsync(int productionOrderId, int warehouseId, decimal basisQuantity, int? actorUserId = null)
     {
+        var auth = _authorizationService.EnsureProductionPostAccess();
+        if (!auth.IsSuccess) return Result.Failure(auth.Message);
         if (basisQuantity <= 0) return Result.Failure("Issue quantity must be greater than zero.");
         var order = await _db.ProductionOrders.Include(x => x.FinishedProduct).FirstOrDefaultAsync(x => x.Id == productionOrderId);
         if (order is null) return Result.Failure("Production order not found.");
@@ -89,11 +103,14 @@ public class ProductionService
         order.MaterialCost += materialCost;
         order.Status = order.Status == "Planned" ? "Materials Issued" : "In Progress";
         await _db.SaveChangesAsync();
+        await _auditService.LogAsync(GetActorUserId(actorUserId), "IssueMaterials", "ProductionOrder", order.Id.ToString(), null, $"{order.OrderNo}|{basisQuantity}");
         return Result.Success("Production materials issued.");
     }
 
-    public async Task<Result> ReceiveFinishedGoodsAsync(ReceiveFinishedGoodsRequest request)
+    public async Task<Result> ReceiveFinishedGoodsAsync(ReceiveFinishedGoodsRequest request, int? actorUserId = null)
     {
+        var auth = _authorizationService.EnsureProductionPostAccess();
+        if (!auth.IsSuccess) return Result.Failure(auth.Message);
         if (request.ProducedQuantity <= 0) return Result.Failure("Produced quantity must be greater than zero.");
         if (request.ScrapQuantity < 0) return Result.Failure("Scrap quantity cannot be negative.");
         var order = await _db.ProductionOrders.Include(x => x.FinishedProduct).FirstOrDefaultAsync(x => x.Id == request.ProductionOrderId);
@@ -122,11 +139,14 @@ public class ProductionService
         stock.QuantityOnHand += request.ProducedQuantity;
         _db.WarehouseTransactions.Add(new WarehouseTransaction { ProductId = order.FinishedProductId, WarehouseId = request.WarehouseId, TransactionType = "PROD-RECEIPT", QuantityIn = request.ProducedQuantity, QuantityOut = 0, ReferenceNo = order.OrderNo, Remarks = string.IsNullOrWhiteSpace(order.BatchNo) ? "Finished goods receipt" : $"Finished goods receipt / {order.BatchNo}" });
         await _db.SaveChangesAsync();
+        await _auditService.LogAsync(GetActorUserId(actorUserId), "ReceiveFinishedGoods", "ProductionOrder", order.Id.ToString(), null, $"{order.OrderNo}|{request.ProducedQuantity}|{request.ScrapQuantity}|{order.BatchNo}");
         return Result.Success("Finished goods received.");
     }
 
-    public async Task<Result> SaveCostingAsync(int productionOrderId, decimal laborCost, decimal overheadCost)
+    public async Task<Result> SaveCostingAsync(int productionOrderId, decimal laborCost, decimal overheadCost, int? actorUserId = null)
     {
+        var auth = _authorizationService.EnsureProductionPostAccess();
+        if (!auth.IsSuccess) return Result.Failure(auth.Message);
         if (laborCost < 0 || overheadCost < 0) return Result.Failure("Labor and overhead costs cannot be negative.");
         var order = await _db.ProductionOrders.FirstOrDefaultAsync(x => x.Id == productionOrderId);
         if (order is null) return Result.Failure("Production order not found.");
@@ -135,6 +155,7 @@ public class ProductionService
         order.LaborCost = laborCost;
         order.OverheadCost = overheadCost;
         await _db.SaveChangesAsync();
+        await _auditService.LogAsync(GetActorUserId(actorUserId), "SaveCosting", "ProductionOrder", order.Id.ToString(), null, $"{order.OrderNo}|{laborCost}|{overheadCost}");
         return Result.Success("Production costing updated.");
     }
 
@@ -147,4 +168,6 @@ public class ProductionService
         var costingRow = new ProductionLedgerRowDto { EntryDate = order.OrderDate, EntryType = "Cost Summary", ProductCode = order.FinishedProduct?.Code ?? string.Empty, ProductName = order.FinishedProduct?.Name ?? string.Empty, Quantity = order.ProducedQuantity, Amount = order.TotalCost, ReferenceNo = order.OrderNo, Remarks = $"Unit cost {order.UnitCost:N2}" };
         return issueRows.Concat(receiptRows).Append(costingRow).OrderBy(x => x.EntryDate).ThenBy(x => x.EntryType).ToList();
     }
+
+    private int? GetActorUserId(int? actorUserId) => actorUserId ?? _currentUserService.CurrentUserId;
 }

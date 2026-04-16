@@ -31,6 +31,19 @@
         <DataTemplate DataType="{x:Type vm:AuditLogsViewModel}"><views:AuditLogsView /></DataTemplate>
     </Window.Resources>
 
+    <Window.InputBindings>
+        <KeyBinding Key="D1" Modifiers="Control" Command="{Binding ShowDashboardCommand}" />
+        <KeyBinding Key="D2" Modifiers="Control" Command="{Binding ShowCustomersCommand}" />
+        <KeyBinding Key="D3" Modifiers="Control" Command="{Binding ShowPosSalesCommand}" />
+        <KeyBinding Key="D4" Modifiers="Control" Command="{Binding ShowProcurementCommand}" />
+        <KeyBinding Key="D5" Modifiers="Control" Command="{Binding ShowWarehouseCommand}" />
+        <KeyBinding Key="D6" Modifiers="Control" Command="{Binding ShowAccountingCommand}" />
+        <KeyBinding Key="D7" Modifiers="Control" Command="{Binding ShowReportsCommand}" />
+        <KeyBinding Key="L" Modifiers="Control" Command="{Binding ShowLedgersCommand}" />
+        <KeyBinding Key="U" Modifiers="Control" Command="{Binding ShowUsersCommand}" />
+        <KeyBinding Key="R" Modifiers="Control,Shift" Command="{Binding ShowReportViewerCommand}" />
+    </Window.InputBindings>
+
     <Grid Margin="18">
         <Grid.ColumnDefinitions>
             <ColumnDefinition Width="336" />
@@ -59,6 +72,7 @@
                         <StackPanel>
                             <TextBlock Text="Signed In As" Foreground="#94A3B8" FontWeight="SemiBold" />
                             <TextBlock Text="{Binding CurrentUserDisplay}" Foreground="White" Margin="0,4,0,0" TextWrapping="Wrap" />
+                            <TextBlock Text="{Binding StatusMessage}" Foreground="#FDE68A" Margin="0,10,0,0" TextWrapping="Wrap" />
                         </StackPanel>
                     </Border>
                 </StackPanel>
@@ -79,7 +93,7 @@
                         <Button Content="Warehouses" Style="{StaticResource SidebarButton}" Command="{Binding ShowWarehousesCommand}" Visibility="{Binding CanManageAdmin, Converter={StaticResource BoolToVisibilityConverter}}" />
                         <Button Content="Routes" Style="{StaticResource SidebarButton}" Command="{Binding ShowRoutesCommand}" Visibility="{Binding CanManageAdmin, Converter={StaticResource BoolToVisibilityConverter}}" />
 
-                        <TextBlock Style="{StaticResource SidebarSectionText}" Text="Supply &amp; Production" />
+                        <TextBlock Style="{StaticResource SidebarSectionText}" Text="Supply &amp; Operations" />
                         <Button Content="Procurement" Style="{StaticResource SidebarButton}" Command="{Binding ShowProcurementCommand}" Visibility="{Binding CanManageAdmin, Converter={StaticResource BoolToVisibilityConverter}}" />
                         <Button Content="Supplier Invoices &amp; Returns" Style="{StaticResource SidebarButton}" Command="{Binding ShowSupplierFinanceCommand}" Visibility="{Binding CanManageAccounting, Converter={StaticResource BoolToVisibilityConverter}}" />
                         <Button Content="Supplier Payments" Style="{StaticResource SidebarButton}" Command="{Binding ShowSupplierPaymentsCommand}" Visibility="{Binding CanManageAccounting, Converter={StaticResource BoolToVisibilityConverter}}" />
@@ -88,7 +102,7 @@
                         <Button Content="Production Costing" Style="{StaticResource SidebarButton}" Command="{Binding ShowProductionCostingCommand}" Visibility="{Binding CanManageProduction, Converter={StaticResource BoolToVisibilityConverter}}" />
                         <Button Content="Mobile Sync" Style="{StaticResource SidebarButton}" Command="{Binding ShowMobileSyncCommand}" Visibility="{Binding CanManageSales, Converter={StaticResource BoolToVisibilityConverter}}" />
 
-                        <TextBlock Style="{StaticResource SidebarSectionText}" Text="Finance &amp; Admin" />
+                        <TextBlock Style="{StaticResource SidebarSectionText}" Text="Finance &amp; Reporting" />
                         <Button Content="Accounting" Style="{StaticResource SidebarButton}" Command="{Binding ShowAccountingCommand}" Visibility="{Binding CanManageAccounting, Converter={StaticResource BoolToVisibilityConverter}}" />
                         <Button Content="Ledgers" Style="{StaticResource SidebarButton}" Command="{Binding ShowLedgersCommand}" Visibility="{Binding CanManageAccounting, Converter={StaticResource BoolToVisibilityConverter}}" />
                         <Button Content="Reports" Style="{StaticResource SidebarButton}" Command="{Binding ShowReportsCommand}" Visibility="{Binding CanViewReports, Converter={StaticResource BoolToVisibilityConverter}}" />
@@ -98,10 +112,15 @@
                     </StackPanel>
                 </ScrollViewer>
 
-                <TextBlock Grid.Row="2"
-                           Text="Use the left navigation to move between modules. Tables and forms on the right update in place."
-                           Foreground="#94A3B8"
-                           TextWrapping="Wrap" />
+                <StackPanel Grid.Row="2">
+                    <TextBlock Text="Ctrl+1 Dashboard  Ctrl+3 POS  Ctrl+6 Accounting"
+                               Foreground="#94A3B8"
+                               TextWrapping="Wrap" />
+                    <TextBlock Text="Ctrl+7 Reports  Ctrl+L Ledgers  Ctrl+U Users  Ctrl+Shift+R Report Center"
+                               Foreground="#94A3B8"
+                               Margin="0,4,0,0"
+                               TextWrapping="Wrap" />
+                </StackPanel>
             </Grid>
         </Border>
 
