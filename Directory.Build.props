@@ -1,0 +1,6 @@
+<Project>
+  <PropertyGroup>
+    <!-- Avoid NU1900 warnings in offline or sandboxed environments where nuget.org audit data is unreachable. -->
+    <NuGetAudit>false</NuGetAudit>
+  </PropertyGroup>
+</Project>
