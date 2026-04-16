@@ -13,7 +13,7 @@ using System.Reflection;
 [assembly: System.Reflection.AssemblyCompanyAttribute("ManufacturingERP.Domain")]
 [assembly: System.Reflection.AssemblyConfigurationAttribute("Debug")]
 [assembly: System.Reflection.AssemblyFileVersionAttribute("1.0.0.0")]
-[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+f385cc4f6ff052ccc7044394a47efb56c13606dc")]
+[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+47bb3fa46df6cd30e01c03bf83a970a9de64c0e3")]
 [assembly: System.Reflection.AssemblyProductAttribute("ManufacturingERP.Domain")]
 [assembly: System.Reflection.AssemblyTitleAttribute("ManufacturingERP.Domain")]
 [assembly: System.Reflection.AssemblyVersionAttribute("1.0.0.0")]
