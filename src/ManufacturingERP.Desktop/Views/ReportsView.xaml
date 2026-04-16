@@ -5,27 +5,38 @@
     <ScrollViewer VerticalScrollBarVisibility="Auto">
         <StackPanel>
             <WrapPanel Margin="0,0,0,18">
-                <TextBlock Text="Reporting Workspace" FontSize="30" FontWeight="Bold" Margin="0,0,12,0" />
+                <TextBlock Text="Reporting Workspace" FontSize="30" FontWeight="Bold" Margin="0,0,18,0" />
+                <StackPanel Orientation="Horizontal" Margin="0,0,18,0" VerticalAlignment="Center">
+                    <TextBlock Text="From" VerticalAlignment="Center" Margin="0,0,6,0" />
+                    <DatePicker SelectedDate="{Binding FromDate}" Width="130" Margin="0,0,12,0" />
+                    <TextBlock Text="To" VerticalAlignment="Center" Margin="0,0,6,0" />
+                    <DatePicker SelectedDate="{Binding ToDate}" Width="130" />
+                </StackPanel>
                 <Button Content="Reload" Command="{Binding LoadCommand}" Margin="0,0,8,0" />
-                <Button Content="Export Sales" Command="{Binding ExportSalesCommand}" Margin="0,0,8,0" />
-                <Button Content="Export Purchases" Command="{Binding ExportPurchasesCommand}" Margin="0,0,8,0" />
-                <Button Content="Export Customer Ledgers" Command="{Binding ExportCustomerLedgerSummaryCommand}" Margin="0,0,8,0" />
-                <Button Content="Export Supplier Ledgers" Command="{Binding ExportSupplierLedgerSummaryCommand}" Margin="0,0,8,0" />
-                <Button Content="Print Invoice (HTML)" Command="{Binding ExportInvoiceHtmlCommand}" Margin="0,0,8,0" />
-                <Button Content="Print PO (HTML)" Command="{Binding ExportPurchaseOrderHtmlCommand}" />
+                <Button Content="Invoice Print" Command="{Binding ExportInvoiceHtmlCommand}" Margin="0,0,8,0" />
+                <Button Content="PO Print" Command="{Binding ExportPurchaseOrderHtmlCommand}" />
+            </WrapPanel>
+
+            <WrapPanel Margin="0,0,0,18">
+                <Button Content="Sales Register HTML" Command="{Binding ExportSalesRegisterHtmlCommand}" Margin="0,0,8,8" />
+                <Button Content="Purchase Register HTML" Command="{Binding ExportPurchaseRegisterHtmlCommand}" Margin="0,0,8,8" />
+                <Button Content="Stock Report HTML" Command="{Binding ExportStockReportHtmlCommand}" Margin="0,0,8,8" />
+                <Button Content="Production Report HTML" Command="{Binding ExportProductionReportHtmlCommand}" Margin="0,0,8,8" />
+                <Button Content="Customer Summary HTML" Command="{Binding ExportCustomerLedgerSummaryCommand}" Margin="0,0,8,8" />
+                <Button Content="Supplier Summary HTML" Command="{Binding ExportSupplierLedgerSummaryCommand}" Margin="0,0,8,8" />
             </WrapPanel>
 
             <Border Style="{StaticResource SectionCard}">
                 <DockPanel>
-                    <TextBlock Text="Recent Sales" Style="{StaticResource CardTitleText}" DockPanel.Dock="Top" />
+                    <TextBlock Text="Sales Register" Style="{StaticResource CardTitleText}" DockPanel.Dock="Top" />
                     <DataGrid ItemsSource="{Binding SalesRows}" AutoGenerateColumns="False" CanUserAddRows="False" Height="220">
                         <DataGrid.Columns>
                             <DataGridTextColumn Header="Invoice" Binding="{Binding InvoiceNo}" Width="160" />
-                            <DataGridTextColumn Header="Date" Binding="{Binding InvoiceDate}" Width="150" />
+                            <DataGridTextColumn Header="Date" Binding="{Binding InvoiceDate, StringFormat=yyyy-MM-dd}" Width="120" />
                             <DataGridTextColumn Header="Customer" Binding="{Binding CustomerName}" Width="*" />
                             <DataGridTextColumn Header="Vehicle" Binding="{Binding VehicleNo}" Width="130" />
-                            <DataGridTextColumn Header="Amount" Binding="{Binding TotalAmount}" Width="120" />
-                            <DataGridTextColumn Header="Paid" Binding="{Binding PaidAmount}" Width="120" />
+                            <DataGridTextColumn Header="Amount" Binding="{Binding TotalAmount, StringFormat=N2}" Width="120" />
+                            <DataGridTextColumn Header="Paid" Binding="{Binding PaidAmount, StringFormat=N2}" Width="120" />
                             <DataGridTextColumn Header="Type" Binding="{Binding SaleType}" Width="100" />
                         </DataGrid.Columns>
                     </DataGrid>
@@ -34,48 +45,86 @@
 
             <Border Style="{StaticResource SectionCard}">
                 <DockPanel>
-                    <TextBlock Text="Recent Purchase Orders" Style="{StaticResource CardTitleText}" DockPanel.Dock="Top" />
+                    <TextBlock Text="Purchase Register" Style="{StaticResource CardTitleText}" DockPanel.Dock="Top" />
                     <DataGrid ItemsSource="{Binding PurchaseRows}" AutoGenerateColumns="False" CanUserAddRows="False" Height="220">
                         <DataGrid.Columns>
                             <DataGridTextColumn Header="PO No" Binding="{Binding OrderNo}" Width="160" />
-                            <DataGridTextColumn Header="Date" Binding="{Binding OrderDate}" Width="150" />
+                            <DataGridTextColumn Header="Date" Binding="{Binding OrderDate, StringFormat=yyyy-MM-dd}" Width="120" />
                             <DataGridTextColumn Header="Supplier" Binding="{Binding SupplierName}" Width="*" />
+                            <DataGridTextColumn Header="Status" Binding="{Binding Status}" Width="140" />
+                            <DataGridTextColumn Header="Total" Binding="{Binding TotalAmount, StringFormat=N2}" Width="120" />
+                        </DataGrid.Columns>
+                    </DataGrid>
+                </DockPanel>
+            </Border>
+
+            <Border Style="{StaticResource SectionCard}">
+                <DockPanel>
+                    <TextBlock Text="Stock Report" Style="{StaticResource CardTitleText}" DockPanel.Dock="Top" />
+                    <DataGrid ItemsSource="{Binding StockRows}" AutoGenerateColumns="False" CanUserAddRows="False" Height="220">
+                        <DataGrid.Columns>
+                            <DataGridTextColumn Header="Code" Binding="{Binding ProductCode}" Width="120" />
+                            <DataGridTextColumn Header="Product" Binding="{Binding ProductName}" Width="*" />
+                            <DataGridTextColumn Header="Warehouse" Binding="{Binding WarehouseName}" Width="180" />
+                            <DataGridTextColumn Header="Qty" Binding="{Binding QuantityOnHand, StringFormat=N2}" Width="100" />
+                            <DataGridTextColumn Header="Unit Cost" Binding="{Binding UnitCost, StringFormat=N2}" Width="110" />
+                            <DataGridTextColumn Header="Value" Binding="{Binding StockValue, StringFormat=N2}" Width="120" />
+                        </DataGrid.Columns>
+                    </DataGrid>
+                </DockPanel>
+            </Border>
+
+            <Border Style="{StaticResource SectionCard}">
+                <DockPanel>
+                    <TextBlock Text="Production Report" Style="{StaticResource CardTitleText}" DockPanel.Dock="Top" />
+                    <DataGrid ItemsSource="{Binding ProductionRows}" AutoGenerateColumns="False" CanUserAddRows="False" Height="220">
+                        <DataGrid.Columns>
+                            <DataGridTextColumn Header="Order" Binding="{Binding OrderNo}" Width="150" />
+                            <DataGridTextColumn Header="Date" Binding="{Binding OrderDate, StringFormat=yyyy-MM-dd}" Width="120" />
+                            <DataGridTextColumn Header="Product" Binding="{Binding ProductName}" Width="*" />
+                            <DataGridTextColumn Header="Batch" Binding="{Binding BatchNo}" Width="130" />
+                            <DataGridTextColumn Header="Produced" Binding="{Binding ProducedQuantity, StringFormat=N2}" Width="100" />
+                            <DataGridTextColumn Header="Scrap" Binding="{Binding ScrapQuantity, StringFormat=N2}" Width="90" />
+                            <DataGridTextColumn Header="Total Cost" Binding="{Binding TotalCost, StringFormat=N2}" Width="120" />
+                            <DataGridTextColumn Header="Unit Cost" Binding="{Binding UnitCost, StringFormat=N2}" Width="120" />
                             <DataGridTextColumn Header="Status" Binding="{Binding Status}" Width="120" />
-                            <DataGridTextColumn Header="Total" Binding="{Binding TotalAmount}" Width="120" />
                         </DataGrid.Columns>
                     </DataGrid>
                 </DockPanel>
             </Border>
 
             <Grid>
-                <Grid.ColumnDefinitions><ColumnDefinition Width="1*"/><ColumnDefinition Width="1*"/></Grid.ColumnDefinitions>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="1*" />
+                    <ColumnDefinition Width="1*" />
+                </Grid.ColumnDefinitions>
                 <Border Grid.Column="0" Style="{StaticResource SectionCard}" Margin="0,0,16,0">
                     <DockPanel>
-                        <TextBlock Text="Customer Ledger Summary" Style="{StaticResource CardTitleText}" DockPanel.Dock="Top" />
+                        <TextBlock Text="Customer Outstanding Summary" Style="{StaticResource CardTitleText}" DockPanel.Dock="Top" />
                         <DataGrid ItemsSource="{Binding CustomerLedgerSummaryRows}" AutoGenerateColumns="False" CanUserAddRows="False" Height="220">
                             <DataGrid.Columns>
                                 <DataGridTextColumn Header="Code" Binding="{Binding PartyCode}" Width="120" />
                                 <DataGridTextColumn Header="Customer" Binding="{Binding PartyName}" Width="*" />
-                                <DataGridTextColumn Header="Balance" Binding="{Binding Balance}" Width="120" />
+                                <DataGridTextColumn Header="Balance" Binding="{Binding Balance, StringFormat=N2}" Width="120" />
                             </DataGrid.Columns>
                         </DataGrid>
                     </DockPanel>
                 </Border>
                 <Border Grid.Column="1" Style="{StaticResource SectionCard}">
                     <DockPanel>
-                        <TextBlock Text="Supplier Ledger Summary" Style="{StaticResource CardTitleText}" DockPanel.Dock="Top" />
+                        <TextBlock Text="Supplier Outstanding Summary" Style="{StaticResource CardTitleText}" DockPanel.Dock="Top" />
                         <DataGrid ItemsSource="{Binding SupplierLedgerSummaryRows}" AutoGenerateColumns="False" CanUserAddRows="False" Height="220">
                             <DataGrid.Columns>
                                 <DataGridTextColumn Header="Code" Binding="{Binding PartyCode}" Width="120" />
                                 <DataGridTextColumn Header="Supplier" Binding="{Binding PartyName}" Width="*" />
-                                <DataGridTextColumn Header="Balance" Binding="{Binding Balance}" Width="120" />
+                                <DataGridTextColumn Header="Balance" Binding="{Binding Balance, StringFormat=N2}" Width="120" />
                             </DataGrid.Columns>
                         </DataGrid>
                     </DockPanel>
                 </Border>
             </Grid>
 
-            <TextBlock Text="{Binding StatusMessage}" Foreground="#2563EB" />
+            <TextBlock Text="{Binding StatusMessage}" Foreground="#2563EB" TextWrapping="Wrap" />
         </StackPanel>
     </ScrollViewer>
 </UserControl>

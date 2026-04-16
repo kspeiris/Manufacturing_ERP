@@ -25,6 +25,30 @@
                 <Border Grid.Column="1" Style="{StaticResource SectionCard}" Margin="0,0,16,0"><StackPanel><TextBlock Text="Supplier Payables" Style="{StaticResource CardTitleText}" /><TextBlock Text="{Binding Summary.Analytics.SupplierPayables, StringFormat=N2}" Style="{StaticResource MetricValueText}" /></StackPanel></Border>
                 <Border Grid.Column="2" Style="{StaticResource SectionCard}"><StackPanel><TextBlock Text="Production Cost This Month" Style="{StaticResource CardTitleText}" /><TextBlock Text="{Binding Summary.Analytics.ProductionCostThisMonth, StringFormat=N2}" Style="{StaticResource MetricValueText}" /></StackPanel></Border>
             </Grid>
+
+            <Border Style="{StaticResource SectionCard}" Margin="0,18,0,0">
+                <StackPanel>
+                    <TextBlock Text="Management Snapshot" Style="{StaticResource CardTitleText}" />
+                    <ItemsControl ItemsSource="{Binding ChartPoints}">
+                        <ItemsControl.ItemTemplate>
+                            <DataTemplate>
+                                <Grid Margin="0,8,0,0">
+                                    <Grid.ColumnDefinitions>
+                                        <ColumnDefinition Width="170" />
+                                        <ColumnDefinition Width="*" />
+                                        <ColumnDefinition Width="120" />
+                                    </Grid.ColumnDefinitions>
+                                    <TextBlock Grid.Column="0" Text="{Binding Label}" VerticalAlignment="Center" />
+                                    <Border Grid.Column="1" Height="22" Background="#E2E8F0" CornerRadius="11" VerticalAlignment="Center">
+                                        <Border Width="{Binding BarWidth}" Height="22" HorizontalAlignment="Left" Background="{Binding FillBrush}" CornerRadius="11" />
+                                    </Border>
+                                    <TextBlock Grid.Column="2" Text="{Binding Value, StringFormat=N2}" HorizontalAlignment="Right" VerticalAlignment="Center" FontWeight="SemiBold" />
+                                </Grid>
+                            </DataTemplate>
+                        </ItemsControl.ItemTemplate>
+                    </ItemsControl>
+                </StackPanel>
+            </Border>
         </StackPanel>
     </ScrollViewer>
 </UserControl>

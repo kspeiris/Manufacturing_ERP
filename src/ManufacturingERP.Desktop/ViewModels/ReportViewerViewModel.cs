@@ -26,7 +26,7 @@ public partial class ReportViewerViewModel : ViewModelBase
         var exportDir = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "Exports");
         if (Directory.Exists(exportDir))
         {
-            foreach (var file in Directory.GetFiles(exportDir).OrderByDescending(x => x))
+            foreach (var file in new DirectoryInfo(exportDir).GetFiles().OrderByDescending(x => x.LastWriteTimeUtc).Select(x => x.FullName))
                 ExportFiles.Add(file);
         }
 
@@ -37,6 +37,7 @@ public partial class ReportViewerViewModel : ViewModelBase
                 TemplateFiles.Add(file);
         }
 
+        SelectedFilePath = ExportFiles.FirstOrDefault() ?? TemplateFiles.FirstOrDefault() ?? string.Empty;
         StatusMessage = $"Found {ExportFiles.Count} exported files and {TemplateFiles.Count} templates.";
         return Task.CompletedTask;
     }
