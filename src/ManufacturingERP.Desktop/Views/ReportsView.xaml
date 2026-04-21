@@ -10,15 +10,10 @@
                     <TextBlock Text="Review recent operational data and launch exports from a more structured reporting hub."
                                Style="{StaticResource PageSubtitleText}" />
                 </StackPanel>
-                <WrapPanel HorizontalAlignment="Right">
-                    <Button Content="Reload" Command="{Binding LoadCommand}" Margin="0,0,8,0" />
-                    <Button Content="Export Sales" Command="{Binding ExportSalesCommand}" Margin="0,0,8,0" />
-                    <Button Content="Export Purchases" Command="{Binding ExportPurchasesCommand}" Margin="0,0,8,0" />
-                    <Button Content="Export Customer Ledgers" Command="{Binding ExportCustomerLedgerSummaryCommand}" Margin="0,0,8,0" />
-                    <Button Content="Export Supplier Ledgers" Command="{Binding ExportSupplierLedgerSummaryCommand}" Margin="0,0,8,0" />
-                    <Button Content="Print Invoice (HTML)" Command="{Binding ExportInvoiceHtmlCommand}" Margin="0,0,8,0" />
-                    <Button Content="Print PO (HTML)" Command="{Binding ExportPurchaseOrderHtmlCommand}" />
-                </WrapPanel>
+                <Button Content="Reload"
+                        Command="{Binding LoadCommand}"
+                        HorizontalAlignment="Right"
+                        VerticalAlignment="Top" />
             </DockPanel>
 
             <Grid Margin="0,0,0,16">
@@ -49,6 +44,31 @@
                     </StackPanel>
                 </Border>
             </Grid>
+
+            <Border Style="{StaticResource UtilityPanel}">
+                <Grid>
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="1.1*" />
+                        <ColumnDefinition Width="2*" />
+                    </Grid.ColumnDefinitions>
+
+                    <StackPanel Margin="0,0,20,0">
+                        <TextBlock Text="Export Actions" Style="{StaticResource CardTitleText}" />
+                        <TextBlock Text="Choose the required operational or finance output from this action shelf instead of hunting through tables."
+                                   Style="{StaticResource PageSubtitleText}"
+                                   Margin="0" />
+                    </StackPanel>
+
+                    <WrapPanel Grid.Column="1" ItemHeight="42">
+                        <Button Content="Export Sales" Command="{Binding ExportSalesCommand}" Margin="0,0,8,8" />
+                        <Button Content="Export Purchases" Command="{Binding ExportPurchasesCommand}" Margin="0,0,8,8" />
+                        <Button Content="Export Customer Ledgers" Command="{Binding ExportCustomerLedgerSummaryCommand}" Margin="0,0,8,8" />
+                        <Button Content="Export Supplier Ledgers" Command="{Binding ExportSupplierLedgerSummaryCommand}" Margin="0,0,8,8" />
+                        <Button Content="Print Invoice (HTML)" Command="{Binding ExportInvoiceHtmlCommand}" Margin="0,0,8,8" />
+                        <Button Content="Print PO (HTML)" Command="{Binding ExportPurchaseOrderHtmlCommand}" Margin="0,0,8,8" />
+                    </WrapPanel>
+                </Grid>
+            </Border>
 
             <Border Style="{StaticResource SectionCard}">
                 <DockPanel>

@@ -1,0 +1,32 @@
+# .NET and NuGet local tooling
+.dotnet/
+.dotnetcli/
+.nuget/
+
+# Build output
+bin/
+obj/
+
+# Logs
+*.log
+build.log
+restore.log
+desktop-norestore-build.log
+desktop-run-build.log
+
+# Runtime databases and temp files
+*.db-shm
+*.db-wal
+tmp_test.txt
+tmp_test2.txt
+
+# App-generated exports
+Exports/
+Reports/Exports/
+src/ManufacturingERP.Desktop/bin/**/Exports/
+
+# IDE and user-specific files
+.vs/
+*.user
+*.suo
+

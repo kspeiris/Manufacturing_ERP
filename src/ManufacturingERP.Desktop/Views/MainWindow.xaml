@@ -99,6 +99,17 @@
                         <Button Content="Report Center" Style="{StaticResource SidebarButton}" Command="{Binding ShowReportViewerCommand}" Visibility="{Binding CanViewReports, Converter={StaticResource BoolToVisibilityConverter}}" />
                         <Button Content="Users" Style="{StaticResource SidebarButton}" Command="{Binding ShowUsersCommand}" Visibility="{Binding CanManageAdmin, Converter={StaticResource BoolToVisibilityConverter}}" />
                         <Button Content="Audit Logs" Style="{StaticResource SidebarButton}" Command="{Binding ShowAuditLogsCommand}" Visibility="{Binding CanManageAdmin, Converter={StaticResource BoolToVisibilityConverter}}" />
+
+                        <Border Background="#172554" BorderBrush="#2563EB" BorderThickness="1" CornerRadius="18" Padding="16" Margin="0,22,0,0">
+                            <StackPanel>
+                                <TextBlock Text="Workspace Notes" Foreground="#93C5FD" FontWeight="SemiBold" />
+                                <TextBlock Text="Use the left navigation to move between modules. Tables and forms on the right update in place."
+                                           Foreground="#D6E1F5"
+                                           FontSize="13"
+                                           TextWrapping="Wrap"
+                                           Margin="0,8,0,0" />
+                            </StackPanel>
+                        </Border>
                     </StackPanel>
                 </ScrollViewer>
             </DockPanel>
@@ -111,7 +122,13 @@
                 BorderBrush="#D3E0F2"
                 BorderThickness="1"
                 Padding="18">
-            <ContentControl Content="{Binding CurrentView}" />
+            <Border Background="#F7FAFE"
+                    CornerRadius="28"
+                    BorderBrush="#DCE7F5"
+                    BorderThickness="1"
+                    Padding="18">
+                <ContentControl Content="{Binding CurrentView}" />
+            </Border>
         </Border>
     </Grid>
 </Window>
