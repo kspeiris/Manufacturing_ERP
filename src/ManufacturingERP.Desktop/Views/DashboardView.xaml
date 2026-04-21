@@ -4,26 +4,129 @@
              xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes">
     <ScrollViewer VerticalScrollBarVisibility="Auto">
         <StackPanel>
-            <TextBlock Text="Executive Dashboard" FontSize="30" FontWeight="Bold" Margin="0,0,0,18" />
-            <UniformGrid Columns="4" Margin="0,0,0,18">
-                <Border Background="White" CornerRadius="18" Padding="18" Margin="0,0,12,0"><StackPanel><TextBlock Text="Customers" Style="{StaticResource CardTitleText}" /><TextBlock Text="{Binding Summary.TotalCustomers}" Style="{StaticResource MetricValueText}" /></StackPanel></Border>
-                <Border Background="White" CornerRadius="18" Padding="18" Margin="0,0,12,0"><StackPanel><TextBlock Text="Products" Style="{StaticResource CardTitleText}" /><TextBlock Text="{Binding Summary.TotalProducts}" Style="{StaticResource MetricValueText}" /></StackPanel></Border>
-                <Border Background="White" CornerRadius="18" Padding="18" Margin="0,0,12,0"><StackPanel><TextBlock Text="Vehicles" Style="{StaticResource CardTitleText}" /><TextBlock Text="{Binding Summary.TotalVehicles}" Style="{StaticResource MetricValueText}" /></StackPanel></Border>
-                <Border Background="White" CornerRadius="18" Padding="18"><StackPanel><TextBlock Text="Today Sales" Style="{StaticResource CardTitleText}" /><TextBlock Text="{Binding Summary.TodaySales, StringFormat=N2}" Style="{StaticResource MetricValueText}" /></StackPanel></Border>
+            <Border Style="{StaticResource HeroCard}">
+                <Grid>
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="2.4*" />
+                        <ColumnDefinition Width="1.2*" />
+                    </Grid.ColumnDefinitions>
+
+                    <StackPanel Margin="0,0,24,0">
+                        <TextBlock Text="Executive Dashboard" Style="{StaticResource HeroTitleText}" />
+                        <TextBlock Text="Operations command center" Style="{StaticResource HeroEyebrowText}" Margin="0,8,0,0" />
+                        <TextBlock Text="Track sales, inventory, receivables, payables, and production cost from one leadership view across the ERP."
+                                   Style="{StaticResource HeroBodyText}"
+                                   Margin="0,14,0,0" />
+                    </StackPanel>
+
+                    <Grid Grid.Column="1">
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="Auto" />
+                            <RowDefinition Height="Auto" />
+                        </Grid.RowDefinitions>
+
+                        <Border Background="#172554" BorderBrush="#2563EB" BorderThickness="1" CornerRadius="18" Padding="18" Margin="0,0,0,12">
+                            <StackPanel>
+                                <TextBlock Text="Today's Sales" Foreground="#93C5FD" FontWeight="SemiBold" />
+                                <TextBlock Text="{Binding Summary.TodaySales, StringFormat=N2}" Foreground="White" FontSize="28" FontWeight="Bold" Margin="0,8,0,0" />
+                            </StackPanel>
+                        </Border>
+
+                        <Border Grid.Row="1" Background="#172554" BorderBrush="#2563EB" BorderThickness="1" CornerRadius="18" Padding="18">
+                            <StackPanel>
+                                <TextBlock Text="Inventory Value" Foreground="#93C5FD" FontWeight="SemiBold" />
+                                <TextBlock Text="{Binding Summary.Analytics.InventoryValue, StringFormat=N2}" Foreground="White" FontSize="28" FontWeight="Bold" Margin="0,8,0,0" />
+                            </StackPanel>
+                        </Border>
+                    </Grid>
+                </Grid>
+            </Border>
+
+            <UniformGrid Columns="3" Margin="0,0,0,16">
+                <Border Style="{StaticResource MetricCard}" Margin="0,0,16,0">
+                    <StackPanel>
+                        <TextBlock Text="Customers" Style="{StaticResource CardTitleText}" />
+                        <TextBlock Text="{Binding Summary.TotalCustomers}" Style="{StaticResource MetricValueText}" />
+                        <TextBlock Text="Active demand-side accounts in the commercial network."
+                                   Style="{StaticResource PageSubtitleText}" />
+                    </StackPanel>
+                </Border>
+                <Border Style="{StaticResource MetricCard}" Margin="0,0,16,0">
+                    <StackPanel>
+                        <TextBlock Text="Products" Style="{StaticResource CardTitleText}" />
+                        <TextBlock Text="{Binding Summary.TotalProducts}" Style="{StaticResource MetricValueText}" />
+                        <TextBlock Text="Sellable and stocked items available across workflows."
+                                   Style="{StaticResource PageSubtitleText}" />
+                    </StackPanel>
+                </Border>
+                <Border Style="{StaticResource MetricCard}">
+                    <StackPanel>
+                        <TextBlock Text="Vehicles" Style="{StaticResource CardTitleText}" />
+                        <TextBlock Text="{Binding Summary.TotalVehicles}" Style="{StaticResource MetricValueText}" />
+                        <TextBlock Text="Distribution fleet currently configured for routes and sales."
+                                   Style="{StaticResource PageSubtitleText}" />
+                    </StackPanel>
+                </Border>
             </UniformGrid>
 
-            <Grid>
-                <Grid.ColumnDefinitions><ColumnDefinition Width="1*"/><ColumnDefinition Width="1*"/><ColumnDefinition Width="1*"/></Grid.ColumnDefinitions>
-                <Border Grid.Column="0" Style="{StaticResource SectionCard}" Margin="0,0,16,16"><StackPanel><TextBlock Text="Monthly Sales" Style="{StaticResource CardTitleText}" /><TextBlock Text="{Binding Summary.Analytics.MonthlySales, StringFormat=N2}" Style="{StaticResource MetricValueText}" /></StackPanel></Border>
-                <Border Grid.Column="1" Style="{StaticResource SectionCard}" Margin="0,0,16,16"><StackPanel><TextBlock Text="Collections This Month" Style="{StaticResource CardTitleText}" /><TextBlock Text="{Binding Summary.Analytics.CollectionsThisMonth, StringFormat=N2}" Style="{StaticResource MetricValueText}" /></StackPanel></Border>
-                <Border Grid.Column="2" Style="{StaticResource SectionCard}" Margin="0,0,0,16"><StackPanel><TextBlock Text="Inventory Value" Style="{StaticResource CardTitleText}" /><TextBlock Text="{Binding Summary.Analytics.InventoryValue, StringFormat=N2}" Style="{StaticResource MetricValueText}" /></StackPanel></Border>
+            <Grid Margin="0,0,0,16">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="1*" />
+                    <ColumnDefinition Width="1*" />
+                    <ColumnDefinition Width="1*" />
+                </Grid.ColumnDefinitions>
+
+                <Border Grid.Column="0" Style="{StaticResource SectionCard}" Margin="0,0,16,0">
+                    <StackPanel>
+                        <TextBlock Text="Monthly Sales" Style="{StaticResource CardTitleText}" />
+                        <TextBlock Text="{Binding Summary.Analytics.MonthlySales, StringFormat=N2}" Style="{StaticResource MetricValueText}" />
+                        <TextBlock Text="Current month recognized revenue across completed sales activity."
+                                   Style="{StaticResource PageSubtitleText}" />
+                    </StackPanel>
+                </Border>
+
+                <Border Grid.Column="1" Style="{StaticResource SectionCard}" Margin="0,0,16,0">
+                    <StackPanel>
+                        <TextBlock Text="Collections This Month" Style="{StaticResource CardTitleText}" />
+                        <TextBlock Text="{Binding Summary.Analytics.CollectionsThisMonth, StringFormat=N2}" Style="{StaticResource MetricValueText}" />
+                        <TextBlock Text="Cash received from customers during the current accounting period."
+                                   Style="{StaticResource PageSubtitleText}" />
+                    </StackPanel>
+                </Border>
+
+                <Border Grid.Column="2" Style="{StaticResource SectionCard}">
+                    <StackPanel>
+                        <TextBlock Text="Production Cost This Month" Style="{StaticResource CardTitleText}" />
+                        <TextBlock Text="{Binding Summary.Analytics.ProductionCostThisMonth, StringFormat=N2}" Style="{StaticResource MetricValueText}" />
+                        <TextBlock Text="Tracked manufacturing spend posted against active production work."
+                                   Style="{StaticResource PageSubtitleText}" />
+                    </StackPanel>
+                </Border>
             </Grid>
 
             <Grid>
-                <Grid.ColumnDefinitions><ColumnDefinition Width="1*"/><ColumnDefinition Width="1*"/><ColumnDefinition Width="1*"/></Grid.ColumnDefinitions>
-                <Border Grid.Column="0" Style="{StaticResource SectionCard}" Margin="0,0,16,0"><StackPanel><TextBlock Text="Customer Receivables" Style="{StaticResource CardTitleText}" /><TextBlock Text="{Binding Summary.Analytics.CustomerReceivables, StringFormat=N2}" Style="{StaticResource MetricValueText}" /></StackPanel></Border>
-                <Border Grid.Column="1" Style="{StaticResource SectionCard}" Margin="0,0,16,0"><StackPanel><TextBlock Text="Supplier Payables" Style="{StaticResource CardTitleText}" /><TextBlock Text="{Binding Summary.Analytics.SupplierPayables, StringFormat=N2}" Style="{StaticResource MetricValueText}" /></StackPanel></Border>
-                <Border Grid.Column="2" Style="{StaticResource SectionCard}"><StackPanel><TextBlock Text="Production Cost This Month" Style="{StaticResource CardTitleText}" /><TextBlock Text="{Binding Summary.Analytics.ProductionCostThisMonth, StringFormat=N2}" Style="{StaticResource MetricValueText}" /></StackPanel></Border>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="1*" />
+                    <ColumnDefinition Width="1*" />
+                </Grid.ColumnDefinitions>
+
+                <Border Grid.Column="0" Style="{StaticResource SectionCard}" Margin="0,0,16,0">
+                    <StackPanel>
+                        <TextBlock Text="Customer Receivables" Style="{StaticResource CardTitleText}" />
+                        <TextBlock Text="{Binding Summary.Analytics.CustomerReceivables, StringFormat=N2}" Style="{StaticResource MetricValueText}" />
+                        <TextBlock Text="Outstanding customer exposure awaiting collection."
+                                   Style="{StaticResource PageSubtitleText}" />
+                    </StackPanel>
+                </Border>
+
+                <Border Grid.Column="1" Style="{StaticResource SectionCard}">
+                    <StackPanel>
+                        <TextBlock Text="Supplier Payables" Style="{StaticResource CardTitleText}" />
+                        <TextBlock Text="{Binding Summary.Analytics.SupplierPayables, StringFormat=N2}" Style="{StaticResource MetricValueText}" />
+                        <TextBlock Text="Open supplier obligations still due for settlement."
+                                   Style="{StaticResource PageSubtitleText}" />
+                    </StackPanel>
+                </Border>
             </Grid>
         </StackPanel>
     </ScrollViewer>

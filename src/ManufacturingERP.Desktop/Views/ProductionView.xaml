@@ -2,63 +2,102 @@
              xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes">
-    <Grid>
-        <Grid.RowDefinitions>
-            <RowDefinition Height="Auto" />
-            <RowDefinition Height="*" />
-        </Grid.RowDefinitions>
+    <ScrollViewer VerticalScrollBarVisibility="Auto">
+        <StackPanel>
+            <TextBlock Text="Production Planning &amp; Receipt" Style="{StaticResource PageTitleText}" />
+            <TextBlock Text="Create production orders, receive finished goods, and monitor open manufacturing work from one workspace."
+                       Style="{StaticResource PageSubtitleText}"
+                       Margin="0,0,0,18" />
 
-        <TextBlock Text="Production Planning &amp; Receipt" FontSize="30" FontWeight="Bold" Margin="0,0,0,18" />
+            <Grid Margin="0,0,0,16">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="Auto" />
+                    <ColumnDefinition Width="Auto" />
+                    <ColumnDefinition Width="*" />
+                </Grid.ColumnDefinitions>
 
-        <Grid Grid.Row="1">
-            <Grid.ColumnDefinitions>
-                <ColumnDefinition Width="1.2*" />
-                <ColumnDefinition Width="2*" />
-            </Grid.ColumnDefinitions>
-
-            <StackPanel Grid.Column="0">
-                <Border Style="{StaticResource SectionCard}" Margin="0,0,16,16">
+                <Border Grid.Column="0" Style="{StaticResource InlineStatCard}" Margin="0,0,16,0">
                     <StackPanel>
-                        <TextBlock Text="Create Production Order" Style="{StaticResource CardTitleText}" />
-                        <TextBlock Text="Finished Product" Style="{StaticResource FormLabel}" />
-                        <ComboBox ItemsSource="{Binding FinishedProducts}" SelectedItem="{Binding SelectedFinishedProduct}" DisplayMemberPath="Name" />
-                        <TextBlock Text="Planned Quantity" Style="{StaticResource FormLabel}" Margin="0,12,0,4" />
-                        <TextBox Text="{Binding PlannedQuantity}" />
-                        <Button Content="Create Order" Command="{Binding CreateOrderCommand}" Margin="0,16,0,0" />
+                        <TextBlock Text="Orders Loaded" Style="{StaticResource InlineStatLabel}" />
+                        <TextBlock Text="{Binding ProductionOrders.Count}" Style="{StaticResource InlineStatValue}" />
                     </StackPanel>
                 </Border>
 
-                <Border Style="{StaticResource SectionCard}" Margin="0,0,16,0">
+                <Border Grid.Column="1" Style="{StaticResource InlineStatCard}" Margin="0,0,16,0">
                     <StackPanel>
-                        <TextBlock Text="Receive Finished Goods" Style="{StaticResource CardTitleText}" />
-                        <TextBlock Text="Warehouse" Style="{StaticResource FormLabel}" />
-                        <ComboBox ItemsSource="{Binding Warehouses}" SelectedItem="{Binding SelectedWarehouse}" DisplayMemberPath="Name" />
-                        <TextBlock Text="Receipt Quantity" Style="{StaticResource FormLabel}" Margin="0,12,0,4" />
-                        <TextBox Text="{Binding ReceiptQuantity}" />
-                        <Button Content="Receive Finished Goods" Command="{Binding ReceiveFinishedGoodsCommand}" Margin="0,16,0,0" />
-                        <TextBlock Text="{Binding StatusMessage}" Margin="0,14,0,0" Foreground="#2563EB" TextWrapping="Wrap" />
+                        <TextBlock Text="Finished Goods" Style="{StaticResource InlineStatLabel}" />
+                        <TextBlock Text="{Binding FinishedProducts.Count}" Style="{StaticResource InlineStatValue}" />
                     </StackPanel>
                 </Border>
-            </StackPanel>
 
-            <Border Grid.Column="1" Style="{StaticResource SectionCard}">
-                <DockPanel>
-                    <WrapPanel DockPanel.Dock="Top" Margin="0,0,0,12">
-                        <TextBlock Text="Production Orders" Style="{StaticResource CardTitleText}" Margin="0,0,8,0" />
-                        <Button Content="Refresh" Command="{Binding RefreshOrdersCommand}" />
-                    </WrapPanel>
-                    <DataGrid ItemsSource="{Binding ProductionOrders}" SelectedItem="{Binding SelectedOrder}" AutoGenerateColumns="False" CanUserAddRows="False">
-                        <DataGrid.Columns>
-                            <DataGridTextColumn Header="Order No" Binding="{Binding OrderNo}" Width="180" />
-                            <DataGridTextColumn Header="Date" Binding="{Binding OrderDate}" Width="150" />
-                            <DataGridTextColumn Header="Product" Binding="{Binding FinishedProduct.Name}" Width="*" />
-                            <DataGridTextColumn Header="Planned" Binding="{Binding PlannedQuantity}" Width="110" />
-                            <DataGridTextColumn Header="Produced" Binding="{Binding ProducedQuantity}" Width="110" />
-                            <DataGridTextColumn Header="Status" Binding="{Binding Status}" Width="130" />
-                        </DataGrid.Columns>
-                    </DataGrid>
-                </DockPanel>
-            </Border>
-        </Grid>
-    </Grid>
+                <Border Grid.Column="2" Style="{StaticResource UtilityPanel}">
+                    <StackPanel>
+                        <TextBlock Text="Production Status" Style="{StaticResource InlineStatLabel}" />
+                        <TextBlock Text="{Binding StatusMessage}" Style="{StaticResource PageSubtitleText}" Margin="0,8,0,0" />
+                    </StackPanel>
+                </Border>
+            </Grid>
+
+            <Grid>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="1.1*" />
+                    <ColumnDefinition Width="1.9*" />
+                </Grid.ColumnDefinitions>
+
+                <StackPanel Grid.Column="0" Margin="0,0,16,0">
+                    <Border Style="{StaticResource SectionCard}">
+                        <StackPanel>
+                            <TextBlock Text="Create Production Order" Style="{StaticResource CardTitleText}" />
+                            <TextBlock Text="Select the finished item and planned quantity before releasing a new order."
+                                       Style="{StaticResource PageSubtitleText}"
+                                       Margin="0,0,0,16" />
+                            <TextBlock Text="Finished Product" Style="{StaticResource FormLabel}" />
+                            <ComboBox ItemsSource="{Binding FinishedProducts}" SelectedItem="{Binding SelectedFinishedProduct}" DisplayMemberPath="Name" />
+                            <TextBlock Text="Planned Quantity" Style="{StaticResource FormLabel}" Margin="0,12,0,4" />
+                            <TextBox Text="{Binding PlannedQuantity}" />
+                            <Button Content="Create Order" Command="{Binding CreateOrderCommand}" Margin="0,16,0,0" />
+                        </StackPanel>
+                    </Border>
+
+                    <Border Style="{StaticResource SectionCard}">
+                        <StackPanel>
+                            <TextBlock Text="Receive Finished Goods" Style="{StaticResource CardTitleText}" />
+                            <TextBlock Text="Post completed output into a warehouse against the selected order."
+                                       Style="{StaticResource PageSubtitleText}"
+                                       Margin="0,0,0,16" />
+                            <TextBlock Text="Warehouse" Style="{StaticResource FormLabel}" />
+                            <ComboBox ItemsSource="{Binding Warehouses}" SelectedItem="{Binding SelectedWarehouse}" DisplayMemberPath="Name" />
+                            <TextBlock Text="Receipt Quantity" Style="{StaticResource FormLabel}" Margin="0,12,0,4" />
+                            <TextBox Text="{Binding ReceiptQuantity}" />
+                            <Button Content="Receive Finished Goods" Command="{Binding ReceiveFinishedGoodsCommand}" Margin="0,16,0,0" />
+                        </StackPanel>
+                    </Border>
+                </StackPanel>
+
+                <Border Grid.Column="1" Style="{StaticResource SectionCard}">
+                    <DockPanel>
+                        <StackPanel DockPanel.Dock="Top" Margin="0,0,0,12">
+                            <WrapPanel>
+                                <TextBlock Text="Production Orders" Style="{StaticResource CardTitleText}" Margin="0,0,8,0" />
+                                <Button Content="Refresh" Command="{Binding RefreshOrdersCommand}" />
+                            </WrapPanel>
+                            <TextBlock Text="Track planned, produced, and status values for all current production orders."
+                                       Style="{StaticResource PageSubtitleText}"
+                                       Margin="0" />
+                        </StackPanel>
+                        <DataGrid ItemsSource="{Binding ProductionOrders}" SelectedItem="{Binding SelectedOrder}" AutoGenerateColumns="False" CanUserAddRows="False">
+                            <DataGrid.Columns>
+                                <DataGridTextColumn Header="Order No" Binding="{Binding OrderNo}" Width="180" />
+                                <DataGridTextColumn Header="Date" Binding="{Binding OrderDate}" Width="150" />
+                                <DataGridTextColumn Header="Product" Binding="{Binding FinishedProduct.Name}" Width="*" />
+                                <DataGridTextColumn Header="Planned" Binding="{Binding PlannedQuantity}" Width="110" />
+                                <DataGridTextColumn Header="Produced" Binding="{Binding ProducedQuantity}" Width="110" />
+                                <DataGridTextColumn Header="Status" Binding="{Binding Status}" Width="130" />
+                            </DataGrid.Columns>
+                        </DataGrid>
+                    </DockPanel>
+                </Border>
+            </Grid>
+        </StackPanel>
+    </ScrollViewer>
 </UserControl>

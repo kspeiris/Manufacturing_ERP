@@ -4,7 +4,39 @@
              xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes">
     <ScrollViewer VerticalScrollBarVisibility="Auto">
         <StackPanel>
-            <TextBlock Text="Supplier Invoices &amp; Purchase Returns" FontSize="30" FontWeight="Bold" Margin="0,0,0,18" />
+            <TextBlock Text="Supplier Invoices &amp; Purchase Returns" Style="{StaticResource PageTitleText}" />
+            <TextBlock Text="Manage supplier-side liabilities and return workflows with clearer document context and monitoring."
+                       Style="{StaticResource PageSubtitleText}"
+                       Margin="0,0,0,18" />
+
+            <Grid Margin="0,0,0,16">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="Auto" />
+                    <ColumnDefinition Width="Auto" />
+                    <ColumnDefinition Width="*" />
+                </Grid.ColumnDefinitions>
+
+                <Border Grid.Column="0" Style="{StaticResource InlineStatCard}" Margin="0,0,16,0">
+                    <StackPanel>
+                        <TextBlock Text="Invoices" Style="{StaticResource InlineStatLabel}" />
+                        <TextBlock Text="{Binding SupplierInvoices.Count}" Style="{StaticResource InlineStatValue}" />
+                    </StackPanel>
+                </Border>
+
+                <Border Grid.Column="1" Style="{StaticResource InlineStatCard}" Margin="0,0,16,0">
+                    <StackPanel>
+                        <TextBlock Text="Returns" Style="{StaticResource InlineStatLabel}" />
+                        <TextBlock Text="{Binding PurchaseReturns.Count}" Style="{StaticResource InlineStatValue}" />
+                    </StackPanel>
+                </Border>
+
+                <Border Grid.Column="2" Style="{StaticResource UtilityPanel}">
+                    <StackPanel>
+                        <TextBlock Text="Process Status" Style="{StaticResource InlineStatLabel}" />
+                        <TextBlock Text="{Binding StatusMessage}" Style="{StaticResource PageSubtitleText}" Margin="0,8,0,0" />
+                    </StackPanel>
+                </Border>
+            </Grid>
 
             <Grid Margin="0,0,0,16">
                 <Grid.ColumnDefinitions><ColumnDefinition Width="1*"/><ColumnDefinition Width="1*"/></Grid.ColumnDefinitions>
@@ -12,6 +44,9 @@
                 <Border Grid.Column="0" Style="{StaticResource SectionCard}" Margin="0,0,16,0">
                     <StackPanel>
                         <TextBlock Text="Supplier Invoice Entry" Style="{StaticResource CardTitleText}" />
+                        <TextBlock Text="Capture supplier invoice references, amounts, and payment position."
+                                   Style="{StaticResource PageSubtitleText}"
+                                   Margin="0,0,0,16" />
                         <TextBlock Text="Supplier" Style="{StaticResource FormLabel}" />
                         <ComboBox ItemsSource="{Binding Suppliers}" SelectedItem="{Binding SelectedSupplier}" DisplayMemberPath="Name" />
                         <TextBlock Text="Reference PO" Style="{StaticResource FormLabel}" Margin="0,12,0,4" />
@@ -30,6 +65,9 @@
                 <Border Grid.Column="1" Style="{StaticResource SectionCard}">
                     <StackPanel>
                         <TextBlock Text="Purchase Return Entry" Style="{StaticResource CardTitleText}" />
+                        <TextBlock Text="Create supplier returns with warehouse allocation and product-level costing."
+                                   Style="{StaticResource PageSubtitleText}"
+                                   Margin="0,0,0,16" />
                         <TextBlock Text="Warehouse" Style="{StaticResource FormLabel}" />
                         <ComboBox ItemsSource="{Binding Warehouses}" SelectedItem="{Binding SelectedWarehouse}" DisplayMemberPath="Name" />
                         <TextBlock Text="Reference Supplier Invoice" Style="{StaticResource FormLabel}" Margin="0,12,0,4" />
@@ -53,13 +91,15 @@
                 </Border>
             </Grid>
 
-            <TextBlock Text="{Binding StatusMessage}" Foreground="#2563EB" Margin="0,0,0,12" />
-
             <Grid>
                 <Grid.ColumnDefinitions><ColumnDefinition Width="1*"/><ColumnDefinition Width="1*"/></Grid.ColumnDefinitions>
+
                 <Border Grid.Column="0" Style="{StaticResource SectionCard}" Margin="0,0,16,0">
                     <DockPanel>
-                        <TextBlock Text="Supplier Invoices" Style="{StaticResource CardTitleText}" DockPanel.Dock="Top" />
+                        <StackPanel DockPanel.Dock="Top" Margin="0,0,0,12">
+                            <TextBlock Text="Supplier Invoices" Style="{StaticResource CardTitleText}" />
+                            <TextBlock Text="Monitor open and settled supplier invoice activity." Style="{StaticResource PageSubtitleText}" Margin="0" />
+                        </StackPanel>
                         <DataGrid ItemsSource="{Binding SupplierInvoices}" AutoGenerateColumns="False" CanUserAddRows="False" Height="260">
                             <DataGrid.Columns>
                                 <DataGridTextColumn Header="Invoice No" Binding="{Binding InvoiceNo}" Width="160" />
@@ -75,7 +115,10 @@
 
                 <Border Grid.Column="1" Style="{StaticResource SectionCard}">
                     <DockPanel>
-                        <TextBlock Text="Purchase Returns" Style="{StaticResource CardTitleText}" DockPanel.Dock="Top" />
+                        <StackPanel DockPanel.Dock="Top" Margin="0,0,0,12">
+                            <TextBlock Text="Purchase Returns" Style="{StaticResource CardTitleText}" />
+                            <TextBlock Text="Track return documents, warehouse impact, and totals." Style="{StaticResource PageSubtitleText}" Margin="0" />
+                        </StackPanel>
                         <DataGrid ItemsSource="{Binding PurchaseReturns}" AutoGenerateColumns="False" CanUserAddRows="False" Height="260">
                             <DataGrid.Columns>
                                 <DataGridTextColumn Header="Return No" Binding="{Binding ReturnNo}" Width="160" />

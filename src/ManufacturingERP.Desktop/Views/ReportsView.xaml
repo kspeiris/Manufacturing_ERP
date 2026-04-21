@@ -4,20 +4,60 @@
              xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes">
     <ScrollViewer VerticalScrollBarVisibility="Auto">
         <StackPanel>
-            <WrapPanel Margin="0,0,0,18">
-                <TextBlock Text="Reporting Workspace" FontSize="30" FontWeight="Bold" Margin="0,0,12,0" />
-                <Button Content="Reload" Command="{Binding LoadCommand}" Margin="0,0,8,0" />
-                <Button Content="Export Sales" Command="{Binding ExportSalesCommand}" Margin="0,0,8,0" />
-                <Button Content="Export Purchases" Command="{Binding ExportPurchasesCommand}" Margin="0,0,8,0" />
-                <Button Content="Export Customer Ledgers" Command="{Binding ExportCustomerLedgerSummaryCommand}" Margin="0,0,8,0" />
-                <Button Content="Export Supplier Ledgers" Command="{Binding ExportSupplierLedgerSummaryCommand}" Margin="0,0,8,0" />
-                <Button Content="Print Invoice (HTML)" Command="{Binding ExportInvoiceHtmlCommand}" Margin="0,0,8,0" />
-                <Button Content="Print PO (HTML)" Command="{Binding ExportPurchaseOrderHtmlCommand}" />
-            </WrapPanel>
+            <DockPanel Margin="0,0,0,18">
+                <StackPanel DockPanel.Dock="Left">
+                    <TextBlock Text="Reporting Workspace" Style="{StaticResource PageTitleText}" />
+                    <TextBlock Text="Review recent operational data and launch exports from a more structured reporting hub."
+                               Style="{StaticResource PageSubtitleText}" />
+                </StackPanel>
+                <WrapPanel HorizontalAlignment="Right">
+                    <Button Content="Reload" Command="{Binding LoadCommand}" Margin="0,0,8,0" />
+                    <Button Content="Export Sales" Command="{Binding ExportSalesCommand}" Margin="0,0,8,0" />
+                    <Button Content="Export Purchases" Command="{Binding ExportPurchasesCommand}" Margin="0,0,8,0" />
+                    <Button Content="Export Customer Ledgers" Command="{Binding ExportCustomerLedgerSummaryCommand}" Margin="0,0,8,0" />
+                    <Button Content="Export Supplier Ledgers" Command="{Binding ExportSupplierLedgerSummaryCommand}" Margin="0,0,8,0" />
+                    <Button Content="Print Invoice (HTML)" Command="{Binding ExportInvoiceHtmlCommand}" Margin="0,0,8,0" />
+                    <Button Content="Print PO (HTML)" Command="{Binding ExportPurchaseOrderHtmlCommand}" />
+                </WrapPanel>
+            </DockPanel>
+
+            <Grid Margin="0,0,0,16">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="Auto" />
+                    <ColumnDefinition Width="Auto" />
+                    <ColumnDefinition Width="*" />
+                </Grid.ColumnDefinitions>
+
+                <Border Grid.Column="0" Style="{StaticResource InlineStatCard}" Margin="0,0,16,0">
+                    <StackPanel>
+                        <TextBlock Text="Sales Rows" Style="{StaticResource InlineStatLabel}" />
+                        <TextBlock Text="{Binding SalesRows.Count}" Style="{StaticResource InlineStatValue}" />
+                    </StackPanel>
+                </Border>
+
+                <Border Grid.Column="1" Style="{StaticResource InlineStatCard}" Margin="0,0,16,0">
+                    <StackPanel>
+                        <TextBlock Text="Purchase Rows" Style="{StaticResource InlineStatLabel}" />
+                        <TextBlock Text="{Binding PurchaseRows.Count}" Style="{StaticResource InlineStatValue}" />
+                    </StackPanel>
+                </Border>
+
+                <Border Grid.Column="2" Style="{StaticResource UtilityPanel}">
+                    <StackPanel>
+                        <TextBlock Text="Export Status" Style="{StaticResource InlineStatLabel}" />
+                        <TextBlock Text="{Binding StatusMessage}" Style="{StaticResource PageSubtitleText}" Margin="0,8,0,0" />
+                    </StackPanel>
+                </Border>
+            </Grid>
 
             <Border Style="{StaticResource SectionCard}">
                 <DockPanel>
-                    <TextBlock Text="Recent Sales" Style="{StaticResource CardTitleText}" DockPanel.Dock="Top" />
+                    <StackPanel DockPanel.Dock="Top" Margin="0,0,0,12">
+                        <TextBlock Text="Recent Sales" Style="{StaticResource CardTitleText}" />
+                        <TextBlock Text="Validate invoicing, collection, and vehicle-sale activity before exporting."
+                                   Style="{StaticResource PageSubtitleText}"
+                                   Margin="0" />
+                    </StackPanel>
                     <DataGrid ItemsSource="{Binding SalesRows}" AutoGenerateColumns="False" CanUserAddRows="False" Height="220">
                         <DataGrid.Columns>
                             <DataGridTextColumn Header="Invoice" Binding="{Binding InvoiceNo}" Width="160" />
@@ -34,7 +74,12 @@
 
             <Border Style="{StaticResource SectionCard}">
                 <DockPanel>
-                    <TextBlock Text="Recent Purchase Orders" Style="{StaticResource CardTitleText}" DockPanel.Dock="Top" />
+                    <StackPanel DockPanel.Dock="Top" Margin="0,0,0,12">
+                        <TextBlock Text="Recent Purchase Orders" Style="{StaticResource CardTitleText}" />
+                        <TextBlock Text="Monitor procurement flow and status changes before distributing reports."
+                                   Style="{StaticResource PageSubtitleText}"
+                                   Margin="0" />
+                    </StackPanel>
                     <DataGrid ItemsSource="{Binding PurchaseRows}" AutoGenerateColumns="False" CanUserAddRows="False" Height="220">
                         <DataGrid.Columns>
                             <DataGridTextColumn Header="PO No" Binding="{Binding OrderNo}" Width="160" />
@@ -48,10 +93,17 @@
             </Border>
 
             <Grid>
-                <Grid.ColumnDefinitions><ColumnDefinition Width="1*"/><ColumnDefinition Width="1*"/></Grid.ColumnDefinitions>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="1*" />
+                    <ColumnDefinition Width="1*" />
+                </Grid.ColumnDefinitions>
+
                 <Border Grid.Column="0" Style="{StaticResource SectionCard}" Margin="0,0,16,0">
                     <DockPanel>
-                        <TextBlock Text="Customer Ledger Summary" Style="{StaticResource CardTitleText}" DockPanel.Dock="Top" />
+                        <StackPanel DockPanel.Dock="Top" Margin="0,0,0,12">
+                            <TextBlock Text="Customer Ledger Summary" Style="{StaticResource CardTitleText}" />
+                            <TextBlock Text="Highlight receivable exposure by customer." Style="{StaticResource PageSubtitleText}" Margin="0" />
+                        </StackPanel>
                         <DataGrid ItemsSource="{Binding CustomerLedgerSummaryRows}" AutoGenerateColumns="False" CanUserAddRows="False" Height="220">
                             <DataGrid.Columns>
                                 <DataGridTextColumn Header="Code" Binding="{Binding PartyCode}" Width="120" />
@@ -61,9 +113,13 @@
                         </DataGrid>
                     </DockPanel>
                 </Border>
+
                 <Border Grid.Column="1" Style="{StaticResource SectionCard}">
                     <DockPanel>
-                        <TextBlock Text="Supplier Ledger Summary" Style="{StaticResource CardTitleText}" DockPanel.Dock="Top" />
+                        <StackPanel DockPanel.Dock="Top" Margin="0,0,0,12">
+                            <TextBlock Text="Supplier Ledger Summary" Style="{StaticResource CardTitleText}" />
+                            <TextBlock Text="Highlight payable exposure by supplier." Style="{StaticResource PageSubtitleText}" Margin="0" />
+                        </StackPanel>
                         <DataGrid ItemsSource="{Binding SupplierLedgerSummaryRows}" AutoGenerateColumns="False" CanUserAddRows="False" Height="220">
                             <DataGrid.Columns>
                                 <DataGridTextColumn Header="Code" Binding="{Binding PartyCode}" Width="120" />
@@ -74,8 +130,6 @@
                     </DockPanel>
                 </Border>
             </Grid>
-
-            <TextBlock Text="{Binding StatusMessage}" Foreground="#2563EB" />
         </StackPanel>
     </ScrollViewer>
 </UserControl>

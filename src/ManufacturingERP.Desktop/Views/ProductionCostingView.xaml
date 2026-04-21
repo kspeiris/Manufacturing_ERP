@@ -2,39 +2,88 @@
              xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes">
-    <Grid>
-        <Grid.ColumnDefinitions><ColumnDefinition Width="1.2*"/><ColumnDefinition Width="1.8*"/></Grid.ColumnDefinitions>
-        <Border Grid.Column="0" Style="{StaticResource SectionCard}" Margin="0,0,16,0">
-            <StackPanel>
-                <TextBlock Text="Production Costing" Style="{StaticResource CardTitleText}" />
-                <TextBlock Text="Material Cost" Style="{StaticResource FormLabel}" />
-                <TextBox Text="{Binding MaterialCost}" />
-                <TextBlock Text="Labor Cost" Style="{StaticResource FormLabel}" Margin="0,12,0,4" />
-                <TextBox Text="{Binding LaborCost}" />
-                <TextBlock Text="Overhead Cost" Style="{StaticResource FormLabel}" Margin="0,12,0,4" />
-                <TextBox Text="{Binding OverheadCost}" />
-                <WrapPanel Margin="0,16,0,0">
-                    <Button Content="Save Costing" Command="{Binding SaveCostingCommand}" Margin="0,0,8,0" />
-                    <Button Content="Refresh" Command="{Binding LoadCommand}" />
-                </WrapPanel>
-                <TextBlock Text="{Binding StatusMessage}" Margin="0,12,0,0" Foreground="#2563EB" />
-            </StackPanel>
-        </Border>
-        <Border Grid.Column="1" Style="{StaticResource SectionCard}">
-            <DockPanel>
-                <TextBlock Text="Production Orders" Style="{StaticResource CardTitleText}" DockPanel.Dock="Top" />
-                <DataGrid ItemsSource="{Binding Orders}" SelectedItem="{Binding SelectedOrder}" AutoGenerateColumns="False" CanUserAddRows="False">
-                    <DataGrid.Columns>
-                        <DataGridTextColumn Header="Order No" Binding="{Binding OrderNo}" Width="150" />
-                        <DataGridTextColumn Header="Product" Binding="{Binding FinishedProduct.Name}" Width="*" />
-                        <DataGridTextColumn Header="Produced Qty" Binding="{Binding ProducedQuantity}" Width="110" />
-                        <DataGridTextColumn Header="Material" Binding="{Binding MaterialCost}" Width="110" />
-                        <DataGridTextColumn Header="Labor" Binding="{Binding LaborCost}" Width="110" />
-                        <DataGridTextColumn Header="Overhead" Binding="{Binding OverheadCost}" Width="110" />
-                        <DataGridTextColumn Header="Unit Cost" Binding="{Binding UnitCost}" Width="110" />
-                    </DataGrid.Columns>
-                </DataGrid>
+    <ScrollViewer VerticalScrollBarVisibility="Auto">
+        <StackPanel>
+            <DockPanel Margin="0,0,0,18">
+                <StackPanel DockPanel.Dock="Left">
+                    <TextBlock Text="Production Costing" Style="{StaticResource PageTitleText}" />
+                    <TextBlock Text="Capture material, labor, and overhead inputs while keeping production-order costing visible."
+                               Style="{StaticResource PageSubtitleText}" />
+                </StackPanel>
+                <Button Content="Refresh"
+                        Command="{Binding LoadCommand}"
+                        HorizontalAlignment="Right"
+                        VerticalAlignment="Top" />
             </DockPanel>
-        </Border>
-    </Grid>
+
+            <Grid Margin="0,0,0,16">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="Auto" />
+                    <ColumnDefinition Width="*" />
+                </Grid.ColumnDefinitions>
+
+                <Border Grid.Column="0" Style="{StaticResource InlineStatCard}" Margin="0,0,16,0">
+                    <StackPanel>
+                        <TextBlock Text="Orders Loaded" Style="{StaticResource InlineStatLabel}" />
+                        <TextBlock Text="{Binding Orders.Count}" Style="{StaticResource InlineStatValue}" />
+                    </StackPanel>
+                </Border>
+
+                <Border Grid.Column="1" Style="{StaticResource UtilityPanel}">
+                    <StackPanel>
+                        <TextBlock Text="Costing Status" Style="{StaticResource InlineStatLabel}" />
+                        <TextBlock Text="{Binding StatusMessage}" Style="{StaticResource PageSubtitleText}" Margin="0,8,0,0" />
+                    </StackPanel>
+                </Border>
+            </Grid>
+
+            <Grid>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="1.05*" />
+                    <ColumnDefinition Width="1.95*" />
+                </Grid.ColumnDefinitions>
+
+                <Border Grid.Column="0" Style="{StaticResource SectionCard}" Margin="0,0,16,0">
+                    <StackPanel>
+                        <TextBlock Text="Cost Input" Style="{StaticResource CardTitleText}" />
+                        <TextBlock Text="Update the current costing mix before saving it against the selected production order."
+                                   Style="{StaticResource PageSubtitleText}"
+                                   Margin="0,0,0,16" />
+                        <TextBlock Text="Material Cost" Style="{StaticResource FormLabel}" />
+                        <TextBox Text="{Binding MaterialCost}" />
+                        <TextBlock Text="Labor Cost" Style="{StaticResource FormLabel}" Margin="0,12,0,4" />
+                        <TextBox Text="{Binding LaborCost}" />
+                        <TextBlock Text="Overhead Cost" Style="{StaticResource FormLabel}" Margin="0,12,0,4" />
+                        <TextBox Text="{Binding OverheadCost}" />
+                        <WrapPanel Margin="0,18,0,0">
+                            <Button Content="Save Costing" Command="{Binding SaveCostingCommand}" Margin="0,0,8,0" />
+                            <Button Content="Refresh" Command="{Binding LoadCommand}" />
+                        </WrapPanel>
+                    </StackPanel>
+                </Border>
+
+                <Border Grid.Column="1" Style="{StaticResource SectionCard}">
+                    <DockPanel>
+                        <StackPanel DockPanel.Dock="Top" Margin="0,0,0,12">
+                            <TextBlock Text="Production Orders" Style="{StaticResource CardTitleText}" />
+                            <TextBlock Text="Select an order to validate its current material, labor, overhead, and unit-cost position."
+                                       Style="{StaticResource PageSubtitleText}"
+                                       Margin="0" />
+                        </StackPanel>
+                        <DataGrid ItemsSource="{Binding Orders}" SelectedItem="{Binding SelectedOrder}" AutoGenerateColumns="False" CanUserAddRows="False">
+                            <DataGrid.Columns>
+                                <DataGridTextColumn Header="Order No" Binding="{Binding OrderNo}" Width="150" />
+                                <DataGridTextColumn Header="Product" Binding="{Binding FinishedProduct.Name}" Width="*" />
+                                <DataGridTextColumn Header="Produced Qty" Binding="{Binding ProducedQuantity}" Width="110" />
+                                <DataGridTextColumn Header="Material" Binding="{Binding MaterialCost}" Width="110" />
+                                <DataGridTextColumn Header="Labor" Binding="{Binding LaborCost}" Width="110" />
+                                <DataGridTextColumn Header="Overhead" Binding="{Binding OverheadCost}" Width="110" />
+                                <DataGridTextColumn Header="Unit Cost" Binding="{Binding UnitCost}" Width="110" />
+                            </DataGrid.Columns>
+                        </DataGrid>
+                    </DockPanel>
+                </Border>
+            </Grid>
+        </StackPanel>
+    </ScrollViewer>
 </UserControl>

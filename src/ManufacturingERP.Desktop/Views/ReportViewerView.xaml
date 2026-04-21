@@ -2,27 +2,81 @@
              xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes">
-    <Grid>
-        <Grid.ColumnDefinitions><ColumnDefinition Width="1.1*"/><ColumnDefinition Width="1.9*"/></Grid.ColumnDefinitions>
-        <Border Grid.Column="0" Style="{StaticResource SectionCard}" Margin="0,0,16,0">
-            <StackPanel>
-                <WrapPanel Margin="0,0,0,12">
-                    <TextBlock Text="Report Center" Style="{StaticResource CardTitleText}" Margin="0,0,8,0" />
-                    <Button Content="Refresh" Command="{Binding LoadCommand}" />
-                </WrapPanel>
-                <TextBlock Text="Exported Files" Style="{StaticResource FormLabel}" />
-                <ListBox x:Name="ExportFilesList" ItemsSource="{Binding ExportFiles}" SelectedItem="{Binding SelectedFilePath}" SelectionChanged="ExportFilesList_OnSelectionChanged" Height="220" Margin="0,0,0,12" />
-                <TextBlock Text="Templates" Style="{StaticResource FormLabel}" />
-                <ListBox ItemsSource="{Binding TemplateFiles}" Height="180" />
-                <Button Content="Select File" Command="{Binding OpenSelectedFileCommand}" Margin="0,12,0,0" />
-                <TextBlock Text="{Binding StatusMessage}" Margin="0,12,0,0" Foreground="#2563EB" TextWrapping="Wrap"/>
-            </StackPanel>
-        </Border>
-        <Border Grid.Column="1" Style="{StaticResource SectionCard}">
-            <DockPanel>
-                <TextBlock Text="Embedded Preview" Style="{StaticResource CardTitleText}" DockPanel.Dock="Top" />
-                <WebBrowser x:Name="PreviewBrowser" />
+    <ScrollViewer VerticalScrollBarVisibility="Auto">
+        <StackPanel>
+            <DockPanel Margin="0,0,0,18">
+                <StackPanel DockPanel.Dock="Left">
+                    <TextBlock Text="Report Center" Style="{StaticResource PageTitleText}" />
+                    <TextBlock Text="Browse generated exports, templates, and the live preview from one document workspace."
+                               Style="{StaticResource PageSubtitleText}" />
+                </StackPanel>
+                <Button Content="Refresh"
+                        Command="{Binding LoadCommand}"
+                        HorizontalAlignment="Right"
+                        VerticalAlignment="Top" />
             </DockPanel>
-        </Border>
-    </Grid>
+
+            <Grid Margin="0,0,0,16">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="Auto" />
+                    <ColumnDefinition Width="Auto" />
+                    <ColumnDefinition Width="*" />
+                </Grid.ColumnDefinitions>
+
+                <Border Grid.Column="0" Style="{StaticResource InlineStatCard}" Margin="0,0,16,0">
+                    <StackPanel>
+                        <TextBlock Text="Exports" Style="{StaticResource InlineStatLabel}" />
+                        <TextBlock Text="{Binding ExportFiles.Count}" Style="{StaticResource InlineStatValue}" />
+                    </StackPanel>
+                </Border>
+
+                <Border Grid.Column="1" Style="{StaticResource InlineStatCard}" Margin="0,0,16,0">
+                    <StackPanel>
+                        <TextBlock Text="Templates" Style="{StaticResource InlineStatLabel}" />
+                        <TextBlock Text="{Binding TemplateFiles.Count}" Style="{StaticResource InlineStatValue}" />
+                    </StackPanel>
+                </Border>
+
+                <Border Grid.Column="2" Style="{StaticResource UtilityPanel}">
+                    <StackPanel>
+                        <TextBlock Text="Viewer Status" Style="{StaticResource InlineStatLabel}" />
+                        <TextBlock Text="{Binding StatusMessage}" Style="{StaticResource PageSubtitleText}" Margin="0,8,0,0" />
+                    </StackPanel>
+                </Border>
+            </Grid>
+
+            <Grid>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="1.05*" />
+                    <ColumnDefinition Width="1.95*" />
+                </Grid.ColumnDefinitions>
+
+                <Border Grid.Column="0" Style="{StaticResource SectionCard}" Margin="0,0,16,0">
+                    <StackPanel>
+                        <TextBlock Text="File Browser" Style="{StaticResource CardTitleText}" />
+                        <TextBlock Text="Choose a generated export or template, then open the selected file or preview it on the right."
+                                   Style="{StaticResource PageSubtitleText}"
+                                   Margin="0,0,0,16" />
+                        <TextBlock Text="Exported Files" Style="{StaticResource FormLabel}" />
+                        <ListBox x:Name="ExportFilesList" ItemsSource="{Binding ExportFiles}" SelectedItem="{Binding SelectedFilePath}" SelectionChanged="ExportFilesList_OnSelectionChanged" Height="220" Margin="0,0,0,12" />
+                        <TextBlock Text="Templates" Style="{StaticResource FormLabel}" />
+                        <ListBox ItemsSource="{Binding TemplateFiles}" Height="180" />
+                        <Button Content="Select File" Command="{Binding OpenSelectedFileCommand}" Margin="0,12,0,0" />
+                    </StackPanel>
+                </Border>
+
+                <Border Grid.Column="1" Style="{StaticResource SectionCard}">
+                    <DockPanel>
+                        <StackPanel DockPanel.Dock="Top" Margin="0,0,0,12">
+                            <TextBlock Text="Embedded Preview" Style="{StaticResource CardTitleText}" />
+                            <TextBlock Text="Preview the currently selected report output without leaving the ERP."
+                                       Style="{StaticResource PageSubtitleText}"
+                                       Margin="0" />
+                        </StackPanel>
+                        <WebBrowser x:Name="PreviewBrowser" />
+                    </DockPanel>
+                </Border>
+            </Grid>
+        </StackPanel>
+    </ScrollViewer>
 </UserControl>
