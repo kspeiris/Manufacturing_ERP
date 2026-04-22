@@ -18,6 +18,7 @@ public partial class ProductsViewModel : ViewModelBase
     [ObservableProperty] private Product? _selectedProduct;
     [ObservableProperty] private string _statusMessage = string.Empty;
     [ObservableProperty] private string _searchText = string.Empty;
+    [ObservableProperty] private string _activeTab = "Overview";
 
     public ProductsViewModel(AuthorizationService authorizationService)
     {
@@ -169,6 +170,13 @@ public partial class ProductsViewModel : ViewModelBase
 
     partial void OnSearchTextChanged(string value) => ApplyFilter();
 
+    [RelayCommand]
+    private void SetActiveTab(string? tab)
+    {
+        if (!string.IsNullOrWhiteSpace(tab))
+            ActiveTab = tab;
+    }
+
     private void ApplyFilter()
     {
         var term = SearchText.Trim();
@@ -184,7 +192,29 @@ public partial class ProductsViewModel : ViewModelBase
         Products.Clear();
         foreach (var item in filtered)
             Products.Add(item);
+
+        OnPropertyChanged(nameof(ActiveProductsCount));
+        OnPropertyChanged(nameof(InactiveProductsCount));
+        OnPropertyChanged(nameof(CategoryCount));
+        OnPropertyChanged(nameof(BatchTrackedCount));
+        OnPropertyChanged(nameof(AverageSellingPrice));
     }
+
+    public int ActiveProductsCount => Products.Count(x => x.IsActive);
+
+    public int InactiveProductsCount => Products.Count(x => !x.IsActive);
+
+    public int CategoryCount => Products
+        .Where(x => x.ProductCategory is not null)
+        .Select(x => x.ProductCategoryId)
+        .Distinct()
+        .Count();
+
+    public int BatchTrackedCount => Products.Count(x => x.TrackBatch);
+
+    public decimal AverageSellingPrice => Products.Count == 0
+        ? 0
+        : Products.Average(x => x.SellingPrice);
 
     private static string? ValidateProduct(Product product, AppDbContext db, int? currentId = null)
     {

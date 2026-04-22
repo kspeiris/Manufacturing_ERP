@@ -4,7 +4,7 @@
              xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes">
     <ScrollViewer VerticalScrollBarVisibility="Auto">
         <StackPanel>
-            <DockPanel Margin="0,0,0,18">
+            <DockPanel Margin="0,0,0,14">
                 <StackPanel DockPanel.Dock="Left">
                     <TextBlock Text="POS Sales" Style="{StaticResource PageTitleText}" />
                     <TextBlock Text="Process fast cash sales with clear checkout context, item totals, and operator guidance."
@@ -12,10 +12,10 @@
                 </StackPanel>
             </DockPanel>
 
-            <Grid Margin="0,0,0,16">
+            <Grid Margin="0,0,0,14">
                 <Grid.ColumnDefinitions>
-                    <ColumnDefinition Width="Auto" />
-                    <ColumnDefinition Width="Auto" />
+                    <ColumnDefinition Width="220" />
+                    <ColumnDefinition Width="220" />
                     <ColumnDefinition Width="*" />
                 </Grid.ColumnDefinitions>
 
@@ -41,7 +41,7 @@
                 </Border>
             </Grid>
 
-            <Grid>
+            <Grid VerticalAlignment="Top">
                 <Grid.ColumnDefinitions>
                     <ColumnDefinition Width="1.05*" />
                     <ColumnDefinition Width="1.95*" />
@@ -57,22 +57,27 @@
                         <ComboBox ItemsSource="{Binding Customers}" SelectedItem="{Binding SelectedCustomer}" DisplayMemberPath="ShopName" />
                         <TextBlock Text="Vehicle" Style="{StaticResource FormLabel}" Margin="0,12,0,4" />
                         <ComboBox ItemsSource="{Binding Vehicles}" SelectedItem="{Binding SelectedVehicle}" DisplayMemberPath="VehicleNumber" />
-                        <WrapPanel Margin="0,18,0,0">
-                            <Button Content="Add Line" Command="{Binding AddLineCommand}" Margin="0,0,8,0" />
-                            <Button Content="Checkout Cash Sale" Command="{Binding CheckoutCommand}" />
-                        </WrapPanel>
+                        <TextBlock Text="Use the action buttons in the items panel to add lines and complete checkout."
+                                   Style="{StaticResource PageSubtitleText}"
+                                   Margin="0,16,0,0" />
                     </StackPanel>
                 </Border>
 
-                <Border Grid.Column="1" Style="{StaticResource SectionCard}">
+                <Border Grid.Column="1" Style="{StaticResource SectionCard}" VerticalAlignment="Top">
                     <DockPanel>
-                        <StackPanel DockPanel.Dock="Top" Margin="0,0,0,12">
-                            <TextBlock Text="POS Items" Style="{StaticResource CardTitleText}" />
-                            <TextBlock Text="Build the current sale and confirm line totals before checkout."
-                                       Style="{StaticResource PageSubtitleText}"
-                                       Margin="0" />
-                        </StackPanel>
-                        <DataGrid ItemsSource="{Binding Lines}" AutoGenerateColumns="False" CanUserAddRows="False">
+                        <DockPanel DockPanel.Dock="Top" Margin="0,0,0,12">
+                            <WrapPanel DockPanel.Dock="Right" Margin="12,0,0,0">
+                                <Button Content="Add Line" Command="{Binding AddLineCommand}" Margin="0,0,8,0" />
+                                <Button Content="Checkout Cash Sale" Command="{Binding CheckoutCommand}" />
+                            </WrapPanel>
+                            <StackPanel>
+                                <TextBlock Text="POS Items" Style="{StaticResource CardTitleText}" />
+                                <TextBlock Text="Build the current sale and confirm line totals before checkout."
+                                           Style="{StaticResource PageSubtitleText}"
+                                           Margin="0" />
+                            </StackPanel>
+                        </DockPanel>
+                        <DataGrid ItemsSource="{Binding Lines}" AutoGenerateColumns="False" CanUserAddRows="False" MaxHeight="260">
                             <DataGrid.Columns>
                                 <DataGridComboBoxColumn Header="Product" Width="*" SelectedItemBinding="{Binding Product}" DisplayMemberPath="Name" SelectedValuePath="."
                                     ItemsSource="{Binding DataContext.Products, RelativeSource={RelativeSource AncestorType=UserControl}}" />

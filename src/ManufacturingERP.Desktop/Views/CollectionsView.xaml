@@ -3,33 +3,35 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes">
     <ScrollViewer VerticalScrollBarVisibility="Auto">
-        <StackPanel>
-            <TextBlock Text="Collections" Style="{StaticResource PageTitleText}" />
-            <TextBlock Text="Record incoming customer payments with visible outstanding balances and a cleaner collections ledger."
-                       Style="{StaticResource PageSubtitleText}"
-                       Margin="0,0,0,18" />
+        <StackPanel Margin="0,0,0,8">
+            <Border Style="{StaticResource HeroCard}">
+                <Grid>
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="2.3*" />
+                        <ColumnDefinition Width="1.1*" />
+                    </Grid.ColumnDefinitions>
 
-            <Grid Margin="0,0,0,16">
-                <Grid.ColumnDefinitions>
-                    <ColumnDefinition Width="Auto" />
-                    <ColumnDefinition Width="*" />
-                </Grid.ColumnDefinitions>
-
-                <Border Grid.Column="0" Style="{StaticResource InlineStatCard}" Margin="0,0,16,0">
-                    <StackPanel>
-                        <TextBlock Text="Open Collections" Style="{StaticResource InlineStatLabel}" />
-                        <TextBlock Text="{Binding Collections.Count}" Style="{StaticResource InlineStatValue}" />
+                    <StackPanel Margin="0,0,24,0">
+                        <TextBlock Text="Collections" Style="{StaticResource HeroTitleText}" />
+                        <TextBlock Text="Cash receipt workspace" Style="{StaticResource HeroEyebrowText}" Margin="0,6,0,0" />
+                        <TextBlock Text="Record incoming customer payments with visible outstanding balances and a cleaner collections ledger."
+                                   Style="{StaticResource HeroBodyText}" Margin="0,12,0,0" MaxWidth="700" />
                     </StackPanel>
-                </Border>
+                    <Border Grid.Column="1" Background="#172554" BorderBrush="#2563EB" BorderThickness="1" CornerRadius="18" Padding="18">
+                        <StackPanel>
+                            <TextBlock Text="Selected Customer Position" Foreground="#93C5FD" FontWeight="SemiBold" />
+                            <TextBlock Text="{Binding SelectedCustomerOutstanding, StringFormat=Outstanding: {0:N2}}" Foreground="White" FontSize="22" FontWeight="Bold" Margin="0,10,0,0" />
+                            <TextBlock Text="{Binding StatusMessage}" Foreground="#CBD5E1" Margin="0,10,0,0" TextWrapping="Wrap" />
+                        </StackPanel>
+                    </Border>
+                </Grid>
+            </Border>
 
-                <Border Grid.Column="1" Style="{StaticResource UtilityPanel}">
-                    <StackPanel>
-                        <TextBlock Text="Selected Customer Position" Style="{StaticResource InlineStatLabel}" />
-                        <TextBlock Text="{Binding SelectedCustomerOutstanding, StringFormat=Outstanding: {0:N2}}" Style="{StaticResource PageSubtitleText}" Margin="0,8,0,0" />
-                        <TextBlock Text="{Binding StatusMessage}" Style="{StaticResource PageSubtitleText}" Margin="0,8,0,0" />
-                    </StackPanel>
-                </Border>
-            </Grid>
+            <WrapPanel Margin="0,0,0,4">
+                <Border Style="{StaticResource ResponsiveTileCard}"><StackPanel><TextBlock Text="Open Collections" Style="{StaticResource InlineStatLabel}" /><TextBlock Text="{Binding Collections.Count}" Style="{StaticResource InlineStatValue}" /><TextBlock Text="Recent collection entries in view." Style="{StaticResource PageSubtitleText}" /></StackPanel></Border>
+                <Border Style="{StaticResource ResponsiveTileCard}"><StackPanel><TextBlock Text="Selected Customer" Style="{StaticResource InlineStatLabel}" /><TextBlock Text="{Binding SelectedCustomer.ShopName, TargetNullValue=Not selected}" Style="{StaticResource InlineStatValue}" /><TextBlock Text="Customer receiving the payment." Style="{StaticResource PageSubtitleText}" /></StackPanel></Border>
+                <Border Style="{StaticResource ResponsiveTileCard}"><StackPanel><TextBlock Text="Reference" Style="{StaticResource InlineStatLabel}" /><TextBlock Text="{Binding ReferenceNo, TargetNullValue=-}" Style="{StaticResource InlineStatValue}" /><TextBlock Text="Payment reference currently being entered." Style="{StaticResource PageSubtitleText}" /></StackPanel></Border>
+            </WrapPanel>
 
             <Grid>
                 <Grid.ColumnDefinitions>
@@ -37,12 +39,11 @@
                     <ColumnDefinition Width="1.95*" />
                 </Grid.ColumnDefinitions>
 
-                <Border Grid.Column="0" Style="{StaticResource SectionCard}" Margin="0,0,16,0">
+                <Border Grid.Column="0" Style="{StaticResource SectionCard}" Margin="0,0,16,16">
                     <StackPanel>
                         <TextBlock Text="Collection Entry" Style="{StaticResource CardTitleText}" />
                         <TextBlock Text="Capture the payment amount, reference, and notes against the selected customer."
-                                   Style="{StaticResource PageSubtitleText}"
-                                   Margin="0,0,0,16" />
+                                   Style="{StaticResource PageSubtitleText}" Margin="0,0,0,16" />
                         <TextBlock Text="Customer" Style="{StaticResource FormLabel}" />
                         <ComboBox ItemsSource="{Binding Customers}" SelectedItem="{Binding SelectedCustomer}" DisplayMemberPath="ShopName" />
                         <TextBlock Text="Amount" Style="{StaticResource FormLabel}" Margin="0,12,0,4" />
@@ -52,29 +53,30 @@
                         <TextBlock Text="Notes" Style="{StaticResource FormLabel}" Margin="0,12,0,4" />
                         <TextBox Text="{Binding Notes}" Height="90" AcceptsReturn="True" TextWrapping="Wrap" />
                         <WrapPanel Margin="0,16,0,0">
-                            <Button Content="Save Collection" Command="{Binding SaveCollectionCommand}" Margin="0,0,8,0" />
-                            <Button Content="Refresh" Command="{Binding LoadCommand}" />
+                            <Button Content="Save Collection" Command="{Binding SaveCollectionCommand}" Style="{StaticResource PageActionButton}" />
+                            <Button Content="Refresh" Command="{Binding LoadCommand}" Style="{StaticResource PageActionButton}" Margin="0" />
                         </WrapPanel>
                     </StackPanel>
                 </Border>
 
                 <Border Grid.Column="1" Style="{StaticResource SectionCard}">
                     <DockPanel>
-                        <StackPanel DockPanel.Dock="Top" Margin="0,0,0,12">
+                        <StackPanel DockPanel.Dock="Top" Margin="0,0,0,14">
                             <TextBlock Text="Recent Collections" Style="{StaticResource CardTitleText}" />
                             <TextBlock Text="Review the latest cash receipts and customer references."
-                                       Style="{StaticResource PageSubtitleText}"
-                                       Margin="0" />
+                                       Style="{StaticResource PageSubtitleText}" Margin="0" />
                         </StackPanel>
-                        <DataGrid ItemsSource="{Binding Collections}" AutoGenerateColumns="False" CanUserAddRows="False">
-                            <DataGrid.Columns>
-                                <DataGridTextColumn Header="Date" Binding="{Binding CollectionDate}" Width="160" />
-                                <DataGridTextColumn Header="Customer" Binding="{Binding Customer.ShopName}" Width="*" />
-                                <DataGridTextColumn Header="Amount" Binding="{Binding Amount}" Width="120" />
-                                <DataGridTextColumn Header="Reference" Binding="{Binding ReferenceNo}" Width="140" />
-                                <DataGridTextColumn Header="Notes" Binding="{Binding Notes}" Width="220" />
-                            </DataGrid.Columns>
-                        </DataGrid>
+                        <Border Background="#F8FBFF" BorderBrush="#DCE7F5" BorderThickness="1" CornerRadius="18" Padding="8">
+                            <DataGrid ItemsSource="{Binding Collections}" AutoGenerateColumns="False" CanUserAddRows="False" MaxHeight="420" MinWidth="760">
+                                <DataGrid.Columns>
+                                    <DataGridTextColumn Header="Date" Binding="{Binding CollectionDate}" Width="160" />
+                                    <DataGridTextColumn Header="Customer" Binding="{Binding Customer.ShopName}" Width="*" />
+                                    <DataGridTextColumn Header="Amount" Binding="{Binding Amount, StringFormat=N2}" Width="120" />
+                                    <DataGridTextColumn Header="Reference" Binding="{Binding ReferenceNo}" Width="140" />
+                                    <DataGridTextColumn Header="Notes" Binding="{Binding Notes}" Width="220" />
+                                </DataGrid.Columns>
+                            </DataGrid>
+                        </Border>
                     </DockPanel>
                 </Border>
             </Grid>

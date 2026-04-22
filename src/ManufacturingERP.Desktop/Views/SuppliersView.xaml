@@ -3,46 +3,87 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes">
     <ScrollViewer VerticalScrollBarVisibility="Auto">
-        <StackPanel>
-            <DockPanel Margin="0,0,0,18">
-                <StackPanel DockPanel.Dock="Left">
-                    <TextBlock Text="Suppliers" Style="{StaticResource PageTitleText}" />
-                    <TextBlock Text="Keep supplier records, phone numbers, and addresses standardized for purchasing and payments."
-                               Style="{StaticResource PageSubtitleText}" />
-                </StackPanel>
-                <WrapPanel HorizontalAlignment="Right">
-                    <Button Content="New" Command="{Binding AddCommand}" Margin="0,0,8,0" />
-                    <Button Content="Edit" Command="{Binding EditCommand}" Margin="0,0,8,0" />
-                    <Button Content="Delete" Command="{Binding DeleteCommand}" Margin="0,0,8,0" />
-                    <Button Content="Refresh" Command="{Binding LoadCommand}" />
-                </WrapPanel>
-            </DockPanel>
+        <StackPanel Margin="0,0,0,8">
+            <Border Style="{StaticResource HeroCard}">
+                <Grid>
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="2.3*" />
+                        <ColumnDefinition Width="1.1*" />
+                    </Grid.ColumnDefinitions>
 
-            <Grid Margin="0,0,0,16">
-                <Grid.ColumnDefinitions><ColumnDefinition Width="Auto" /><ColumnDefinition Width="Auto" /><ColumnDefinition Width="*" /></Grid.ColumnDefinitions>
-                <Border Grid.Column="0" Style="{StaticResource InlineStatCard}" Margin="0,0,16,0"><StackPanel><TextBlock Text="Suppliers Loaded" Style="{StaticResource InlineStatLabel}" /><TextBlock Text="{Binding Suppliers.Count}" Style="{StaticResource InlineStatValue}" /></StackPanel></Border>
-                <Border Grid.Column="1" Style="{StaticResource InlineStatCard}" Margin="0,0,16,0"><StackPanel><TextBlock Text="Search Scope" Style="{StaticResource InlineStatLabel}" /><TextBlock Text="Code, name, phone, or address" Style="{StaticResource PageSubtitleText}" Margin="0,8,0,0" /></StackPanel></Border>
-                <Border Grid.Column="2" Style="{StaticResource UtilityPanel}"><StackPanel><TextBlock Text="Directory Search" Style="{StaticResource InlineStatLabel}" /><TextBox Margin="0,12,0,0" Text="{Binding SearchText, UpdateSourceTrigger=PropertyChanged}" materialDesign:HintAssist.Hint="Search by code, name, phone, or address" /><TextBlock Text="{Binding StatusMessage}" Style="{StaticResource PageSubtitleText}" Margin="0,8,0,0" /></StackPanel></Border>
+                    <StackPanel Margin="0,0,24,0">
+                        <TextBlock Text="Suppliers" Style="{StaticResource HeroTitleText}" />
+                        <TextBlock Text="Procurement directory" Style="{StaticResource HeroEyebrowText}" Margin="0,6,0,0" />
+                        <TextBlock Text="Keep supplier records, phone numbers, and addresses standardized for purchasing and payments."
+                                   Style="{StaticResource HeroBodyText}" Margin="0,12,0,0" MaxWidth="700" />
+                    </StackPanel>
+                    <Grid Grid.Column="1">
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="Auto" />
+                            <RowDefinition Height="12" />
+                            <RowDefinition Height="*" />
+                        </Grid.RowDefinitions>
+                        <WrapPanel HorizontalAlignment="Right">
+                            <Button Content="New" Command="{Binding AddCommand}" Style="{StaticResource PageActionButton}" />
+                            <Button Content="Edit" Command="{Binding EditCommand}" Style="{StaticResource PageActionButton}" />
+                            <Button Content="Delete" Command="{Binding DeleteCommand}" Style="{StaticResource PageDangerButton}" />
+                            <Button Content="Refresh" Command="{Binding LoadCommand}" Style="{StaticResource PageActionButton}" Margin="0" />
+                        </WrapPanel>
+                        <Border Grid.Row="2" Background="#172554" BorderBrush="#2563EB" BorderThickness="1" CornerRadius="18" Padding="18">
+                            <StackPanel>
+                                <TextBlock Text="Directory Search" Foreground="#93C5FD" FontWeight="SemiBold" />
+                                <TextBox Margin="0,12,0,0" Text="{Binding SearchText, UpdateSourceTrigger=PropertyChanged}" materialDesign:HintAssist.Hint="Search by code, name, phone, or address" />
+                                <TextBlock Text="{Binding StatusMessage}" Foreground="#CBD5E1" Margin="0,10,0,0" TextWrapping="Wrap" />
+                            </StackPanel>
+                        </Border>
+                    </Grid>
+                </Grid>
+            </Border>
+
+            <Grid Margin="0,0,0,4">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="*" />
+                    <ColumnDefinition Width="*" />
+                    <ColumnDefinition Width="*" />
+                </Grid.ColumnDefinitions>
+                <Border Grid.Column="0" Style="{StaticResource SectionCard}" Margin="0,0,16,16"><StackPanel><TextBlock Text="Suppliers Loaded" Style="{StaticResource InlineStatLabel}" /><TextBlock Text="{Binding Suppliers.Count}" Style="{StaticResource InlineStatValue}" /><TextBlock Text="Current visible supplier records." Style="{StaticResource PageSubtitleText}" /></StackPanel></Border>
+                <Border Grid.Column="1" Style="{StaticResource SectionCard}" Margin="0,0,16,16"><StackPanel><TextBlock Text="Search Scope" Style="{StaticResource InlineStatLabel}" /><TextBlock Text="Code, name, phone, or address" Style="{StaticResource PageSubtitleText}" Margin="0,8,0,0" /></StackPanel></Border>
+                <Border Grid.Column="2" Style="{StaticResource SectionCard}" Margin="0,0,0,16"><StackPanel><TextBlock Text="Selected Supplier" Style="{StaticResource InlineStatLabel}" /><TextBlock Text="{Binding SelectedSupplier.Name, TargetNullValue=No supplier selected}" Style="{StaticResource InlineStatValue}" /><TextBlock Text="{Binding SelectedSupplier.SupplierCode, StringFormat=Code: {0}, TargetNullValue=Choose a row from the directory}" Style="{StaticResource PageSubtitleText}" /></StackPanel></Border>
             </Grid>
 
-            <Border Style="{StaticResource SectionCard}">
-                <DockPanel>
-                    <StackPanel DockPanel.Dock="Top" Margin="0,0,0,12">
-                        <TextBlock Text="Supplier Directory" Style="{StaticResource CardTitleText}" />
-                        <TextBlock Text="Review supplier records before procurement or supplier-payment activity."
-                                   Style="{StaticResource PageSubtitleText}"
-                                   Margin="0" />
+            <Grid>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="2.15*" />
+                    <ColumnDefinition Width="1*" />
+                </Grid.ColumnDefinitions>
+
+                <Border Grid.Column="0" Style="{StaticResource SectionCard}" Margin="0,0,16,16">
+                    <DockPanel>
+                        <StackPanel DockPanel.Dock="Top" Margin="0,0,0,14">
+                            <TextBlock Text="Supplier Directory" Style="{StaticResource CardTitleText}" />
+                            <TextBlock Text="Review supplier records before procurement or supplier-payment activity." Style="{StaticResource PageSubtitleText}" Margin="0" />
+                        </StackPanel>
+                        <Border Background="#F8FBFF" BorderBrush="#DCE7F5" BorderThickness="1" CornerRadius="18" Padding="8">
+                            <DataGrid ItemsSource="{Binding Suppliers}" SelectedItem="{Binding SelectedSupplier}" AutoGenerateColumns="False" CanUserAddRows="False" MaxHeight="460" MinWidth="820">
+                                <DataGrid.Columns>
+                                    <DataGridTextColumn Header="Code" Binding="{Binding SupplierCode}" Width="120" />
+                                    <DataGridTextColumn Header="Name" Binding="{Binding Name}" Width="220" />
+                                    <DataGridTextColumn Header="Phone" Binding="{Binding ContactNumber}" Width="150" />
+                                    <DataGridTextColumn Header="Address" Binding="{Binding Address}" Width="260" />
+                                </DataGrid.Columns>
+                            </DataGrid>
+                        </Border>
+                    </DockPanel>
+                </Border>
+                <Border Grid.Column="1" Style="{StaticResource SectionCard}">
+                    <StackPanel>
+                        <TextBlock Text="Supplier Details" Style="{StaticResource CardTitleText}" />
+                        <TextBlock Text="Review the currently selected supplier before changes are made." Style="{StaticResource PageSubtitleText}" Margin="0,-2,0,18" />
+                        <Border Background="#FFF7ED" BorderBrush="#FED7AA" BorderThickness="1" CornerRadius="16" Padding="16" Margin="0,0,0,12"><StackPanel><TextBlock Text="Name / Code" Style="{StaticResource InlineStatLabel}" /><TextBlock Text="{Binding SelectedSupplier.Name, TargetNullValue=No supplier selected}" Style="{StaticResource InlineStatValue}" /><TextBlock Text="{Binding SelectedSupplier.SupplierCode, StringFormat=Code: {0}, TargetNullValue=Code: -}" Style="{StaticResource PageSubtitleText}" /></StackPanel></Border>
+                        <Border Background="#EEF2FF" BorderBrush="#C7D2FE" BorderThickness="1" CornerRadius="16" Padding="16"><StackPanel><TextBlock Text="Contact" Style="{StaticResource InlineStatLabel}" /><TextBlock Text="{Binding SelectedSupplier.ContactNumber, TargetNullValue=-}" Style="{StaticResource InlineStatValue}" /><TextBlock Text="{Binding SelectedSupplier.Address, TargetNullValue=Address: -, StringFormat=Address: {0}}" Style="{StaticResource PageSubtitleText}" TextWrapping="Wrap" /></StackPanel></Border>
                     </StackPanel>
-                    <DataGrid ItemsSource="{Binding Suppliers}" SelectedItem="{Binding SelectedSupplier}" AutoGenerateColumns="False" CanUserAddRows="False">
-                        <DataGrid.Columns>
-                            <DataGridTextColumn Header="Code" Binding="{Binding SupplierCode}" Width="120" />
-                            <DataGridTextColumn Header="Name" Binding="{Binding Name}" Width="*" />
-                            <DataGridTextColumn Header="Phone" Binding="{Binding ContactNumber}" Width="140" />
-                            <DataGridTextColumn Header="Address" Binding="{Binding Address}" Width="220" />
-                        </DataGrid.Columns>
-                    </DataGrid>
-                </DockPanel>
-            </Border>
+                </Border>
+            </Grid>
         </StackPanel>
     </ScrollViewer>
 </UserControl>

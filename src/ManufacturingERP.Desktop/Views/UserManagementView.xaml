@@ -4,7 +4,7 @@
              xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes">
     <ScrollViewer VerticalScrollBarVisibility="Auto">
         <StackPanel>
-            <DockPanel Margin="0,0,0,18">
+            <DockPanel Margin="0,0,0,14">
                 <StackPanel DockPanel.Dock="Left">
                     <TextBlock Text="User Management" Style="{StaticResource PageTitleText}" />
                     <TextBlock Text="Administer access, roles, and active accounts from a cleaner security workspace."
@@ -16,9 +16,9 @@
                         VerticalAlignment="Top" />
             </DockPanel>
 
-            <Grid Margin="0,0,0,16">
+            <Grid Margin="0,0,0,14">
                 <Grid.ColumnDefinitions>
-                    <ColumnDefinition Width="Auto" />
+                    <ColumnDefinition Width="220" />
                     <ColumnDefinition Width="*" />
                 </Grid.ColumnDefinitions>
 
@@ -37,13 +37,13 @@
                 </Border>
             </Grid>
 
-            <Grid>
+            <Grid VerticalAlignment="Top">
                 <Grid.ColumnDefinitions>
                     <ColumnDefinition Width="1.05*" />
                     <ColumnDefinition Width="1.95*" />
                 </Grid.ColumnDefinitions>
 
-                <Border Grid.Column="0" Style="{StaticResource SectionCard}" Margin="0,0,16,0">
+                <Border Grid.Column="0" Style="{StaticResource SectionCard}" Margin="0,0,16,0" VerticalAlignment="Top">
                     <StackPanel>
                         <TextBlock Text="User Profile" Style="{StaticResource CardTitleText}" />
                         <TextBlock Text="Create or update user credentials, names, role assignments, and active status."
@@ -58,16 +58,16 @@
                         <TextBlock Text="Role" Style="{StaticResource FormLabel}" Margin="0,12,0,4" />
                         <ComboBox ItemsSource="{Binding Roles}" SelectedItem="{Binding SelectedRole}" />
                         <CheckBox Content="Active" IsChecked="{Binding IsActive}" Margin="0,12,0,0" />
-                        <WrapPanel Margin="0,16,0,0">
-                            <Button Content="New" Command="{Binding NewUserCommand}" Margin="0,0,8,0" />
-                            <Button Content="Save" Command="{Binding SaveCommand}" Margin="0,0,8,0" />
-                            <Button Content="Delete" Command="{Binding DeleteCommand}" Margin="0,0,8,0" />
-                            <Button Content="Refresh" Command="{Binding LoadCommand}" />
+                        <WrapPanel Margin="0,16,0,0" ItemHeight="40">
+                            <Button Content="New" Command="{Binding NewUserCommand}" Margin="0,0,8,8" />
+                            <Button Content="Save" Command="{Binding SaveCommand}" Margin="0,0,8,8" />
+                            <Button Content="Delete" Command="{Binding DeleteCommand}" Margin="0,0,8,8" />
+                            <Button Content="Refresh" Command="{Binding LoadCommand}" Margin="0,0,0,8" />
                         </WrapPanel>
                     </StackPanel>
                 </Border>
 
-                <Border Grid.Column="1" Style="{StaticResource SectionCard}">
+                <Border Grid.Column="1" Style="{StaticResource SectionCard}" VerticalAlignment="Top">
                     <DockPanel>
                         <StackPanel DockPanel.Dock="Top" Margin="0,0,0,12">
                             <TextBlock Text="User Directory" Style="{StaticResource CardTitleText}" />
@@ -78,7 +78,7 @@
                                      Text="{Binding SearchText, UpdateSourceTrigger=PropertyChanged}"
                                      materialDesign:HintAssist.Hint="Search by username, full name, or role" />
                         </StackPanel>
-                        <DataGrid ItemsSource="{Binding Users}" SelectedItem="{Binding SelectedUser}" AutoGenerateColumns="False" CanUserAddRows="False">
+                        <DataGrid ItemsSource="{Binding Users}" SelectedItem="{Binding SelectedUser}" AutoGenerateColumns="False" CanUserAddRows="False" MaxHeight="320">
                             <DataGrid.Columns>
                                 <DataGridTextColumn Header="Username" Binding="{Binding Username}" Width="160" />
                                 <DataGridTextColumn Header="Full Name" Binding="{Binding FullName}" Width="*" />
