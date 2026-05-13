@@ -56,6 +56,7 @@ public class SupplierPaymentService
             Notes = request.Notes
         };
 
+        await using var transaction = await _db.Database.BeginTransactionAsync();
         _db.SupplierPayments.Add(payment);
 
         if (invoice is not null)
@@ -67,6 +68,7 @@ public class SupplierPaymentService
 
         await _db.SaveChangesAsync();
         await _auditService.LogAsync(actorUserId, "Create", "SupplierPayment", payment.Id.ToString(), null, payment.PaymentNo);
+        await transaction.CommitAsync();
         return Result<int>.Success(payment.Id, payment.PaymentNo);
     }
 

@@ -11,8 +11,8 @@ public partial class LoginViewModel : ViewModelBase
     private readonly PasswordHasherService _passwordHasherService;
     private readonly CurrentUserService _currentUserService;
 
-    [ObservableProperty] private string _username = "admin";
-    [ObservableProperty] private string _password = "admin123";
+    [ObservableProperty] private string _username = string.Empty;
+    [ObservableProperty] private string _password = string.Empty;
     [ObservableProperty] private string _errorMessage = string.Empty;
 
     public LoginViewModel(PasswordHasherService passwordHasherService, CurrentUserService currentUserService)
@@ -37,6 +37,12 @@ public partial class LoginViewModel : ViewModelBase
         {
             ErrorMessage = "This user account is disabled.";
             return false;
+        }
+
+        if (_passwordHasherService.NeedsRehash(user.PasswordHash))
+        {
+            user.PasswordHash = _passwordHasherService.Hash(Password);
+            await db.SaveChangesAsync();
         }
 
         _currentUserService.Set(user);

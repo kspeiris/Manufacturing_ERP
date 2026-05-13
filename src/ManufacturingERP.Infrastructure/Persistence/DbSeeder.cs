@@ -2,6 +2,7 @@ using ManufacturingERP.Application.Services;
 using ManufacturingERP.Domain.Entities;
 using ManufacturingERP.Domain.Enums;
 using ManufacturingERP.Shared.Constants;
+using System.Security.Cryptography;
 
 namespace ManufacturingERP.Infrastructure.Persistence;
 
@@ -13,12 +14,12 @@ public static class DbSeeder
 
         if (!db.Users.Any())
         {
+            var initialPassword = GetInitialAdminPassword();
             db.Users.AddRange(
-                new User { Username = AppConstants.DefaultAdminUser, PasswordHash = hasher.Hash(AppConstants.DefaultAdminPassword), FullName = "System Administrator", Role = UserRole.Admin },
-                new User { Username = "manager", PasswordHash = hasher.Hash("1234"), FullName = "Operations Manager", Role = UserRole.Manager },
-                new User { Username = "accounts", PasswordHash = hasher.Hash("1234"), FullName = "Accounts User", Role = UserRole.Accounts },
-                new User { Username = "sales", PasswordHash = hasher.Hash("1234"), FullName = "Sales User", Role = UserRole.Sales }
+                new User { Username = AppConstants.DefaultAdminUser, PasswordHash = hasher.Hash(initialPassword), FullName = "System Administrator", Role = UserRole.Admin }
             );
+
+            WriteFirstRunPasswordFile(initialPassword);
         }
 
 
@@ -45,9 +46,9 @@ public static class DbSeeder
 
             db.Products.AddRange(
                 new Product { Code = "FG-001", Name = "Sample Product A", ProductCategoryId = fg.Id, CostPrice = 100, SellingPrice = 140, Unit = "PCS" },
-                new Product { Code = "FG-002", Name = "Sample Product B", ProductCategoryId = fg.Id, CostPrice = 80, SellingPrice = 120, Unit = "PCS" },
-                new Product { Code = "RM-001", Name = "Raw Material X", ProductCategoryId = rm.Id, CostPrice = 30, SellingPrice = 0, Unit = "KG" },
-                new Product { Code = "RM-002", Name = "Packing Material Y", ProductCategoryId = rm.Id, CostPrice = 10, SellingPrice = 0, Unit = "PCS" }
+                new Product { Code = "FG-002", Name = "Sample Product B", ProductCategoryId = fg.Id, CostPrice = 80, SellingPrice = 120, Unit = "PCS", ReorderLevel = 50 },
+                new Product { Code = "RM-001", Name = "Raw Material X", ProductCategoryId = rm.Id, CostPrice = 30, SellingPrice = 0, Unit = "KG", ReorderLevel = 100, TrackBatch = true },
+                new Product { Code = "RM-002", Name = "Packing Material Y", ProductCategoryId = rm.Id, CostPrice = 10, SellingPrice = 0, Unit = "PCS", ReorderLevel = 100 }
             );
         }
 
@@ -81,6 +82,16 @@ public static class DbSeeder
             await db.SaveChangesAsync();
         }
 
+        if (!db.WarehouseBins.Any())
+        {
+            var mainWarehouse = db.Warehouses.First();
+            db.WarehouseBins.AddRange(
+                new WarehouseBin { WarehouseId = mainWarehouse.Id, BinCode = "MAIN-RECV", Description = "Default receiving bin", Aisle = "MAIN", Rack = "RECV" },
+                new WarehouseBin { WarehouseId = mainWarehouse.Id, BinCode = "MAIN-PICK", Description = "Default picking bin", Aisle = "MAIN", Rack = "PICK" }
+            );
+            await db.SaveChangesAsync();
+        }
+
         await db.SaveChangesAsync();
 
         if (!db.StockBalances.Any())
@@ -88,6 +99,56 @@ public static class DbSeeder
             var warehouseId = db.Warehouses.First().Id;
             foreach (var product in db.Products)
                 db.StockBalances.Add(new StockBalance { ProductId = product.Id, WarehouseId = warehouseId, QuantityOnHand = product.Code.StartsWith("RM-") ? 500 : 250 });
+        }
+
+        if (!db.BatchLots.Any())
+        {
+            var warehouse = db.Warehouses.First();
+            var bin = db.WarehouseBins.FirstOrDefault(x => x.WarehouseId == warehouse.Id);
+            foreach (var product in db.Products.Where(x => x.TrackBatch))
+            {
+                db.BatchLots.Add(new BatchLot
+                {
+                    LotNumber = $"{product.Code}-LOT-001",
+                    ProductId = product.Id,
+                    WarehouseId = warehouse.Id,
+                    WarehouseBinId = bin?.Id,
+                    ManufacturingDate = DateTime.Today.AddDays(-30),
+                    ExpiryDate = DateTime.Today.AddMonths(6),
+                    QuantityReceived = 500,
+                    QuantityOnHand = 500,
+                    SourceDocument = "SEED"
+                });
+            }
+        }
+
+        if (!db.FiscalPeriods.Any())
+        {
+            var year = DateTime.Today.Year;
+            for (var month = 1; month <= 12; month++)
+            {
+                var start = new DateTime(year, month, 1);
+                db.FiscalPeriods.Add(new FiscalPeriod
+                {
+                    FiscalYear = year,
+                    PeriodNumber = month,
+                    PeriodName = start.ToString("MMM-yyyy"),
+                    StartDate = start,
+                    EndDate = start.AddMonths(1).AddDays(-1)
+                });
+            }
+        }
+
+        if (!db.Taxes.Any())
+        {
+            db.Taxes.Add(new Tax
+            {
+                TaxCode = "VAT-STD",
+                TaxName = "Standard VAT",
+                TaxType = TaxType.Percentage,
+                Rate = 15,
+                IsDefault = true
+            });
         }
 
         if (!db.BomHeaders.Any())
@@ -193,5 +254,28 @@ public static class DbSeeder
             });
 
         await db.SaveChangesAsync();
+    }
+
+    private static string GetInitialAdminPassword()
+    {
+        var configuredPassword = Environment.GetEnvironmentVariable("MANUFACTURINGERP_ADMIN_PASSWORD");
+        if (!string.IsNullOrWhiteSpace(configuredPassword))
+            return configuredPassword;
+
+        return Convert.ToBase64String(RandomNumberGenerator.GetBytes(18));
+    }
+
+    private static void WriteFirstRunPasswordFile(string password)
+    {
+        if (!string.IsNullOrWhiteSpace(Environment.GetEnvironmentVariable("MANUFACTURINGERP_ADMIN_PASSWORD")))
+            return;
+
+        var path = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "first-run-admin.txt");
+        if (File.Exists(path))
+            return;
+
+        File.WriteAllText(
+            path,
+            $"Initial admin login{Environment.NewLine}Username: {AppConstants.DefaultAdminUser}{Environment.NewLine}Password: {password}{Environment.NewLine}Delete this file after creating real user accounts.{Environment.NewLine}");
     }
 }

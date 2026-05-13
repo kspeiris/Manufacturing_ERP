@@ -11,6 +11,7 @@ public class Product : BaseEntity
     public string Unit { get; set; } = "PCS";
     public decimal CostPrice { get; set; }
     public decimal SellingPrice { get; set; }
+    public decimal ReorderLevel { get; set; }
     public bool TrackBatch { get; set; }
     public bool IsActive { get; set; } = true;
 }

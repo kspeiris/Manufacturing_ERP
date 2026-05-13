@@ -1,5 +1,6 @@
 using ManufacturingERP.Domain.Entities;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.Infrastructure;
 
 namespace ManufacturingERP.Application.Abstractions;
 
@@ -13,8 +14,14 @@ public interface IAppDbContext
     DbSet<RoutePlan> RoutePlans { get; }
     DbSet<Vehicle> Vehicles { get; }
     DbSet<Warehouse> Warehouses { get; }
+    DbSet<WarehouseBin> WarehouseBins { get; }
     DbSet<StockBalance> StockBalances { get; }
     DbSet<WarehouseTransaction> WarehouseTransactions { get; }
+    DbSet<BatchLot> BatchLots { get; }
+    DbSet<StockTransfer> StockTransfers { get; }
+    DbSet<StockTransferLine> StockTransferLines { get; }
+    DbSet<StockCount> StockCounts { get; }
+    DbSet<StockCountLine> StockCountLines { get; }
     DbSet<VehicleLoad> VehicleLoads { get; }
     DbSet<VehicleLoadItem> VehicleLoadItems { get; }
     DbSet<SalesInvoice> SalesInvoices { get; }
@@ -29,6 +36,10 @@ public interface IAppDbContext
     DbSet<PurchaseReturnItem> PurchaseReturnItems { get; }
     DbSet<SupplierPayment> SupplierPayments { get; }
     DbSet<Account> Accounts { get; }
+    DbSet<FiscalPeriod> FiscalPeriods { get; }
+    DbSet<Tax> Taxes { get; }
+    DbSet<Voucher> Vouchers { get; }
+    DbSet<VoucherLine> VoucherLines { get; }
     DbSet<SyncLog> SyncLogs { get; }
     DbSet<BomHeader> BomHeaders { get; }
     DbSet<BomLine> BomLines { get; }
@@ -39,5 +50,6 @@ public interface IAppDbContext
     DbSet<JournalLine> JournalLines { get; }
     DbSet<AuditLog> AuditLogs { get; }
     DbSet<SystemReport> SystemReports { get; }
+    DatabaseFacade Database { get; }
     Task<int> SaveChangesAsync(CancellationToken cancellationToken = default);
 }

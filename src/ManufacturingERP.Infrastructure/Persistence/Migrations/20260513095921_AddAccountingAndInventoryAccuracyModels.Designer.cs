@@ -3,6 +3,7 @@ using System;
 using ManufacturingERP.Infrastructure.Persistence;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -10,9 +11,11 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace ManufacturingERP.Infrastructure.Persistence.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    partial class AppDbContextModelSnapshot : ModelSnapshot
+    [Migration("20260513095921_AddAccountingAndInventoryAccuracyModels")]
+    partial class AddAccountingAndInventoryAccuracyModels
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder.HasAnnotation("ProductVersion", "8.0.4");
@@ -557,9 +560,6 @@ namespace ManufacturingERP.Infrastructure.Persistence.Migrations
                     b.Property<int>("ProductCategoryId")
                         .HasColumnType("INTEGER");
 
-                    b.Property<decimal>("ReorderLevel")
-                        .HasColumnType("TEXT");
-
                     b.Property<decimal>("SellingPrice")
                         .HasColumnType("TEXT");
 
@@ -981,9 +981,6 @@ namespace ManufacturingERP.Infrastructure.Persistence.Migrations
                     b.Property<decimal>("QuantityOnHand")
                         .HasColumnType("TEXT");
 
-                    b.Property<decimal>("QuantityReserved")
-                        .HasColumnType("TEXT");
-
                     b.Property<DateTime?>("UpdatedAtUtc")
                         .HasColumnType("TEXT");
 
@@ -992,10 +989,9 @@ namespace ManufacturingERP.Infrastructure.Persistence.Migrations
 
                     b.HasKey("Id");
 
-                    b.HasIndex("WarehouseId");
+                    b.HasIndex("ProductId");
 
-                    b.HasIndex("ProductId", "WarehouseId")
-                        .IsUnique();
+                    b.HasIndex("WarehouseId");
 
                     b.ToTable("StockBalances");
                 });
@@ -1892,8 +1888,7 @@ namespace ManufacturingERP.Infrastructure.Persistence.Migrations
 
                     b.HasOne("ManufacturingERP.Domain.Entities.WarehouseBin", "WarehouseBin")
                         .WithMany()
-                        .HasForeignKey("WarehouseBinId")
-                        .OnDelete(DeleteBehavior.Restrict);
+                        .HasForeignKey("WarehouseBinId");
 
                     b.HasOne("ManufacturingERP.Domain.Entities.Warehouse", "Warehouse")
                         .WithMany()

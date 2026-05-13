@@ -11,12 +11,14 @@ public static class DependencyInjection
 {
     public static IServiceCollection AddInfrastructure(this IServiceCollection services, string dbPath)
     {
+        var databasePath = Path.Combine(dbPath, AppConstants.DatabaseFileName);
         services.AddDbContext<AppDbContext>(options =>
-            options.UseSqlite($"Data Source={Path.Combine(dbPath, AppConstants.DatabaseFileName)}"));
+            options.UseSqlite($"Data Source={databasePath}"));
 
         services.AddScoped<IAppDbContext>(provider => provider.GetRequiredService<AppDbContext>());
         services.AddSingleton<CurrentUserService>();
         services.AddSingleton<PasswordHasherService>();
+        services.AddSingleton(new DatabaseBackupService(databasePath));
         services.AddSingleton<MasterDataValidationService>();
         services.AddSingleton<AuthorizationService>();
         services.AddScoped<AuditService>();

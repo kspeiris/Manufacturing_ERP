@@ -78,6 +78,7 @@ public class SalesService
         }
 
         var invoiceNo = GenerateInvoiceNumber();
+        await using var transaction = await _db.Database.BeginTransactionAsync();
         var stockValidation = await TryReserveStockAsync(invoiceLines, invoiceNo);
         if (!stockValidation.IsSuccess)
             return Result<int>.Failure(stockValidation.Message);
@@ -100,6 +101,7 @@ public class SalesService
 
         await _db.SaveChangesAsync();
         await _auditService.LogAsync(GetActorUserId(actorUserId), "Create", "SalesInvoice", invoice.Id.ToString(), null, invoice.InvoiceNo);
+        await transaction.CommitAsync();
         return Result<int>.Success(invoice.Id, invoice.InvoiceNo);
     }
 
@@ -123,6 +125,8 @@ public class SalesService
         if (amount > customer.OutstandingBalance)
             return Result.Failure("Collection amount cannot exceed customer outstanding balance.");
 
+        await using var transaction = await _db.Database.BeginTransactionAsync();
+
         customer.OutstandingBalance -= amount;
         _db.CollectionEntries.Add(new CollectionEntry
         {
@@ -135,6 +139,7 @@ public class SalesService
 
         await _db.SaveChangesAsync();
         await _auditService.LogAsync(GetActorUserId(actorUserId), "Create", "CollectionEntry", customerId.ToString(), null, $"{amount}|{referenceNo}");
+        await transaction.CommitAsync();
         return Result.Success("Collection recorded.");
     }
 

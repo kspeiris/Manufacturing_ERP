@@ -60,9 +60,11 @@ public class ProcurementService
         };
 
         po.TotalAmount = po.Items.Sum(x => x.LineTotal);
+        await using var transaction = await _db.Database.BeginTransactionAsync();
         _db.PurchaseOrders.Add(po);
         await _db.SaveChangesAsync();
         await _auditService.LogAsync(GetActorUserId(actorUserId), "Create", "PurchaseOrder", po.Id.ToString(), null, po.OrderNo);
+        await transaction.CommitAsync();
         return Result<int>.Success(po.Id, po.OrderNo);
     }
 
@@ -147,6 +149,8 @@ public class ProcurementService
         };
         receipt.TotalAmount = receipt.Items.Sum(x => x.LineTotal);
 
+        await using var transaction = await _db.Database.BeginTransactionAsync();
+
         foreach (var line in request.Items)
         {
             var stock = await _db.StockBalances.FirstOrDefaultAsync(x => x.ProductId == line.ProductId && x.WarehouseId == request.WarehouseId);
@@ -194,6 +198,7 @@ public class ProcurementService
             await _db.SaveChangesAsync();
         }
 
+        await transaction.CommitAsync();
         return Result<int>.Success(receipt.Id, receipt.ReceiptNo);
     }
 
