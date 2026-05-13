@@ -3,54 +3,104 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes">
     <ScrollViewer VerticalScrollBarVisibility="Auto">
-        <StackPanel>
-            <TextBlock Text="Procurement Workspace" Style="{StaticResource PageTitleText}" />
-            <TextBlock Text="Create purchase orders, receive goods, and manage line items without cramped table space." Style="{StaticResource PageSubtitleText}" Margin="0,0,0,18" />
+        <StackPanel Margin="0,0,0,8">
+            <Border Style="{StaticResource HeroCard}">
+                <Grid>
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="2.3*" />
+                        <ColumnDefinition Width="1.1*" />
+                    </Grid.ColumnDefinitions>
 
-            <Grid Margin="0,0,0,16">
+                    <StackPanel Margin="0,0,24,0">
+                        <TextBlock Text="Procurement Workspace" Style="{StaticResource HeroTitleText}" />
+                        <TextBlock Text="Purchase flow control" Style="{StaticResource HeroEyebrowText}" Margin="0,6,0,0" />
+                        <TextBlock Text="Manage purchase orders and goods receipts with clearer supplier, warehouse, and line-item context."
+                                   Style="{StaticResource HeroBodyText}" Margin="0,12,0,0" MaxWidth="700" />
+                    </StackPanel>
+                    <Border Grid.Column="1" Background="#172554" BorderBrush="#2563EB" BorderThickness="1" CornerRadius="18" Padding="18">
+                        <StackPanel>
+                            <TextBlock Text="Procurement Status" Foreground="#93C5FD" FontWeight="SemiBold" />
+                            <TextBlock Text="{Binding StatusMessage}" Foreground="#CBD5E1" Margin="0,10,0,0" TextWrapping="Wrap" />
+                            <TextBlock Text="{Binding Lines.Count, StringFormat=PO lines: {0}}" Foreground="White" FontSize="20" FontWeight="SemiBold" Margin="0,10,0,0" />
+                        </StackPanel>
+                    </Border>
+                </Grid>
+            </Border>
+
+            <Grid Margin="0,0,0,4">
                 <Grid.ColumnDefinitions>
-                    <ColumnDefinition Width="1.2*" />
-                    <ColumnDefinition Width="2*" />
+                    <ColumnDefinition Width="*" />
+                    <ColumnDefinition Width="*" />
+                    <ColumnDefinition Width="*" />
+                </Grid.ColumnDefinitions>
+                <Border Grid.Column="0" Style="{StaticResource SectionCard}" Margin="0,0,16,16"><StackPanel><TextBlock Text="PO Lines" Style="{StaticResource InlineStatLabel}" /><TextBlock Text="{Binding Lines.Count}" Style="{StaticResource InlineStatValue}" /><TextBlock Text="Current line items in the working document." Style="{StaticResource PageSubtitleText}" /></StackPanel></Border>
+                <Border Grid.Column="1" Style="{StaticResource SectionCard}" Margin="0,0,16,16"><StackPanel><TextBlock Text="Supplier" Style="{StaticResource InlineStatLabel}" /><TextBlock Text="{Binding SelectedSupplier.Name, TargetNullValue=Not selected}" Style="{StaticResource InlineStatValue}" /><TextBlock Text="Current supplier on the document." Style="{StaticResource PageSubtitleText}" /></StackPanel></Border>
+                <Border Grid.Column="2" Style="{StaticResource SectionCard}" Margin="0,0,0,16"><StackPanel><TextBlock Text="Warehouse" Style="{StaticResource InlineStatLabel}" /><TextBlock Text="{Binding SelectedWarehouse.Name, TargetNullValue=Not selected}" Style="{StaticResource InlineStatValue}" /><TextBlock Text="Receiving destination for the GRN." Style="{StaticResource PageSubtitleText}" /></StackPanel></Border>
+            </Grid>
+
+            <Grid>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="1.05*" />
+                    <ColumnDefinition Width="1.95*" />
                 </Grid.ColumnDefinitions>
 
-                <Border Grid.Column="0" Style="{StaticResource SectionCard}" Margin="0,0,16,0">
+                <Border Grid.Column="0" Style="{StaticResource SectionCard}" Margin="0,0,16,16">
                     <StackPanel>
                         <TextBlock Text="Purchase Order / GRN" Style="{StaticResource CardTitleText}" />
+                        <TextBlock Text="Define supplier, warehouse, references, and notes before saving or receiving goods."
+                                   Style="{StaticResource PageSubtitleText}" Margin="0,0,0,16" />
                         <TextBlock Text="Supplier" Style="{StaticResource FormLabel}" />
                         <ComboBox ItemsSource="{Binding Suppliers}" SelectedItem="{Binding SelectedSupplier}" DisplayMemberPath="Name" />
-
                         <TextBlock Text="Warehouse" Style="{StaticResource FormLabel}" Margin="0,12,0,4" />
                         <ComboBox ItemsSource="{Binding Warehouses}" SelectedItem="{Binding SelectedWarehouse}" DisplayMemberPath="Name" />
-
                         <TextBlock Text="Reference PO" Style="{StaticResource FormLabel}" Margin="0,12,0,4" />
                         <TextBox Text="{Binding ReferencePurchaseOrderNo}" />
-
                         <TextBlock Text="Notes" Style="{StaticResource FormLabel}" Margin="0,12,0,4" />
                         <TextBox Text="{Binding Notes}" Height="80" AcceptsReturn="True" TextWrapping="Wrap" />
-
                         <WrapPanel Margin="0,16,0,0">
-                            <Button Content="Add Line" Command="{Binding AddLineCommand}" Style="{StaticResource SecondaryActionButton}" />
-                            <Button Content="Save Purchase Order" Command="{Binding SavePurchaseOrderCommand}" Style="{StaticResource PrimaryActionButton}" />
-                            <Button Content="Receive Goods" Command="{Binding ReceiveGoodsCommand}" Style="{StaticResource SecondaryActionButton}" Margin="0" />
+                            <Button Content="Add Line" Command="{Binding AddLineCommand}" Style="{StaticResource PageActionButton}" />
+                            <Button Content="Save Purchase Order" Command="{Binding SavePurchaseOrderCommand}" Style="{StaticResource PageActionButton}" />
+                            <Button Content="Receive Goods" Command="{Binding ReceiveGoodsCommand}" Style="{StaticResource PageActionButton}" Margin="0" />
                         </WrapPanel>
-
-                        <TextBlock Text="{Binding StatusMessage}" Style="{StaticResource StatusMessageText}" />
                     </StackPanel>
                 </Border>
 
                 <Border Grid.Column="1" Style="{StaticResource SectionCard}">
-                    <StackPanel>
-                        <TextBlock Text="Line Items" Style="{StaticResource CardTitleText}" />
-                        <DataGrid ItemsSource="{Binding Lines}" MinHeight="420">
-                            <DataGrid.Columns>
-                                <DataGridComboBoxColumn Header="Product" Width="*" SelectedItemBinding="{Binding Product}" DisplayMemberPath="Name"
-                                                        SelectedValuePath="."
-                                                        ItemsSource="{Binding DataContext.Products, RelativeSource={RelativeSource AncestorType=UserControl}}" />
-                                <DataGridTextColumn Header="Quantity" Width="120" Binding="{Binding Quantity}" />
-                                <DataGridTextColumn Header="Unit Price" Width="140" Binding="{Binding UnitPrice}" />
-                            </DataGrid.Columns>
-                        </DataGrid>
-                    </StackPanel>
+                    <DockPanel>
+                        <Grid DockPanel.Dock="Top" Margin="0,0,0,14">
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="*" />
+                                <ColumnDefinition Width="Auto" />
+                            </Grid.ColumnDefinitions>
+                            <StackPanel>
+                                <TextBlock Text="Line Items" Style="{StaticResource CardTitleText}" />
+                                <TextBlock Text="Complete the buying document with product quantities and prices."
+                                           Style="{StaticResource PageSubtitleText}" Margin="0" />
+                            </StackPanel>
+                            <Border Grid.Column="1" Style="{StaticResource TableCountBadge}">
+                                <TextBlock Text="{Binding Lines.Count, StringFormat=Total: {0}}" Style="{StaticResource TableCountText}" />
+                            </Border>
+                        </Grid>
+                        <Border DockPanel.Dock="Top" Style="{StaticResource TableToolbarBorder}" Margin="0,0,0,14">
+                            <TextBlock Text="Purchase document lines with product, quantity, and unit pricing."
+                                       Style="{StaticResource PageSubtitleText}"
+                                       VerticalAlignment="Center"
+                                       Margin="0" />
+                        </Border>
+                        <Border Style="{StaticResource TableShellBorder}" Padding="8">
+                            <ScrollViewer Style="{StaticResource TableViewportScrollViewer}">
+                            <DataGrid ItemsSource="{Binding Lines}" AutoGenerateColumns="False" CanUserAddRows="False" Height="420" MinWidth="740">
+                                <DataGrid.Columns>
+                                    <DataGridComboBoxColumn Header="Product" Width="*" SelectedItemBinding="{Binding Product}" DisplayMemberPath="Name"
+                                                            SelectedValuePath="."
+                                                            ItemsSource="{Binding DataContext.Products, RelativeSource={RelativeSource AncestorType=UserControl}}" />
+                                    <DataGridTextColumn Header="Quantity" Width="120" Binding="{Binding Quantity}" />
+                                    <DataGridTextColumn Header="Unit Price" Width="140" Binding="{Binding UnitPrice}" />
+                                </DataGrid.Columns>
+                            </DataGrid>
+                            </ScrollViewer>
+                        </Border>
+                    </DockPanel>
                 </Border>
             </Grid>
         </StackPanel>

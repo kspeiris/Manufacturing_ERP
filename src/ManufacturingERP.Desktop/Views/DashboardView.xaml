@@ -2,98 +2,549 @@
              xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes">
-    <ScrollViewer VerticalScrollBarVisibility="Auto">
-        <StackPanel>
-            <TextBlock Text="Executive Dashboard" Style="{StaticResource PageTitleText}" />
-            <TextBlock Text="Keep an eye on customer reach, sales velocity, stock value, and finance signals from a single snapshot."
-                       Style="{StaticResource PageSubtitleText}"
-                       Margin="0,0,0,18" />
+    <UserControl.Resources>
+        <Style x:Key="DashboardKpiCard" TargetType="Border" BasedOn="{StaticResource SectionCard}">
+            <Setter Property="Background" Value="#FFFFFF" />
+            <Setter Property="Padding" Value="18" />
+            <Setter Property="Margin" Value="0,0,16,16" />
+            <Setter Property="Width" Value="250" />
+        </Style>
 
-            <Border Style="{StaticResource HeroCard}" Margin="0,0,0,18">
+        <Style x:Key="DashboardQuickCard" TargetType="Border" BasedOn="{StaticResource SectionCard}">
+            <Setter Property="Background" Value="#FFFFFF" />
+            <Setter Property="Padding" Value="16" />
+            <Setter Property="Margin" Value="0,0,16,16" />
+            <Setter Property="Width" Value="250" />
+        </Style>
+
+        <Style x:Key="DashboardPillText" TargetType="TextBlock">
+            <Setter Property="Foreground" Value="#0F172A" />
+            <Setter Property="FontSize" Value="11" />
+            <Setter Property="FontWeight" Value="SemiBold" />
+        </Style>
+    </UserControl.Resources>
+
+    <ScrollViewer VerticalScrollBarVisibility="Auto"
+                  HorizontalScrollBarVisibility="Disabled">
+        <StackPanel Margin="0,0,0,8">
+            <Border Style="{StaticResource HeroCard}">
                 <Grid>
                     <Grid.ColumnDefinitions>
-                        <ColumnDefinition Width="2.2*" />
-                        <ColumnDefinition Width="1*" />
+                        <ColumnDefinition Width="2.4*" />
+                        <ColumnDefinition Width="1.05*" />
                     </Grid.ColumnDefinitions>
-                    <StackPanel>
-                        <TextBlock Text="Business Health Overview" FontSize="15" FontWeight="SemiBold" Foreground="#D9ECFF" />
-                        <TextBlock Text="One place to review the strength of sales, stock, collections, and operational capacity."
-                                   FontSize="29"
-                                   FontWeight="Bold"
-                                   Foreground="White"
-                                   Margin="0,10,0,10"
-                                   TextWrapping="Wrap" />
-                        <TextBlock Text="Use this page as the morning control center before moving into sales, procurement, warehouse, and finance workflows."
-                                   Foreground="#E8F5FF"
-                                   TextWrapping="Wrap" />
+
+                    <StackPanel Margin="0,0,24,0">
+                        <TextBlock Text="Executive Dashboard"
+                                   Style="{StaticResource HeroTitleText}" />
+                        <TextBlock Text="Operations command center"
+                                   Style="{StaticResource HeroEyebrowText}"
+                                   Margin="0,6,0,0" />
+                        <TextBlock Text="Track sales, inventory, receivables, payables, and production cost from one leadership view across the ERP."
+                                   Style="{StaticResource HeroBodyText}"
+                                   Margin="0,12,0,0"
+                                   MaxWidth="720" />
+
+                        <Border Margin="0,22,0,0"
+                                Background="#162033"
+                                BorderBrush="#233A63"
+                                BorderThickness="1"
+                                CornerRadius="18"
+                                Padding="16">
+                            <Grid>
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition Width="*" />
+                                    <ColumnDefinition Width="*" />
+                                </Grid.ColumnDefinitions>
+                                <StackPanel>
+                                    <TextBlock Text="Outstanding Balance"
+                                               Foreground="#93C5FD"
+                                               FontWeight="SemiBold" />
+                                    <TextBlock Text="{Binding Summary.OutstandingBalance, StringFormat=N2}"
+                                               Foreground="White"
+                                               FontSize="24"
+                                               FontWeight="Bold"
+                                               Margin="0,8,0,0" />
+                                    <TextBlock Text="Open customer exposure needing attention."
+                                               Foreground="#CBD5E1"
+                                               Margin="0,8,0,0"
+                                               TextWrapping="Wrap" />
+                                </StackPanel>
+
+                                <StackPanel Grid.Column="1" Margin="20,0,0,0">
+                                    <TextBlock Text="Collections This Month"
+                                               Foreground="#93C5FD"
+                                               FontWeight="SemiBold" />
+                                    <TextBlock Text="{Binding Summary.Analytics.CollectionsThisMonth, StringFormat=N2}"
+                                               Foreground="White"
+                                               FontSize="24"
+                                               FontWeight="Bold"
+                                               Margin="0,8,0,0" />
+                                    <TextBlock Text="Cash recovery posted during the current period."
+                                               Foreground="#CBD5E1"
+                                               Margin="0,8,0,0"
+                                               TextWrapping="Wrap" />
+                                </StackPanel>
+                            </Grid>
+                        </Border>
                     </StackPanel>
-                    <Grid Grid.Column="1" Margin="24,0,0,0">
+
+                    <Grid Grid.Column="1"
+                          VerticalAlignment="Stretch">
                         <Grid.RowDefinitions>
-                            <RowDefinition Height="Auto" />
-                            <RowDefinition Height="Auto" />
+                            <RowDefinition Height="*" />
+                            <RowDefinition Height="12" />
+                            <RowDefinition Height="*" />
                         </Grid.RowDefinitions>
-                        <Border Background="#1FFFFFFF" CornerRadius="18" Padding="16" Margin="0,0,0,12">
-                            <StackPanel>
-                                <TextBlock Text="Today Sales" Foreground="#D9ECFF" />
-                                <TextBlock Text="{Binding Summary.TodaySales, StringFormat=N2}" Foreground="White" FontSize="26" FontWeight="Bold" Margin="0,6,0,0" />
-                                <TextBlock Text="{Binding Summary.OutstandingBalance, StringFormat=Outstanding {0:N2}}" Foreground="#E8F5FF" Margin="0,6,0,0" />
+
+                        <Border Background="#172554"
+                                BorderBrush="#2563EB"
+                                BorderThickness="1"
+                                CornerRadius="18"
+                                Padding="20">
+                            <StackPanel VerticalAlignment="Center">
+                                <TextBlock Text="Today's Sales"
+                                           Foreground="#93C5FD"
+                                           FontWeight="SemiBold" />
+                                <TextBlock Text="{Binding Summary.TodaySales, StringFormat=N2}"
+                                           Foreground="White"
+                                           FontSize="28"
+                                           FontWeight="Bold"
+                                           Margin="0,10,0,0" />
+                                <TextBlock Text="Live daily billing total."
+                                           Foreground="#CBD5E1"
+                                           Margin="0,8,0,0" />
                             </StackPanel>
                         </Border>
-                        <Border Grid.Row="1" Background="#1FFFFFFF" CornerRadius="18" Padding="16">
-                            <StackPanel>
-                                <TextBlock Text="Inventory Value" Foreground="#D9ECFF" />
-                                <TextBlock Text="{Binding Summary.Analytics.InventoryValue, StringFormat=N2}" Foreground="White" FontSize="26" FontWeight="Bold" Margin="0,6,0,0" />
+
+                        <Border Grid.Row="2"
+                                Background="#172554"
+                                BorderBrush="#2563EB"
+                                BorderThickness="1"
+                                CornerRadius="18"
+                                Padding="20">
+                            <StackPanel VerticalAlignment="Center">
+                                <TextBlock Text="Inventory Value"
+                                           Foreground="#93C5FD"
+                                           FontWeight="SemiBold" />
+                                <TextBlock Text="{Binding Summary.Analytics.InventoryValue, StringFormat=N2}"
+                                           Foreground="White"
+                                           FontSize="28"
+                                           FontWeight="Bold"
+                                           Margin="0,10,0,0" />
+                                <TextBlock Text="Current stock value on hand."
+                                           Foreground="#CBD5E1"
+                                           Margin="0,8,0,0" />
                             </StackPanel>
                         </Border>
                     </Grid>
                 </Grid>
             </Border>
 
-            <UniformGrid Columns="4" Margin="0,0,0,18">
-                <Border Style="{StaticResource MetricCard}" Margin="0,0,12,0"><StackPanel><TextBlock Text="Customers" Style="{StaticResource CardTitleText}" /><TextBlock Text="{Binding Summary.TotalCustomers}" Style="{StaticResource MetricValueText}" /><TextBlock Text="Active outlets in the customer base." Style="{StaticResource CaptionText}" Margin="0,8,0,0" /></StackPanel></Border>
-                <Border Style="{StaticResource MetricCard}" Margin="0,0,12,0"><StackPanel><TextBlock Text="Products" Style="{StaticResource CardTitleText}" /><TextBlock Text="{Binding Summary.TotalProducts}" Style="{StaticResource MetricValueText}" /><TextBlock Text="Items available across sales and stock workflows." Style="{StaticResource CaptionText}" Margin="0,8,0,0" /></StackPanel></Border>
-                <Border Style="{StaticResource MetricCard}" Margin="0,0,12,0"><StackPanel><TextBlock Text="Vehicles" Style="{StaticResource CardTitleText}" /><TextBlock Text="{Binding Summary.TotalVehicles}" Style="{StaticResource MetricValueText}" /><TextBlock Text="Fleet units configured for field operations." Style="{StaticResource CaptionText}" Margin="0,8,0,0" /></StackPanel></Border>
-                <Border Style="{StaticResource MetricCard}"><StackPanel><TextBlock Text="Receivables" Style="{StaticResource CardTitleText}" /><TextBlock Text="{Binding Summary.Analytics.CustomerReceivables, StringFormat=N2}" Style="{StaticResource MetricValueText}" /><TextBlock Text="Open customer balances still awaiting collection." Style="{StaticResource CaptionText}" Margin="0,8,0,0" /></StackPanel></Border>
-            </UniformGrid>
+            <WrapPanel Margin="0,0,0,4">
+                <Border Style="{StaticResource DashboardKpiCard}">
+                    <StackPanel>
+                        <DockPanel LastChildFill="False">
+                            <Border Background="#ECFDF5"
+                                    BorderBrush="#D1FAE5"
+                                    BorderThickness="1"
+                                    CornerRadius="999"
+                                    Padding="10,4"
+                                    DockPanel.Dock="Right">
+                                <TextBlock Text="Commercial"
+                                           Style="{StaticResource DashboardPillText}"
+                                           Foreground="#047857" />
+                            </Border>
+                        </DockPanel>
+                        <TextBlock Text="Revenue This Month"
+                                   Style="{StaticResource CardTitleText}"
+                                   Margin="0,6,0,0" />
+                        <TextBlock Text="{Binding Summary.Analytics.MonthlySales, StringFormat=N2}"
+                                   Style="{StaticResource MetricValueText}" />
+                        <TextBlock Text="Recognized sales performance across the current month."
+                                   Style="{StaticResource PageSubtitleText}" />
+                    </StackPanel>
+                </Border>
 
-            <Grid>
-                <Grid.ColumnDefinitions><ColumnDefinition Width="1*"/><ColumnDefinition Width="1*"/><ColumnDefinition Width="1*"/></Grid.ColumnDefinitions>
-                <Border Grid.Column="0" Style="{StaticResource SectionCard}" Margin="0,0,16,16"><StackPanel><TextBlock Text="Monthly Sales" Style="{StaticResource CardTitleText}" /><TextBlock Text="{Binding Summary.Analytics.MonthlySales, StringFormat=N2}" Style="{StaticResource MetricValueText}" /><TextBlock Text="Revenue recorded this month across all sales channels." Style="{StaticResource CaptionText}" Margin="0,10,0,0" /></StackPanel></Border>
-                <Border Grid.Column="1" Style="{StaticResource SectionCard}" Margin="0,0,16,16"><StackPanel><TextBlock Text="Collections This Month" Style="{StaticResource CardTitleText}" /><TextBlock Text="{Binding Summary.Analytics.CollectionsThisMonth, StringFormat=N2}" Style="{StaticResource MetricValueText}" /><TextBlock Text="Cash collected from receivables during the current month." Style="{StaticResource CaptionText}" Margin="0,10,0,0" /></StackPanel></Border>
-                <Border Grid.Column="2" Style="{StaticResource SectionCard}" Margin="0,0,0,16"><StackPanel><TextBlock Text="Inventory Value" Style="{StaticResource CardTitleText}" /><TextBlock Text="{Binding Summary.Analytics.InventoryValue, StringFormat=N2}" Style="{StaticResource MetricValueText}" /><TextBlock Text="Current stock holding value across configured warehouses." Style="{StaticResource CaptionText}" Margin="0,10,0,0" /></StackPanel></Border>
+                <Border Style="{StaticResource DashboardKpiCard}">
+                    <StackPanel>
+                        <DockPanel LastChildFill="False">
+                            <Border Background="#EFF6FF"
+                                    BorderBrush="#DBEAFE"
+                                    BorderThickness="1"
+                                    CornerRadius="999"
+                                    Padding="10,4"
+                                    DockPanel.Dock="Right">
+                                <TextBlock Text="Cash"
+                                           Style="{StaticResource DashboardPillText}"
+                                           Foreground="#1D4ED8" />
+                            </Border>
+                        </DockPanel>
+                        <TextBlock Text="Collections"
+                                   Style="{StaticResource CardTitleText}"
+                                   Margin="0,6,0,0" />
+                        <TextBlock Text="{Binding Summary.Analytics.CollectionsThisMonth, StringFormat=N2}"
+                                   Style="{StaticResource MetricValueText}" />
+                        <TextBlock Text="Receipts collected from customers this month."
+                                   Style="{StaticResource PageSubtitleText}" />
+                    </StackPanel>
+                </Border>
+
+                <Border Style="{StaticResource DashboardKpiCard}">
+                    <StackPanel>
+                        <DockPanel LastChildFill="False">
+                            <Border Background="#FFF1F2"
+                                    BorderBrush="#FFE4E6"
+                                    BorderThickness="1"
+                                    CornerRadius="999"
+                                    Padding="10,4"
+                                    DockPanel.Dock="Right">
+                                <TextBlock Text="Risk"
+                                           Style="{StaticResource DashboardPillText}"
+                                           Foreground="#BE123C" />
+                            </Border>
+                        </DockPanel>
+                        <TextBlock Text="Customer Receivables"
+                                   Style="{StaticResource CardTitleText}"
+                                   Margin="0,6,0,0" />
+                        <TextBlock Text="{Binding Summary.Analytics.CustomerReceivables, StringFormat=N2}"
+                                   Style="{StaticResource MetricValueText}" />
+                        <TextBlock Text="Open balances still waiting to be collected."
+                                   Style="{StaticResource PageSubtitleText}" />
+                    </StackPanel>
+                </Border>
+
+                <Border Style="{StaticResource DashboardKpiCard}">
+                    <StackPanel>
+                        <DockPanel LastChildFill="False">
+                            <Border Background="#FFFBEB"
+                                    BorderBrush="#FEF3C7"
+                                    BorderThickness="1"
+                                    CornerRadius="999"
+                                    Padding="10,4"
+                                    DockPanel.Dock="Right">
+                                <TextBlock Text="Stock"
+                                           Style="{StaticResource DashboardPillText}"
+                                           Foreground="#B45309" />
+                            </Border>
+                        </DockPanel>
+                        <TextBlock Text="Inventory Value"
+                                   Style="{StaticResource CardTitleText}"
+                                   Margin="0,6,0,0" />
+                        <TextBlock Text="{Binding Summary.Analytics.InventoryValue, StringFormat=N2}"
+                                   Style="{StaticResource MetricValueText}" />
+                        <TextBlock Text="Book value of available inventory across warehouses."
+                                   Style="{StaticResource PageSubtitleText}" />
+                    </StackPanel>
+                </Border>
+
+                <Border Style="{StaticResource DashboardKpiCard}">
+                    <StackPanel>
+                        <DockPanel LastChildFill="False">
+                            <Border Background="#EEF2FF"
+                                    BorderBrush="#E0E7FF"
+                                    BorderThickness="1"
+                                    CornerRadius="999"
+                                    Padding="10,4"
+                                    DockPanel.Dock="Right">
+                                <TextBlock Text="Master"
+                                           Style="{StaticResource DashboardPillText}"
+                                           Foreground="#4338CA" />
+                            </Border>
+                        </DockPanel>
+                        <TextBlock Text="Customers"
+                                   Style="{StaticResource CardTitleText}"
+                                   Margin="0,6,0,0" />
+                        <TextBlock Text="{Binding Summary.TotalCustomers}"
+                                   Style="{StaticResource MetricValueText}" />
+                        <TextBlock Text="Active demand-side accounts in the commercial network."
+                                   Style="{StaticResource PageSubtitleText}" />
+                    </StackPanel>
+                </Border>
+
+                <Border Style="{StaticResource DashboardKpiCard}">
+                    <StackPanel>
+                        <DockPanel LastChildFill="False">
+                            <Border Background="#ECFEFF"
+                                    BorderBrush="#CFFAFE"
+                                    BorderThickness="1"
+                                    CornerRadius="999"
+                                    Padding="10,4"
+                                    DockPanel.Dock="Right">
+                                <TextBlock Text="Catalog"
+                                           Style="{StaticResource DashboardPillText}"
+                                           Foreground="#0F766E" />
+                            </Border>
+                        </DockPanel>
+                        <TextBlock Text="Products"
+                                   Style="{StaticResource CardTitleText}"
+                                   Margin="0,6,0,0" />
+                        <TextBlock Text="{Binding Summary.TotalProducts}"
+                                   Style="{StaticResource MetricValueText}" />
+                        <TextBlock Text="Sellable and stocked items available across workflows."
+                                   Style="{StaticResource PageSubtitleText}" />
+                    </StackPanel>
+                </Border>
+
+                <Border Style="{StaticResource DashboardKpiCard}">
+                    <StackPanel>
+                        <DockPanel LastChildFill="False">
+                            <Border Background="#F5F3FF"
+                                    BorderBrush="#EDE9FE"
+                                    BorderThickness="1"
+                                    CornerRadius="999"
+                                    Padding="10,4"
+                                    DockPanel.Dock="Right">
+                                <TextBlock Text="Fleet"
+                                           Style="{StaticResource DashboardPillText}"
+                                           Foreground="#6D28D9" />
+                            </Border>
+                        </DockPanel>
+                        <TextBlock Text="Vehicles"
+                                   Style="{StaticResource CardTitleText}"
+                                   Margin="0,6,0,0" />
+                        <TextBlock Text="{Binding Summary.TotalVehicles}"
+                                   Style="{StaticResource MetricValueText}" />
+                        <TextBlock Text="Distribution fleet currently configured for routes and sales."
+                                   Style="{StaticResource PageSubtitleText}" />
+                    </StackPanel>
+                </Border>
+
+                <Border Style="{StaticResource DashboardKpiCard}">
+                    <StackPanel>
+                        <DockPanel LastChildFill="False">
+                            <Border Background="#F0FDF4"
+                                    BorderBrush="#DCFCE7"
+                                    BorderThickness="1"
+                                    CornerRadius="999"
+                                    Padding="10,4"
+                                    DockPanel.Dock="Right">
+                                <TextBlock Text="Production"
+                                           Style="{StaticResource DashboardPillText}"
+                                           Foreground="#15803D" />
+                            </Border>
+                        </DockPanel>
+                        <TextBlock Text="Production Cost"
+                                   Style="{StaticResource CardTitleText}"
+                                   Margin="0,6,0,0" />
+                        <TextBlock Text="{Binding Summary.Analytics.ProductionCostThisMonth, StringFormat=N2}"
+                                   Style="{StaticResource MetricValueText}" />
+                        <TextBlock Text="Tracked manufacturing spend posted this month."
+                                   Style="{StaticResource PageSubtitleText}" />
+                    </StackPanel>
+                </Border>
+            </WrapPanel>
+
+            <Grid Margin="0,0,0,16">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="1.65*" />
+                    <ColumnDefinition Width="1*" />
+                </Grid.ColumnDefinitions>
+
+                <Border Grid.Column="0"
+                        Style="{StaticResource SectionCard}"
+                        Margin="0,0,16,0">
+                    <StackPanel>
+                        <TextBlock Text="Commercial Snapshot"
+                                   Style="{StaticResource CardTitleText}" />
+                        <TextBlock Text="Leadership view of customer-side performance and cash conversion."
+                                   Style="{StaticResource PageSubtitleText}"
+                                   Margin="0,-2,0,18" />
+
+                        <Grid>
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="*" />
+                                <ColumnDefinition Width="*" />
+                            </Grid.ColumnDefinitions>
+                            <Grid.RowDefinitions>
+                                <RowDefinition Height="Auto" />
+                                <RowDefinition Height="Auto" />
+                            </Grid.RowDefinitions>
+
+                            <Border Grid.Row="0"
+                                    Grid.Column="0"
+                                    Background="#F8FBFF"
+                                    BorderBrush="#DCE7F5"
+                                    BorderThickness="1"
+                                    CornerRadius="16"
+                                    Padding="16"
+                                    Margin="0,0,12,12">
+                                <StackPanel>
+                                    <TextBlock Text="Today's Sales"
+                                               Style="{StaticResource InlineStatLabel}" />
+                                    <TextBlock Text="{Binding Summary.TodaySales, StringFormat=N2}"
+                                               Style="{StaticResource InlineStatValue}" />
+                                    <TextBlock Text="Live billing completed today."
+                                               Style="{StaticResource PageSubtitleText}" />
+                                </StackPanel>
+                            </Border>
+
+                            <Border Grid.Row="0"
+                                    Grid.Column="1"
+                                    Background="#F8FBFF"
+                                    BorderBrush="#DCE7F5"
+                                    BorderThickness="1"
+                                    CornerRadius="16"
+                                    Padding="16"
+                                    Margin="0,0,0,12">
+                                <StackPanel>
+                                    <TextBlock Text="Monthly Sales"
+                                               Style="{StaticResource InlineStatLabel}" />
+                                    <TextBlock Text="{Binding Summary.Analytics.MonthlySales, StringFormat=N2}"
+                                               Style="{StaticResource InlineStatValue}" />
+                                    <TextBlock Text="Recognized revenue in the current month."
+                                               Style="{StaticResource PageSubtitleText}" />
+                                </StackPanel>
+                            </Border>
+
+                            <Border Grid.Row="1"
+                                    Grid.Column="0"
+                                    Background="#F8FBFF"
+                                    BorderBrush="#DCE7F5"
+                                    BorderThickness="1"
+                                    CornerRadius="16"
+                                    Padding="16"
+                                    Margin="0,0,12,0">
+                                <StackPanel>
+                                    <TextBlock Text="Collections This Month"
+                                               Style="{StaticResource InlineStatLabel}" />
+                                    <TextBlock Text="{Binding Summary.Analytics.CollectionsThisMonth, StringFormat=N2}"
+                                               Style="{StaticResource InlineStatValue}" />
+                                    <TextBlock Text="Cash received and posted this month."
+                                               Style="{StaticResource PageSubtitleText}" />
+                                </StackPanel>
+                            </Border>
+
+                            <Border Grid.Row="1"
+                                    Grid.Column="1"
+                                    Background="#F8FBFF"
+                                    BorderBrush="#DCE7F5"
+                                    BorderThickness="1"
+                                    CornerRadius="16"
+                                    Padding="16">
+                                <StackPanel>
+                                    <TextBlock Text="Customer Receivables"
+                                               Style="{StaticResource InlineStatLabel}" />
+                                    <TextBlock Text="{Binding Summary.Analytics.CustomerReceivables, StringFormat=N2}"
+                                               Style="{StaticResource InlineStatValue}" />
+                                    <TextBlock Text="Outstanding customer exposure awaiting collection."
+                                               Style="{StaticResource PageSubtitleText}" />
+                                </StackPanel>
+                            </Border>
+                        </Grid>
+                    </StackPanel>
+                </Border>
+
+                <Border Grid.Column="1"
+                        Style="{StaticResource SectionCard}">
+                    <StackPanel>
+                        <TextBlock Text="Finance And Supply"
+                                   Style="{StaticResource CardTitleText}" />
+                        <TextBlock Text="Core liability and inventory indicators across the ERP."
+                                   Style="{StaticResource PageSubtitleText}"
+                                   Margin="0,-2,0,18" />
+
+                        <Border Background="#FFF7ED"
+                                BorderBrush="#FED7AA"
+                                BorderThickness="1"
+                                CornerRadius="16"
+                                Padding="16"
+                                Margin="0,0,0,12">
+                            <StackPanel>
+                                <TextBlock Text="Supplier Payables"
+                                           Style="{StaticResource InlineStatLabel}" />
+                                <TextBlock Text="{Binding Summary.Analytics.SupplierPayables, StringFormat=N2}"
+                                           Style="{StaticResource InlineStatValue}" />
+                                <TextBlock Text="Open supplier obligations still due for settlement."
+                                           Style="{StaticResource PageSubtitleText}" />
+                            </StackPanel>
+                        </Border>
+
+                        <Border Background="#FFFBEB"
+                                BorderBrush="#FDE68A"
+                                BorderThickness="1"
+                                CornerRadius="16"
+                                Padding="16"
+                                Margin="0,0,0,12">
+                            <StackPanel>
+                                <TextBlock Text="Inventory Value"
+                                           Style="{StaticResource InlineStatLabel}" />
+                                <TextBlock Text="{Binding Summary.Analytics.InventoryValue, StringFormat=N2}"
+                                           Style="{StaticResource InlineStatValue}" />
+                                <TextBlock Text="Current stock value available across the business."
+                                           Style="{StaticResource PageSubtitleText}" />
+                            </StackPanel>
+                        </Border>
+
+                        <Border Background="#EEF2FF"
+                                BorderBrush="#C7D2FE"
+                                BorderThickness="1"
+                                CornerRadius="16"
+                                Padding="16">
+                            <StackPanel>
+                                <TextBlock Text="Production Cost This Month"
+                                           Style="{StaticResource InlineStatLabel}" />
+                                <TextBlock Text="{Binding Summary.Analytics.ProductionCostThisMonth, StringFormat=N2}"
+                                           Style="{StaticResource InlineStatValue}" />
+                                <TextBlock Text="Tracked manufacturing spend posted against active work."
+                                           Style="{StaticResource PageSubtitleText}" />
+                            </StackPanel>
+                        </Border>
+                    </StackPanel>
+                </Border>
             </Grid>
 
-            <Grid>
-                <Grid.ColumnDefinitions><ColumnDefinition Width="1*"/><ColumnDefinition Width="1*"/><ColumnDefinition Width="1*"/></Grid.ColumnDefinitions>
-                <Border Grid.Column="0" Style="{StaticResource SectionCard}" Margin="0,0,16,0"><StackPanel><TextBlock Text="Customer Receivables" Style="{StaticResource CardTitleText}" /><TextBlock Text="{Binding Summary.Analytics.CustomerReceivables, StringFormat=N2}" Style="{StaticResource MetricValueText}" /></StackPanel></Border>
-                <Border Grid.Column="1" Style="{StaticResource SectionCard}" Margin="0,0,16,0"><StackPanel><TextBlock Text="Supplier Payables" Style="{StaticResource CardTitleText}" /><TextBlock Text="{Binding Summary.Analytics.SupplierPayables, StringFormat=N2}" Style="{StaticResource MetricValueText}" /></StackPanel></Border>
-                <Border Grid.Column="2" Style="{StaticResource SectionCard}"><StackPanel><TextBlock Text="Production Cost This Month" Style="{StaticResource CardTitleText}" /><TextBlock Text="{Binding Summary.Analytics.ProductionCostThisMonth, StringFormat=N2}" Style="{StaticResource MetricValueText}" /><TextBlock Text="Tracked material, labor, and overhead costs for completed orders." Style="{StaticResource CaptionText}" Margin="0,10,0,0" /></StackPanel></Border>
-            </Grid>
+            <StackPanel Margin="0,0,0,8">
+                <TextBlock Text="Today's Quick Stats"
+                           Style="{StaticResource CardTitleText}"
+                           Margin="0,0,0,14" />
 
-            <Border Style="{StaticResource SectionCard}" Margin="0,18,0,0">
-                <StackPanel>
-                    <TextBlock Text="Management Snapshot" Style="{StaticResource CardTitleText}" />
-                    <TextBlock Text="Relative metric bars make it easier to compare the business drivers at a glance." Style="{StaticResource CaptionText}" />
-                    <ItemsControl ItemsSource="{Binding ChartPoints}">
-                        <ItemsControl.ItemTemplate>
-                            <DataTemplate>
-                                <Grid Margin="0,12,0,0">
-                                    <Grid.ColumnDefinitions>
-                                        <ColumnDefinition Width="180" />
-                                        <ColumnDefinition Width="*" />
-                                        <ColumnDefinition Width="120" />
-                                    </Grid.ColumnDefinitions>
-                                    <TextBlock Grid.Column="0" Text="{Binding Label}" VerticalAlignment="Center" FontWeight="SemiBold" />
-                                    <Border Grid.Column="1" Height="24" Background="#E2E8F0" CornerRadius="12" VerticalAlignment="Center">
-                                        <Border Width="{Binding BarWidth}" Height="24" HorizontalAlignment="Left" Background="{Binding FillBrush}" CornerRadius="12" />
-                                    </Border>
-                                    <TextBlock Grid.Column="2" Text="{Binding Value, StringFormat=N2}" HorizontalAlignment="Right" VerticalAlignment="Center" FontWeight="SemiBold" />
-                                </Grid>
-                            </DataTemplate>
-                        </ItemsControl.ItemTemplate>
-                    </ItemsControl>
-                </StackPanel>
-            </Border>
+                <WrapPanel>
+                    <Border Style="{StaticResource DashboardQuickCard}">
+                        <StackPanel>
+                            <TextBlock Text="Today Sales"
+                                       Style="{StaticResource InlineStatLabel}" />
+                            <TextBlock Text="{Binding Summary.TodaySales, StringFormat=N2}"
+                                       Style="{StaticResource InlineStatValue}" />
+                            <TextBlock Text="Current same-day recognized sales."
+                                       Style="{StaticResource PageSubtitleText}" />
+                        </StackPanel>
+                    </Border>
+
+                    <Border Style="{StaticResource DashboardQuickCard}">
+                        <StackPanel>
+                            <TextBlock Text="Customers"
+                                       Style="{StaticResource InlineStatLabel}" />
+                            <TextBlock Text="{Binding Summary.TotalCustomers}"
+                                       Style="{StaticResource InlineStatValue}" />
+                            <TextBlock Text="Accounts available in the selling network."
+                                       Style="{StaticResource PageSubtitleText}" />
+                        </StackPanel>
+                    </Border>
+
+                    <Border Style="{StaticResource DashboardQuickCard}">
+                        <StackPanel>
+                            <TextBlock Text="Products"
+                                       Style="{StaticResource InlineStatLabel}" />
+                            <TextBlock Text="{Binding Summary.TotalProducts}"
+                                       Style="{StaticResource InlineStatValue}" />
+                            <TextBlock Text="Items currently listed in the catalog."
+                                       Style="{StaticResource PageSubtitleText}" />
+                        </StackPanel>
+                    </Border>
+
+                    <Border Style="{StaticResource DashboardQuickCard}">
+                        <StackPanel>
+                            <TextBlock Text="Vehicles"
+                                       Style="{StaticResource InlineStatLabel}" />
+                            <TextBlock Text="{Binding Summary.TotalVehicles}"
+                                       Style="{StaticResource InlineStatValue}" />
+                            <TextBlock Text="Fleet capacity available for distribution."
+                                       Style="{StaticResource PageSubtitleText}" />
+                        </StackPanel>
+                    </Border>
+                </WrapPanel>
+            </StackPanel>
         </StackPanel>
     </ScrollViewer>
 </UserControl>

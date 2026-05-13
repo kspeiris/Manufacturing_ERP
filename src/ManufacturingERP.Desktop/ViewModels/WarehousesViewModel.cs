@@ -59,8 +59,10 @@ public partial class WarehousesViewModel : ViewModelBase
     }
 
     [RelayCommand]
-    private async Task EditAsync()
+    private async Task EditAsync(Warehouse? warehouse = null)
     {
+        if (warehouse is not null)
+            SelectedWarehouse = warehouse;
         var auth = _authorizationService.EnsureAdminAccess();
         if (!auth.IsSuccess) { StatusMessage = auth.Message; return; }
         if (SelectedWarehouse is null) { StatusMessage = "Select a warehouse."; return; }
@@ -92,8 +94,10 @@ public partial class WarehousesViewModel : ViewModelBase
     }
 
     [RelayCommand]
-    private async Task DeleteAsync()
+    private async Task DeleteAsync(Warehouse? warehouse = null)
     {
+        if (warehouse is not null)
+            SelectedWarehouse = warehouse;
         var auth = _authorizationService.EnsureAdminAccess();
         if (!auth.IsSuccess) { StatusMessage = auth.Message; return; }
         if (SelectedWarehouse is null) { StatusMessage = "Select a warehouse."; return; }
@@ -118,6 +122,13 @@ public partial class WarehousesViewModel : ViewModelBase
     }
 
     partial void OnSearchTextChanged(string value) => ApplyFilter();
+
+    [RelayCommand]
+    private void SelectWarehouse(Warehouse? warehouse)
+    {
+        if (warehouse is not null)
+            SelectedWarehouse = warehouse;
+    }
 
     private void ApplyFilter()
     {

@@ -5,19 +5,57 @@
     <ScrollViewer VerticalScrollBarVisibility="Auto">
         <StackPanel>
             <TextBlock Text="Customer &amp; Supplier Ledgers" Style="{StaticResource PageTitleText}" />
-            <TextBlock Text="Load either party ledger without leaving the page so balances and references stay easy to compare." Style="{StaticResource PageSubtitleText}" Margin="0,0,0,18" />
+            <TextBlock Text="Load party-ledger movements with a cleaner split between receivable and payable views."
+                       Style="{StaticResource PageSubtitleText}"
+                       Margin="0,0,0,18" />
+
+            <Grid Margin="0,0,0,16">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="Auto" />
+                    <ColumnDefinition Width="Auto" />
+                    <ColumnDefinition Width="*" />
+                </Grid.ColumnDefinitions>
+
+                <Border Grid.Column="0" Style="{StaticResource InlineStatCard}" Margin="0,0,16,0">
+                    <StackPanel>
+                        <TextBlock Text="Customer Rows" Style="{StaticResource InlineStatLabel}" />
+                        <TextBlock Text="{Binding CustomerRows.Count}" Style="{StaticResource InlineStatValue}" />
+                    </StackPanel>
+                </Border>
+
+                <Border Grid.Column="1" Style="{StaticResource InlineStatCard}" Margin="0,0,16,0">
+                    <StackPanel>
+                        <TextBlock Text="Supplier Rows" Style="{StaticResource InlineStatLabel}" />
+                        <TextBlock Text="{Binding SupplierRows.Count}" Style="{StaticResource InlineStatValue}" />
+                    </StackPanel>
+                </Border>
+
+                <Border Grid.Column="2" Style="{StaticResource UtilityPanel}">
+                    <StackPanel>
+                        <TextBlock Text="Ledger Focus" Style="{StaticResource InlineStatLabel}" />
+                        <TextBlock Text="Load a party on either side to inspect references, debits, credits, and running balances."
+                                   Style="{StaticResource PageSubtitleText}"
+                                   Margin="0,8,0,0" />
+                    </StackPanel>
+                </Border>
+            </Grid>
+
             <Grid>
-                <Grid.ColumnDefinitions><ColumnDefinition Width="1*"/><ColumnDefinition Width="1*"/></Grid.ColumnDefinitions>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="1*" />
+                    <ColumnDefinition Width="1*" />
+                </Grid.ColumnDefinitions>
+
                 <Border Grid.Column="0" Style="{StaticResource SectionCard}" Margin="0,0,16,0">
                     <DockPanel>
                         <StackPanel DockPanel.Dock="Top" Margin="0,0,0,12">
                             <TextBlock Text="Customer Ledger" Style="{StaticResource CardTitleText}" />
-                            <WrapPanel>
+                            <WrapPanel Margin="0,10,0,0">
                                 <ComboBox Width="240" ItemsSource="{Binding Customers}" SelectedItem="{Binding SelectedCustomer}" DisplayMemberPath="ShopName" Margin="0,0,8,0" />
-                                <Button Content="Load" Command="{Binding LoadCustomerLedgerCommand}" Style="{StaticResource SecondaryActionButton}" Margin="0" />
+                                <Button Content="Load" Command="{Binding LoadCustomerLedgerCommand}" />
                             </WrapPanel>
                         </StackPanel>
-                        <DataGrid ItemsSource="{Binding CustomerRows}" MinHeight="320">
+                        <DataGrid ItemsSource="{Binding CustomerRows}" AutoGenerateColumns="False" CanUserAddRows="False" Height="300">
                             <DataGrid.Columns>
                                 <DataGridTextColumn Header="Date" Binding="{Binding EntryDate}" Width="140" />
                                 <DataGridTextColumn Header="Type" Binding="{Binding EntryType}" Width="120" />
@@ -29,16 +67,17 @@
                         </DataGrid>
                     </DockPanel>
                 </Border>
+
                 <Border Grid.Column="1" Style="{StaticResource SectionCard}">
                     <DockPanel>
                         <StackPanel DockPanel.Dock="Top" Margin="0,0,0,12">
                             <TextBlock Text="Supplier Ledger" Style="{StaticResource CardTitleText}" />
-                            <WrapPanel>
+                            <WrapPanel Margin="0,10,0,0">
                                 <ComboBox Width="240" ItemsSource="{Binding Suppliers}" SelectedItem="{Binding SelectedSupplier}" DisplayMemberPath="Name" Margin="0,0,8,0" />
-                                <Button Content="Load" Command="{Binding LoadSupplierLedgerCommand}" Style="{StaticResource SecondaryActionButton}" Margin="0" />
+                                <Button Content="Load" Command="{Binding LoadSupplierLedgerCommand}" />
                             </WrapPanel>
                         </StackPanel>
-                        <DataGrid ItemsSource="{Binding SupplierRows}" MinHeight="320">
+                        <DataGrid ItemsSource="{Binding SupplierRows}" AutoGenerateColumns="False" CanUserAddRows="False" Height="300">
                             <DataGrid.Columns>
                                 <DataGridTextColumn Header="Date" Binding="{Binding EntryDate}" Width="140" />
                                 <DataGridTextColumn Header="Type" Binding="{Binding EntryType}" Width="120" />

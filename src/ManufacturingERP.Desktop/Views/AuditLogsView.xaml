@@ -2,45 +2,64 @@
              xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes">
-    <Border Style="{StaticResource ViewRootCard}">
-        <Grid>
-            <Grid.RowDefinitions>
-                <RowDefinition Height="Auto" />
-                <RowDefinition Height="*" />
-            </Grid.RowDefinitions>
-
-            <DockPanel Grid.Row="0" LastChildFill="False" Margin="0,0,0,14">
+    <ScrollViewer VerticalScrollBarVisibility="Auto">
+        <StackPanel>
+            <DockPanel Margin="0,0,0,18">
                 <StackPanel DockPanel.Dock="Left">
                     <TextBlock Text="Audit Logs" Style="{StaticResource PageTitleText}" />
-                    <TextBlock Text="Review who changed what and when across the ERP workspace." Style="{StaticResource PageSubtitleText}" />
-                    <TextBox Style="{StaticResource SearchTextBox}"
-                             Text="{Binding SearchText, UpdateSourceTrigger=PropertyChanged}"
-                             materialDesign:HintAssist.Hint="Search by user, action, entity, or values" />
-                    <TextBlock Text="{Binding StatusMessage}" Style="{StaticResource StatusMessageText}" />
+                    <TextBlock Text="Review platform activity, user actions, and record-level changes from a single compliance workspace."
+                               Style="{StaticResource PageSubtitleText}" />
                 </StackPanel>
-                <Button Content="Refresh" Command="{Binding LoadCommand}" Style="{StaticResource SecondaryActionButton}" Margin="0" />
+                <Button Content="Refresh"
+                        Command="{Binding LoadCommand}"
+                        HorizontalAlignment="Right"
+                        VerticalAlignment="Top" />
             </DockPanel>
 
-            <Grid Grid.Row="1">
-                <Grid.RowDefinitions>
-                    <RowDefinition Height="Auto" />
-                    <RowDefinition Height="*" />
-                </Grid.RowDefinitions>
-                <ProgressBar Grid.Row="0"
-                             IsIndeterminate="True"
-                             Visibility="{Binding IsBusy, Converter={StaticResource BoolToVisibilityConverter}}" />
-                <DataGrid Grid.Row="1" ItemsSource="{Binding AuditLogs}">
-                    <DataGrid.Columns>
-                        <DataGridTextColumn Header="When (UTC)" Binding="{Binding ActionAtUtc, StringFormat=yyyy-MM-dd HH:mm:ss}" Width="180" />
-                        <DataGridTextColumn Header="User" Binding="{Binding User.Username}" Width="120" />
-                        <DataGridTextColumn Header="Action" Binding="{Binding Action}" Width="110" />
-                        <DataGridTextColumn Header="Entity" Binding="{Binding EntityName}" Width="140" />
-                        <DataGridTextColumn Header="Key" Binding="{Binding EntityKey}" Width="120" />
-                        <DataGridTextColumn Header="Old Values" Binding="{Binding OldValues}" Width="*" />
-                        <DataGridTextColumn Header="New Values" Binding="{Binding NewValues}" Width="*" />
-                    </DataGrid.Columns>
-                </DataGrid>
+            <Grid Margin="0,0,0,16">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="Auto" />
+                    <ColumnDefinition Width="*" />
+                </Grid.ColumnDefinitions>
+
+                <Border Grid.Column="0" Style="{StaticResource InlineStatCard}" Margin="0,0,16,0">
+                    <StackPanel>
+                        <TextBlock Text="Audit Records" Style="{StaticResource InlineStatLabel}" />
+                        <TextBlock Text="{Binding AuditLogs.Count}" Style="{StaticResource InlineStatValue}" />
+                    </StackPanel>
+                </Border>
+
+                <Border Grid.Column="1" Style="{StaticResource UtilityPanel}">
+                    <StackPanel>
+                        <TextBlock Text="Traceability Scope" Style="{StaticResource InlineStatLabel}" />
+                        <TextBlock Text="User, action, entity, and before/after values stay visible together for investigations and review."
+                                   Style="{StaticResource PageSubtitleText}"
+                                   Margin="0,8,0,0" />
+                    </StackPanel>
+                </Border>
             </Grid>
-        </Grid>
-    </Border>
+
+            <Border Style="{StaticResource SectionCard}">
+                <DockPanel>
+                    <StackPanel DockPanel.Dock="Top" Margin="0,0,0,12">
+                        <TextBlock Text="Activity Register" Style="{StaticResource CardTitleText}" />
+                        <TextBlock Text="Use this ledger to validate who changed what, and when."
+                                   Style="{StaticResource PageSubtitleText}"
+                                   Margin="0" />
+                    </StackPanel>
+                    <DataGrid ItemsSource="{Binding AuditLogs}" AutoGenerateColumns="False" CanUserAddRows="False">
+                        <DataGrid.Columns>
+                            <DataGridTextColumn Header="When (UTC)" Binding="{Binding ActionAtUtc}" Width="180" />
+                            <DataGridTextColumn Header="User" Binding="{Binding User.Username}" Width="120" />
+                            <DataGridTextColumn Header="Action" Binding="{Binding Action}" Width="100" />
+                            <DataGridTextColumn Header="Entity" Binding="{Binding EntityName}" Width="120" />
+                            <DataGridTextColumn Header="Key" Binding="{Binding EntityKey}" Width="100" />
+                            <DataGridTextColumn Header="Old Values" Binding="{Binding OldValues}" Width="*" />
+                            <DataGridTextColumn Header="New Values" Binding="{Binding NewValues}" Width="*" />
+                        </DataGrid.Columns>
+                    </DataGrid>
+                </DockPanel>
+            </Border>
+        </StackPanel>
+    </ScrollViewer>
 </UserControl>

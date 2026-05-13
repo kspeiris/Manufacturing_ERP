@@ -4,34 +4,77 @@
              xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes">
     <ScrollViewer VerticalScrollBarVisibility="Auto">
         <StackPanel>
-            <TextBlock Text="Mobile Sync" Style="{StaticResource PageTitleText}" />
-            <TextBlock Text="Run device sync jobs and review the latest log entries without losing the control panel." Style="{StaticResource PageSubtitleText}" Margin="0,0,0,18" />
-            <Grid>
-                <Grid.ColumnDefinitions><ColumnDefinition Width="1*"/><ColumnDefinition Width="2*"/></Grid.ColumnDefinitions>
-                <Border Grid.Column="0" Style="{StaticResource SectionCard}" Margin="0,0,16,0">
+            <DockPanel Margin="0,0,0,18">
+                <StackPanel DockPanel.Dock="Left">
+                    <TextBlock Text="Mobile Sync" Style="{StaticResource PageTitleText}" />
+                    <TextBlock Text="Coordinate field-device uploads and confirm that vehicle transactions are arriving cleanly."
+                               Style="{StaticResource PageSubtitleText}" />
+                </StackPanel>
+                <Button Content="Refresh"
+                        Command="{Binding LoadCommand}"
+                        HorizontalAlignment="Right"
+                        VerticalAlignment="Top" />
+            </DockPanel>
+
+            <Grid Margin="0,0,0,16">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="Auto" />
+                    <ColumnDefinition Width="*" />
+                </Grid.ColumnDefinitions>
+
+                <Border Grid.Column="0" Style="{StaticResource InlineStatCard}" Margin="0,0,16,0">
                     <StackPanel>
-                <TextBlock Text="Vehicle Mobile Sync" Style="{StaticResource CardTitleText}" />
-                <TextBlock Text="Device ID" Style="{StaticResource FormLabel}" />
-                <TextBox Text="{Binding DeviceId}" />
-                <WrapPanel Margin="0,16,0,0">
-                    <Button Content="Run Sync" Command="{Binding RunSyncCommand}" Style="{StaticResource PrimaryActionButton}" />
-                    <Button Content="Refresh" Command="{Binding LoadCommand}" Style="{StaticResource SecondaryActionButton}" Margin="0" />
-                </WrapPanel>
-                <TextBlock Text="{Binding StatusMessage}" Style="{StaticResource StatusMessageText}" />
+                        <TextBlock Text="Sync Events" Style="{StaticResource InlineStatLabel}" />
+                        <TextBlock Text="{Binding SyncLogs.Count}" Style="{StaticResource InlineStatValue}" />
                     </StackPanel>
                 </Border>
+
+                <Border Grid.Column="1" Style="{StaticResource UtilityPanel}">
+                    <StackPanel>
+                        <TextBlock Text="Status Feed" Style="{StaticResource InlineStatLabel}" />
+                        <TextBlock Text="{Binding StatusMessage}" Style="{StaticResource PageSubtitleText}" Margin="0,8,0,0" />
+                    </StackPanel>
+                </Border>
+            </Grid>
+
+            <Grid>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="1.05*" />
+                    <ColumnDefinition Width="1.95*" />
+                </Grid.ColumnDefinitions>
+
+                <Border Grid.Column="0" Style="{StaticResource SectionCard}" Margin="0,0,16,0">
+                    <StackPanel>
+                        <TextBlock Text="Run Vehicle Sync" Style="{StaticResource CardTitleText}" />
+                        <TextBlock Text="Trigger a device pull by entering the handheld or vehicle device identifier."
+                                   Style="{StaticResource PageSubtitleText}"
+                                   Margin="0,0,0,16" />
+                        <TextBlock Text="Device ID" Style="{StaticResource FormLabel}" />
+                        <TextBox Text="{Binding DeviceId}" />
+                        <WrapPanel Margin="0,18,0,0">
+                            <Button Content="Run Sync" Command="{Binding RunSyncCommand}" Margin="0,0,8,0" />
+                            <Button Content="Refresh" Command="{Binding LoadCommand}" />
+                        </WrapPanel>
+                    </StackPanel>
+                </Border>
+
                 <Border Grid.Column="1" Style="{StaticResource SectionCard}">
                     <DockPanel>
-                        <TextBlock Text="Sync Log" Style="{StaticResource CardTitleText}" DockPanel.Dock="Top" />
-                        <DataGrid ItemsSource="{Binding SyncLogs}">
-                    <DataGrid.Columns>
-                        <DataGridTextColumn Header="Type" Binding="{Binding SyncType}" Width="140" />
-                        <DataGridTextColumn Header="Device" Binding="{Binding DeviceId}" Width="140" />
-                        <DataGridTextColumn Header="Started" Binding="{Binding SyncStartedAt}" Width="170" />
-                        <DataGridTextColumn Header="Completed" Binding="{Binding SyncCompletedAt}" Width="170" />
-                        <DataGridTextColumn Header="Status" Binding="{Binding Status}" Width="100" />
-                        <DataGridTextColumn Header="Notes" Binding="{Binding Notes}" Width="*" />
-                    </DataGrid.Columns>
+                        <StackPanel DockPanel.Dock="Top" Margin="0,0,0,12">
+                            <TextBlock Text="Synchronization Log" Style="{StaticResource CardTitleText}" />
+                            <TextBlock Text="Review each device sync cycle, duration, and outcome."
+                                       Style="{StaticResource PageSubtitleText}"
+                                       Margin="0" />
+                        </StackPanel>
+                        <DataGrid ItemsSource="{Binding SyncLogs}" AutoGenerateColumns="False" CanUserAddRows="False">
+                            <DataGrid.Columns>
+                                <DataGridTextColumn Header="Type" Binding="{Binding SyncType}" Width="140" />
+                                <DataGridTextColumn Header="Device" Binding="{Binding DeviceId}" Width="140" />
+                                <DataGridTextColumn Header="Started" Binding="{Binding SyncStartedAt}" Width="170" />
+                                <DataGridTextColumn Header="Completed" Binding="{Binding SyncCompletedAt}" Width="170" />
+                                <DataGridTextColumn Header="Status" Binding="{Binding Status}" Width="100" />
+                                <DataGridTextColumn Header="Notes" Binding="{Binding Notes}" Width="*" />
+                            </DataGrid.Columns>
                         </DataGrid>
                     </DockPanel>
                 </Border>

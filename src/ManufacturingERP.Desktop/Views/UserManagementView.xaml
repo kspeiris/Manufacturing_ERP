@@ -4,46 +4,87 @@
              xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes">
     <ScrollViewer VerticalScrollBarVisibility="Auto">
         <StackPanel>
-            <TextBlock Text="User Management" Style="{StaticResource PageTitleText}" />
-            <TextBlock Text="Create accounts, assign roles, and review the active user list from one administrative workspace." Style="{StaticResource PageSubtitleText}" Margin="0,0,0,18" />
-            <Grid>
-                <Grid.ColumnDefinitions><ColumnDefinition Width="1.1*"/><ColumnDefinition Width="1.9*"/></Grid.ColumnDefinitions>
+            <DockPanel Margin="0,0,0,14">
+                <StackPanel DockPanel.Dock="Left">
+                    <TextBlock Text="User Management" Style="{StaticResource PageTitleText}" />
+                    <TextBlock Text="Administer access, roles, and active accounts from a cleaner security workspace."
+                               Style="{StaticResource PageSubtitleText}" />
+                </StackPanel>
+                <Button Content="Refresh"
+                        Command="{Binding LoadCommand}"
+                        HorizontalAlignment="Right"
+                        VerticalAlignment="Top" />
+            </DockPanel>
 
-                <Border Grid.Column="0" Style="{StaticResource SectionCard}" Margin="0,0,16,0">
+            <Grid Margin="0,0,0,14">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="220" />
+                    <ColumnDefinition Width="*" />
+                </Grid.ColumnDefinitions>
+
+                <Border Grid.Column="0" Style="{StaticResource InlineStatCard}" Margin="0,0,16,0">
                     <StackPanel>
-                <TextBlock Text="User Management" Style="{StaticResource CardTitleText}" />
-                <TextBlock Text="Username" Style="{StaticResource FormLabel}" />
-                <TextBox Text="{Binding Username}" />
-                <TextBlock Text="Password" Style="{StaticResource FormLabel}" Margin="0,12,0,4" />
-                <TextBox Text="{Binding Password}" />
-                <TextBlock Text="Full Name" Style="{StaticResource FormLabel}" Margin="0,12,0,4" />
-                <TextBox Text="{Binding FullName}" />
-                <TextBlock Text="Role" Style="{StaticResource FormLabel}" Margin="0,12,0,4" />
-                <ComboBox ItemsSource="{Binding Roles}" SelectedItem="{Binding SelectedRole}" />
-                <CheckBox Content="Active" IsChecked="{Binding IsActive}" Margin="0,12,0,0" />
-                <WrapPanel Margin="0,16,0,0">
-                    <Button Content="New" Command="{Binding NewUserCommand}" Style="{StaticResource SecondaryActionButton}" />
-                    <Button Content="Save" Command="{Binding SaveCommand}" Style="{StaticResource PrimaryActionButton}" />
-                    <Button Content="Delete" Command="{Binding DeleteCommand}" Style="{StaticResource DangerActionButton}" />
-                    <Button Content="Refresh" Command="{Binding LoadCommand}" Style="{StaticResource SecondaryActionButton}" Margin="0" />
-                </WrapPanel>
-                <TextBlock Text="{Binding StatusMessage}" Style="{StaticResource StatusMessageText}" />
+                        <TextBlock Text="Users Loaded" Style="{StaticResource InlineStatLabel}" />
+                        <TextBlock Text="{Binding Users.Count}" Style="{StaticResource InlineStatValue}" />
                     </StackPanel>
                 </Border>
 
-                <Border Grid.Column="1" Style="{StaticResource SectionCard}">
+                <Border Grid.Column="1" Style="{StaticResource UtilityPanel}">
+                    <StackPanel>
+                        <TextBlock Text="Admin Status" Style="{StaticResource InlineStatLabel}" />
+                        <TextBlock Text="{Binding StatusMessage}" Style="{StaticResource PageSubtitleText}" Margin="0,8,0,0" />
+                    </StackPanel>
+                </Border>
+            </Grid>
+
+            <Grid VerticalAlignment="Top">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="1.05*" />
+                    <ColumnDefinition Width="1.95*" />
+                </Grid.ColumnDefinitions>
+
+                <Border Grid.Column="0" Style="{StaticResource SectionCard}" Margin="0,0,16,0" VerticalAlignment="Top">
+                    <StackPanel>
+                        <TextBlock Text="User Profile" Style="{StaticResource CardTitleText}" />
+                        <TextBlock Text="Create or update user credentials, names, role assignments, and active status."
+                                   Style="{StaticResource PageSubtitleText}"
+                                   Margin="0,0,0,16" />
+                        <TextBlock Text="Username" Style="{StaticResource FormLabel}" />
+                        <TextBox Text="{Binding Username}" />
+                        <TextBlock Text="Password" Style="{StaticResource FormLabel}" Margin="0,12,0,4" />
+                        <TextBox Text="{Binding Password}" />
+                        <TextBlock Text="Full Name" Style="{StaticResource FormLabel}" Margin="0,12,0,4" />
+                        <TextBox Text="{Binding FullName}" />
+                        <TextBlock Text="Role" Style="{StaticResource FormLabel}" Margin="0,12,0,4" />
+                        <ComboBox ItemsSource="{Binding Roles}" SelectedItem="{Binding SelectedRole}" />
+                        <CheckBox Content="Active" IsChecked="{Binding IsActive}" Margin="0,12,0,0" />
+                        <WrapPanel Margin="0,16,0,0" ItemHeight="40">
+                            <Button Content="New" Command="{Binding NewUserCommand}" Margin="0,0,8,8" />
+                            <Button Content="Save" Command="{Binding SaveCommand}" Margin="0,0,8,8" />
+                            <Button Content="Delete" Command="{Binding DeleteCommand}" Margin="0,0,8,8" />
+                            <Button Content="Refresh" Command="{Binding LoadCommand}" Margin="0,0,0,8" />
+                        </WrapPanel>
+                    </StackPanel>
+                </Border>
+
+                <Border Grid.Column="1" Style="{StaticResource SectionCard}" VerticalAlignment="Top">
                     <DockPanel>
                         <StackPanel DockPanel.Dock="Top" Margin="0,0,0,12">
-                    <TextBlock Text="Users" Style="{StaticResource CardTitleText}" />
-                    <TextBox Margin="0,12,0,0" Text="{Binding SearchText, UpdateSourceTrigger=PropertyChanged}" materialDesign:HintAssist.Hint="Search by username, full name, or role" />
+                            <TextBlock Text="User Directory" Style="{StaticResource CardTitleText}" />
+                            <TextBlock Text="Search usernames, names, and role assignments before making access changes."
+                                       Style="{StaticResource PageSubtitleText}"
+                                       Margin="0" />
+                            <TextBox Margin="0,12,0,0"
+                                     Text="{Binding SearchText, UpdateSourceTrigger=PropertyChanged}"
+                                     materialDesign:HintAssist.Hint="Search by username, full name, or role" />
                         </StackPanel>
-                        <DataGrid ItemsSource="{Binding Users}" SelectedItem="{Binding SelectedUser}">
-                    <DataGrid.Columns>
-                        <DataGridTextColumn Header="Username" Binding="{Binding Username}" Width="160" />
-                        <DataGridTextColumn Header="Full Name" Binding="{Binding FullName}" Width="*" />
-                        <DataGridTextColumn Header="Role" Binding="{Binding Role}" Width="140" />
-                        <DataGridCheckBoxColumn Header="Active" Binding="{Binding IsActive}" Width="90" />
-                    </DataGrid.Columns>
+                        <DataGrid ItemsSource="{Binding Users}" SelectedItem="{Binding SelectedUser}" AutoGenerateColumns="False" CanUserAddRows="False" MaxHeight="320">
+                            <DataGrid.Columns>
+                                <DataGridTextColumn Header="Username" Binding="{Binding Username}" Width="160" />
+                                <DataGridTextColumn Header="Full Name" Binding="{Binding FullName}" Width="*" />
+                                <DataGridTextColumn Header="Role" Binding="{Binding Role}" Width="140" />
+                                <DataGridCheckBoxColumn Header="Active" Binding="{Binding IsActive}" Width="90" />
+                            </DataGrid.Columns>
                         </DataGrid>
                     </DockPanel>
                 </Border>

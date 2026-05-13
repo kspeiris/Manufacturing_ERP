@@ -4,51 +4,79 @@
              xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes">
     <ScrollViewer VerticalScrollBarVisibility="Auto">
         <StackPanel>
-            <TextBlock Text="Accounting" Style="{StaticResource PageTitleText}" />
-            <TextBlock Text="Post journal entries and review the latest trial balance without switching screens." Style="{StaticResource PageSubtitleText}" Margin="0,0,0,18" />
+            <TextBlock Text="Accounting Workspace" Style="{StaticResource PageTitleText}" />
+            <TextBlock Text="Post journals and review trial balance from one finance-ready control area."
+                       Style="{StaticResource PageSubtitleText}"
+                       Margin="0,0,0,18" />
+
+            <Grid Margin="0,0,0,16">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="Auto" />
+                    <ColumnDefinition Width="*" />
+                </Grid.ColumnDefinitions>
+
+                <Border Grid.Column="0" Style="{StaticResource InlineStatCard}" Margin="0,0,16,0">
+                    <StackPanel>
+                        <TextBlock Text="Journal Lines" Style="{StaticResource InlineStatLabel}" />
+                        <TextBlock Text="{Binding Lines.Count}" Style="{StaticResource InlineStatValue}" />
+                    </StackPanel>
+                </Border>
+
+                <Border Grid.Column="1" Style="{StaticResource UtilityPanel}">
+                    <StackPanel>
+                        <TextBlock Text="Posting Status" Style="{StaticResource InlineStatLabel}" />
+                        <TextBlock Text="{Binding StatusMessage}" Style="{StaticResource PageSubtitleText}" Margin="0,8,0,0" />
+                    </StackPanel>
+                </Border>
+            </Grid>
+
             <Grid>
                 <Grid.ColumnDefinitions>
-                    <ColumnDefinition Width="1.3*" />
-                    <ColumnDefinition Width="1.7*" />
+                    <ColumnDefinition Width="1.15*" />
+                    <ColumnDefinition Width="1.85*" />
                 </Grid.ColumnDefinitions>
 
                 <Border Grid.Column="0" Style="{StaticResource SectionCard}" Margin="0,0,16,0">
                     <StackPanel>
-                <TextBlock Text="Journal Entry" Style="{StaticResource CardTitleText}" />
-                <TextBlock Text="Description" Style="{StaticResource FormLabel}" />
-                <TextBox Text="{Binding Description}" Margin="0,0,0,12" />
-
-                <DataGrid ItemsSource="{Binding Lines}" MinHeight="420">
-                    <DataGrid.Columns>
-                        <DataGridTextColumn Header="Account Code" Binding="{Binding AccountCode}" Width="110" />
-                        <DataGridTextColumn Header="Account Name" Binding="{Binding AccountName}" Width="*" />
-                        <DataGridTextColumn Header="Debit" Binding="{Binding Debit}" Width="90" />
-                        <DataGridTextColumn Header="Credit" Binding="{Binding Credit}" Width="90" />
-                    </DataGrid.Columns>
-                </DataGrid>
-
-                <WrapPanel Margin="0,16,0,0">
-                    <Button Content="Add Line" Command="{Binding AddLineCommand}" Style="{StaticResource SecondaryActionButton}" />
-                    <Button Content="Save Journal" Command="{Binding SaveJournalEntryCommand}" Style="{StaticResource PrimaryActionButton}" Margin="0" />
-                </WrapPanel>
-
-                <TextBlock Text="{Binding StatusMessage}" Style="{StaticResource StatusMessageText}" />
+                        <TextBlock Text="Journal Entry" Style="{StaticResource CardTitleText}" />
+                        <TextBlock Text="Prepare descriptions and debit-credit lines before posting the journal."
+                                   Style="{StaticResource PageSubtitleText}"
+                                   Margin="0,0,0,16" />
+                        <TextBlock Text="Description" Style="{StaticResource FormLabel}" />
+                        <TextBox Text="{Binding Description}" Margin="0,0,0,12" />
+                        <DataGrid ItemsSource="{Binding Lines}" AutoGenerateColumns="False" CanUserAddRows="False" Height="420">
+                            <DataGrid.Columns>
+                                <DataGridTextColumn Header="Account Code" Binding="{Binding AccountCode}" Width="110" />
+                                <DataGridTextColumn Header="Account Name" Binding="{Binding AccountName}" Width="*" />
+                                <DataGridTextColumn Header="Debit" Binding="{Binding Debit}" Width="90" />
+                                <DataGridTextColumn Header="Credit" Binding="{Binding Credit}" Width="90" />
+                            </DataGrid.Columns>
+                        </DataGrid>
+                        <WrapPanel Margin="0,16,0,0">
+                            <Button Content="Add Line" Command="{Binding AddLineCommand}" Margin="0,0,8,0" />
+                            <Button Content="Save Journal" Command="{Binding SaveJournalEntryCommand}" />
+                        </WrapPanel>
                     </StackPanel>
                 </Border>
 
                 <Border Grid.Column="1" Style="{StaticResource SectionCard}">
                     <DockPanel>
-                        <WrapPanel DockPanel.Dock="Top" Margin="0,0,0,12">
-                    <TextBlock Text="Trial Balance" Style="{StaticResource CardTitleText}" Margin="0,0,8,0" />
-                    <Button Content="Refresh" Command="{Binding LoadTrialBalanceCommand}" Style="{StaticResource SecondaryActionButton}" Margin="0" />
-                        </WrapPanel>
-                        <DataGrid ItemsSource="{Binding TrialBalanceRows}">
-                    <DataGrid.Columns>
-                        <DataGridTextColumn Header="Code" Binding="{Binding AccountCode}" Width="110" />
-                        <DataGridTextColumn Header="Account" Binding="{Binding AccountName}" Width="*" />
-                        <DataGridTextColumn Header="Debit" Binding="{Binding Debit}" Width="120" />
-                        <DataGridTextColumn Header="Credit" Binding="{Binding Credit}" Width="120" />
-                    </DataGrid.Columns>
+                        <StackPanel DockPanel.Dock="Top" Margin="0,0,0,12">
+                            <WrapPanel>
+                                <TextBlock Text="Trial Balance" Style="{StaticResource CardTitleText}" Margin="0,0,8,0" />
+                                <Button Content="Refresh" Command="{Binding LoadTrialBalanceCommand}" />
+                            </WrapPanel>
+                            <TextBlock Text="Monitor account debits and credits after posting."
+                                       Style="{StaticResource PageSubtitleText}"
+                                       Margin="0" />
+                        </StackPanel>
+                        <DataGrid ItemsSource="{Binding TrialBalanceRows}" AutoGenerateColumns="False" CanUserAddRows="False">
+                            <DataGrid.Columns>
+                                <DataGridTextColumn Header="Code" Binding="{Binding AccountCode}" Width="110" />
+                                <DataGridTextColumn Header="Account" Binding="{Binding AccountName}" Width="*" />
+                                <DataGridTextColumn Header="Debit" Binding="{Binding Debit}" Width="120" />
+                                <DataGridTextColumn Header="Credit" Binding="{Binding Credit}" Width="120" />
+                            </DataGrid.Columns>
                         </DataGrid>
                     </DockPanel>
                 </Border>

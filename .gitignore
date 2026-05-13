@@ -1,16 +1,37 @@
-# Build outputs
+# .NET and NuGet local tooling
+.dotnet/
+.dotnetcli/
+.nuget/
+
+# Build output
+bin/
+obj/
 **/bin/
 **/obj/
 
-# Local databases
+# Runtime databases and temp files
 *.db
 *.db-shm
 *.db-wal
 
-# Local .NET CLI and package caches
-.dotnetcli/
-.nuget/
+# Logs
+*.log
+build.log
+restore.log
+desktop-norestore-build.log
+desktop-run-build.log
+
+# App-generated exports
+Exports/
+Reports/Exports/
+src/ManufacturingERP.Desktop/bin/**/Exports/
 
 # Diagnostic and temporary files
-*.log
 tmp_*.txt
+tmp_test.txt
+tmp_test2.txt
+
+# IDE and user-specific files
+.vs/
+*.user
+*.suo

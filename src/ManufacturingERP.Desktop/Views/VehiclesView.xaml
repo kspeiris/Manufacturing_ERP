@@ -2,38 +2,140 @@
              xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes">
-    <Border Style="{StaticResource ViewRootCard}">
-        <Grid>
-            <Grid.RowDefinitions>
-                <RowDefinition Height="Auto" />
-                <RowDefinition Height="Auto" />
-                <RowDefinition Height="*" />
-            </Grid.RowDefinitions>
-            <DockPanel LastChildFill="False" Margin="0,0,0,14">
-                <StackPanel DockPanel.Dock="Left">
-                    <TextBlock Text="Vehicles" Style="{StaticResource PageTitleText}" />
-                    <TextBlock Text="Track fleet identity, assignments, and active status for field sales operations." Style="{StaticResource PageSubtitleText}" />
-                </StackPanel>
-                <WrapPanel HorizontalAlignment="Right" VerticalAlignment="Top">
-                    <Button Content="New" Command="{Binding AddCommand}" Style="{StaticResource PrimaryActionButton}" />
-                    <Button Content="Edit" Command="{Binding EditCommand}" Style="{StaticResource SecondaryActionButton}" />
-                    <Button Content="Delete" Command="{Binding DeleteCommand}" Style="{StaticResource DangerActionButton}" />
-                    <Button Content="Refresh" Command="{Binding LoadCommand}" Style="{StaticResource SecondaryActionButton}" Margin="0" />
-                </WrapPanel>
-            </DockPanel>
-            <StackPanel Grid.Row="1" Margin="0,0,0,14">
-                <TextBox Text="{Binding SearchText, UpdateSourceTrigger=PropertyChanged}" materialDesign:HintAssist.Hint="Search by vehicle, description, driver, or rep" />
-                <TextBlock Text="{Binding StatusMessage}" Style="{StaticResource StatusMessageText}" />
-            </StackPanel>
-            <DataGrid Grid.Row="2" ItemsSource="{Binding Vehicles}" SelectedItem="{Binding SelectedVehicle}">
-                <DataGrid.Columns>
-                    <DataGridTextColumn Header="Vehicle No" Binding="{Binding VehicleNumber}" Width="140" />
-                    <DataGridTextColumn Header="Description" Binding="{Binding Description}" Width="*" />
-                    <DataGridTextColumn Header="Driver" Binding="{Binding DriverName}" Width="150" />
-                    <DataGridTextColumn Header="Sales Rep" Binding="{Binding SalesRepName}" Width="150" />
-                    <DataGridCheckBoxColumn Header="Active" Binding="{Binding IsActive}" Width="90" />
-                </DataGrid.Columns>
-            </DataGrid>
-        </Grid>
-    </Border>
+    <ScrollViewer VerticalScrollBarVisibility="Auto">
+        <StackPanel Margin="0,0,0,8">
+            <Border Style="{StaticResource HeroCard}">
+                <Grid>
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="2.3*" />
+                        <ColumnDefinition Width="1.1*" />
+                    </Grid.ColumnDefinitions>
+
+                    <StackPanel Margin="0,0,24,0">
+                        <TextBlock Text="Vehicles" Style="{StaticResource HeroTitleText}" />
+                        <TextBlock Text="Fleet command center" Style="{StaticResource HeroEyebrowText}" Margin="0,6,0,0" />
+                        <TextBlock Text="Manage fleet records, route drivers, and sales reps with a clearer transport directory."
+                                   Style="{StaticResource HeroBodyText}" Margin="0,12,0,0" MaxWidth="700" />
+                    </StackPanel>
+                    <Grid Grid.Column="1">
+                        <Grid.RowDefinitions><RowDefinition Height="Auto" /><RowDefinition Height="12" /><RowDefinition Height="*" /></Grid.RowDefinitions>
+                        <WrapPanel HorizontalAlignment="Right">
+                            <Button Content="New" Command="{Binding AddCommand}" Style="{StaticResource PageActionButton}" />
+                            <Button Content="Edit" Command="{Binding EditCommand}" Style="{StaticResource PageActionButton}" />
+                            <Button Content="Delete" Command="{Binding DeleteCommand}" Style="{StaticResource PageDangerButton}" />
+                            <Button Content="Refresh" Command="{Binding LoadCommand}" Style="{StaticResource PageActionButton}" Margin="0" />
+                        </WrapPanel>
+                        <Border Grid.Row="2" Background="#172554" BorderBrush="#2563EB" BorderThickness="1" CornerRadius="18" Padding="18">
+                            <StackPanel>
+                                <TextBlock Text="Selected Vehicle" Foreground="#93C5FD" FontWeight="SemiBold" />
+                                <TextBlock Text="{Binding SelectedVehicle.VehicleNumber, TargetNullValue=No vehicle selected}" Foreground="White" FontSize="22" FontWeight="SemiBold" Margin="0,10,0,0" TextWrapping="Wrap" />
+                                <TextBlock Text="{Binding SelectedVehicle.DriverName, StringFormat=Driver: {0}, TargetNullValue=Select a fleet row to review assignments and status.}" Foreground="#CBD5E1" Margin="0,8,0,0" TextWrapping="Wrap" />
+                                <TextBlock Text="{Binding StatusMessage}" Foreground="#93C5FD" Margin="0,10,0,0" TextWrapping="Wrap" />
+                            </StackPanel>
+                        </Border>
+                    </Grid>
+                </Grid>
+            </Border>
+
+            <Grid Margin="0,0,0,4">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="*" />
+                    <ColumnDefinition Width="*" />
+                    <ColumnDefinition Width="*" />
+                </Grid.ColumnDefinitions>
+                <Border Grid.Column="0" Style="{StaticResource SectionCard}" Margin="0,0,16,16"><StackPanel><TextBlock Text="Vehicles Loaded" Style="{StaticResource InlineStatLabel}" /><TextBlock Text="{Binding Vehicles.Count}" Style="{StaticResource InlineStatValue}" /><TextBlock Text="Current visible fleet records." Style="{StaticResource PageSubtitleText}" /></StackPanel></Border>
+                <Border Grid.Column="1" Style="{StaticResource SectionCard}" Margin="0,0,16,16"><StackPanel><TextBlock Text="Search Scope" Style="{StaticResource InlineStatLabel}" /><TextBlock Text="Vehicle, description, driver, or rep" Style="{StaticResource PageSubtitleText}" Margin="0,8,0,0" /></StackPanel></Border>
+                <Border Grid.Column="2" Style="{StaticResource SectionCard}" Margin="0,0,0,16"><StackPanel><TextBlock Text="Selected Vehicle" Style="{StaticResource InlineStatLabel}" /><TextBlock Text="{Binding SelectedVehicle.VehicleNumber, TargetNullValue=No vehicle selected}" Style="{StaticResource InlineStatValue}" /><TextBlock Text="{Binding SelectedVehicle.DriverName, StringFormat=Driver: {0}, TargetNullValue=Choose a row from the directory}" Style="{StaticResource PageSubtitleText}" /></StackPanel></Border>
+            </Grid>
+
+            <Grid>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="2.15*" />
+                    <ColumnDefinition Width="1*" />
+                </Grid.ColumnDefinitions>
+
+                <Border Grid.Column="0" Style="{StaticResource SectionCard}" Margin="0,0,16,16">
+                    <DockPanel>
+                        <Grid DockPanel.Dock="Top" Margin="0,0,0,14">
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="*" />
+                                <ColumnDefinition Width="Auto" />
+                            </Grid.ColumnDefinitions>
+                            <StackPanel>
+                                <TextBlock Text="Fleet Directory" Style="{StaticResource CardTitleText}" />
+                                <TextBlock Text="Use the fleet register to validate active delivery vehicles and assigned operators." Style="{StaticResource PageSubtitleText}" Margin="0" />
+                            </StackPanel>
+                            <Border Grid.Column="1" Style="{StaticResource TableCountBadge}">
+                                <TextBlock Text="{Binding Vehicles.Count, StringFormat=Total: {0}}" Style="{StaticResource TableCountText}" />
+                            </Border>
+                        </Grid>
+                        <Border DockPanel.Dock="Top" Style="{StaticResource TableToolbarBorder}" Margin="0,0,0,14">
+                            <Grid>
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition Width="*" />
+                                    <ColumnDefinition Width="Auto" />
+                                </Grid.ColumnDefinitions>
+                                <TextBox Text="{Binding SearchText, UpdateSourceTrigger=PropertyChanged}" materialDesign:HintAssist.Hint="Search by vehicle, description, driver, or rep" />
+                                <Button Grid.Column="1" Content="Refresh" Command="{Binding LoadCommand}" Style="{StaticResource PageActionButton}" Margin="12,0,0,0" />
+                            </Grid>
+                        </Border>
+                        <Border Style="{StaticResource TableShellBorder}" Padding="8">
+                            <ScrollViewer Style="{StaticResource TableViewportScrollViewer}">
+                            <DataGrid ItemsSource="{Binding Vehicles}" SelectedItem="{Binding SelectedVehicle}" AutoGenerateColumns="False" CanUserAddRows="False" MaxHeight="460" MinWidth="860">
+                                <DataGrid.Columns>
+                                    <DataGridTextColumn Header="Vehicle No" Binding="{Binding VehicleNumber}" Width="140" />
+                                    <DataGridTextColumn Header="Description" Binding="{Binding Description}" Width="220" />
+                                    <DataGridTextColumn Header="Driver" Binding="{Binding DriverName}" Width="150" />
+                                    <DataGridTextColumn Header="Sales Rep" Binding="{Binding SalesRepName}" Width="150" />
+                                    <DataGridTemplateColumn Header="Status" Width="120">
+                                        <DataGridTemplateColumn.CellTemplate>
+                                            <DataTemplate>
+                                                <Border x:Name="StatusBadge" Background="#FEE2E2" BorderBrush="#FECACA" BorderThickness="1" CornerRadius="999" Padding="10,4" HorizontalAlignment="Left">
+                                                    <TextBlock x:Name="StatusText" Text="Inactive" Foreground="#B91C1C" FontWeight="SemiBold" />
+                                                </Border>
+                                                <DataTemplate.Triggers>
+                                                    <DataTrigger Binding="{Binding IsActive}" Value="True">
+                                                        <Setter TargetName="StatusBadge" Property="Background" Value="#DCFCE7" />
+                                                        <Setter TargetName="StatusBadge" Property="BorderBrush" Value="#BBF7D0" />
+                                                        <Setter TargetName="StatusText" Property="Text" Value="Active" />
+                                                        <Setter TargetName="StatusText" Property="Foreground" Value="#15803D" />
+                                                    </DataTrigger>
+                                                </DataTemplate.Triggers>
+                                            </DataTemplate>
+                                        </DataGridTemplateColumn.CellTemplate>
+                                    </DataGridTemplateColumn>
+                                    <DataGridTemplateColumn Header="Actions" Width="132">
+                                        <DataGridTemplateColumn.CellTemplate>
+                                            <DataTemplate>
+                                                <StackPanel Orientation="Horizontal">
+                                                    <Button Style="{StaticResource TableActionIconButton}" ToolTip="View" Command="{Binding DataContext.SelectVehicleCommand, RelativeSource={RelativeSource AncestorType=UserControl}}" CommandParameter="{Binding}">
+                                                        <materialDesign:PackIcon Kind="EyeOutline" Width="18" Height="18" Foreground="#2563EB" />
+                                                    </Button>
+                                                    <Button Style="{StaticResource TableActionIconButton}" ToolTip="Edit" Command="{Binding DataContext.EditCommand, RelativeSource={RelativeSource AncestorType=UserControl}}" CommandParameter="{Binding}">
+                                                        <materialDesign:PackIcon Kind="PencilOutline" Width="18" Height="18" Foreground="#D97706" />
+                                                    </Button>
+                                                    <Button Style="{StaticResource TableActionIconButton}" ToolTip="Delete" Command="{Binding DataContext.DeleteCommand, RelativeSource={RelativeSource AncestorType=UserControl}}" CommandParameter="{Binding}" Margin="0">
+                                                        <materialDesign:PackIcon Kind="TrashCanOutline" Width="18" Height="18" Foreground="#DC2626" />
+                                                    </Button>
+                                                </StackPanel>
+                                            </DataTemplate>
+                                        </DataGridTemplateColumn.CellTemplate>
+                                    </DataGridTemplateColumn>
+                                </DataGrid.Columns>
+                            </DataGrid>
+                            </ScrollViewer>
+                        </Border>
+                    </DockPanel>
+                </Border>
+                <Border Grid.Column="1" Style="{StaticResource SectionCard}">
+                    <StackPanel>
+                        <TextBlock Text="Vehicle Details" Style="{StaticResource CardTitleText}" />
+                        <TextBlock Text="Review operator assignments before updating the fleet record." Style="{StaticResource PageSubtitleText}" Margin="0,-2,0,18" />
+                        <Border Background="#FFF7ED" BorderBrush="#FED7AA" BorderThickness="1" CornerRadius="16" Padding="16" Margin="0,0,0,12"><StackPanel><TextBlock Text="Vehicle / Status" Style="{StaticResource InlineStatLabel}" /><TextBlock Text="{Binding SelectedVehicle.VehicleNumber, TargetNullValue=No vehicle selected}" Style="{StaticResource InlineStatValue}" /><TextBlock Text="{Binding SelectedVehicle.IsActive, StringFormat=Active: {0}, TargetNullValue=Active: -}" Style="{StaticResource PageSubtitleText}" /></StackPanel></Border>
+                        <Border Background="#EEF2FF" BorderBrush="#C7D2FE" BorderThickness="1" CornerRadius="16" Padding="16"><StackPanel><TextBlock Text="Assignments" Style="{StaticResource InlineStatLabel}" /><TextBlock Text="{Binding SelectedVehicle.DriverName, TargetNullValue=-}" Style="{StaticResource InlineStatValue}" /><TextBlock Text="{Binding SelectedVehicle.SalesRepName, StringFormat=Sales Rep: {0}, TargetNullValue=Sales Rep: -}" Style="{StaticResource PageSubtitleText}" /><TextBlock Text="{Binding SelectedVehicle.Description, TargetNullValue=Description: -, StringFormat=Description: {0}}" Style="{StaticResource PageSubtitleText}" TextWrapping="Wrap" /></StackPanel></Border>
+                    </StackPanel>
+                </Border>
+            </Grid>
+        </StackPanel>
+    </ScrollViewer>
 </UserControl>

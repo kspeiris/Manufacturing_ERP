@@ -4,60 +4,100 @@
              xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes">
     <ScrollViewer VerticalScrollBarVisibility="Auto">
         <StackPanel>
-            <TextBlock Text="Vehicle Sales Invoice" Style="{StaticResource PageTitleText}" />
-            <TextBlock Text="Prepare route-based invoices with product lines, paid amount, balance due, and final total in one flow." Style="{StaticResource PageSubtitleText}" Margin="0,0,0,18" />
+            <DockPanel Margin="0,0,0,14">
+                <StackPanel DockPanel.Dock="Left">
+                    <TextBlock Text="Vehicle Sales Invoice" Style="{StaticResource PageTitleText}" />
+                    <TextBlock Text="Build route-vehicle invoices with visible balance and invoice totals before posting."
+                               Style="{StaticResource PageSubtitleText}" />
+                </StackPanel>
+            </DockPanel>
 
-            <Border Style="{StaticResource ViewRootCard}">
-            <Grid>
-                <Grid.RowDefinitions>
-                    <RowDefinition Height="Auto" />
-                    <RowDefinition Height="*" />
-                    <RowDefinition Height="Auto" />
-                    <RowDefinition Height="Auto" />
-                </Grid.RowDefinitions>
+            <Grid Margin="0,0,0,14">
                 <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="220" />
+                    <ColumnDefinition Width="220" />
                     <ColumnDefinition Width="*" />
-                    <ColumnDefinition Width="*" />
-                    <ColumnDefinition Width="180" />
-                    <ColumnDefinition Width="180" />
                 </Grid.ColumnDefinitions>
 
-                <ComboBox Grid.Column="0" Margin="0,0,12,12" ItemsSource="{Binding Customers}" SelectedItem="{Binding SelectedCustomer}" DisplayMemberPath="ShopName" materialDesign:HintAssist.Hint="Customer / Shop" />
-                <ComboBox Grid.Column="1" Margin="0,0,12,12" ItemsSource="{Binding Vehicles}" SelectedItem="{Binding SelectedVehicle}" DisplayMemberPath="VehicleNumber" materialDesign:HintAssist.Hint="Vehicle" />
-                <ComboBox Grid.Column="2" Margin="0,0,12,12" ItemsSource="{Binding SaleTypes}" SelectedItem="{Binding SaleType}" materialDesign:HintAssist.Hint="Sale Type" />
-                <TextBox Grid.Column="3" Margin="0,0,0,12" Text="{Binding PaidAmount}" materialDesign:HintAssist.Hint="Paid Amount" />
+                <Border Grid.Column="0" Style="{StaticResource InlineStatCard}" Margin="0,0,16,0">
+                    <StackPanel>
+                        <TextBlock Text="Invoice Lines" Style="{StaticResource InlineStatLabel}" />
+                        <TextBlock Text="{Binding Lines.Count}" Style="{StaticResource InlineStatValue}" />
+                    </StackPanel>
+                </Border>
 
-                <DataGrid Grid.Row="1" Grid.ColumnSpan="4" ItemsSource="{Binding Lines}" AutoGenerateColumns="False" CanUserAddRows="False">
-                    <DataGrid.Columns>
-                        <DataGridTemplateColumn Header="Product" Width="*">
-                            <DataGridTemplateColumn.CellTemplate>
-                                <DataTemplate>
-                                    <ComboBox ItemsSource="{Binding DataContext.Products, RelativeSource={RelativeSource AncestorType=UserControl}}"
-                                              SelectedItem="{Binding Product}" DisplayMemberPath="Name" />
-                                </DataTemplate>
-                            </DataGridTemplateColumn.CellTemplate>
-                        </DataGridTemplateColumn>
-                        <DataGridTextColumn Header="Qty" Binding="{Binding Quantity}" Width="120" />
-                        <DataGridTextColumn Header="Unit Price" Binding="{Binding UnitPrice}" Width="140" />
-                        <DataGridTextColumn Header="Line Total" Binding="{Binding LineTotal}" Width="140" IsReadOnly="True" />
-                    </DataGrid.Columns>
-                </DataGrid>
+                <Border Grid.Column="1" Style="{StaticResource InlineStatCard}" Margin="0,0,16,0">
+                    <StackPanel>
+                        <TextBlock Text="Invoice Total" Style="{StaticResource InlineStatLabel}" />
+                        <TextBlock Text="{Binding InvoiceTotal, StringFormat=N2}" Style="{StaticResource InlineStatValue}" />
+                    </StackPanel>
+                </Border>
 
-                <Grid Grid.Row="2" Grid.ColumnSpan="4" Margin="0,14,0,0">
+                <Border Grid.Column="2" Style="{StaticResource UtilityPanel}">
+                    <StackPanel>
+                        <TextBlock Text="Collection Position" Style="{StaticResource InlineStatLabel}" />
+                        <TextBlock Text="{Binding BalanceDue, StringFormat=Balance Due: {0:N2}}" Style="{StaticResource PageSubtitleText}" Margin="0,8,0,0" />
+                        <TextBlock Text="{Binding StatusMessage}" Style="{StaticResource PageSubtitleText}" Margin="0,8,0,0" />
+                    </StackPanel>
+                </Border>
+            </Grid>
+
+            <Border Style="{StaticResource SectionCard}" VerticalAlignment="Top">
+                <Grid>
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="Auto" />
+                        <RowDefinition Height="Auto" />
+                        <RowDefinition Height="Auto" />
+                        <RowDefinition Height="Auto" />
+                    </Grid.RowDefinitions>
                     <Grid.ColumnDefinitions>
                         <ColumnDefinition Width="*" />
-                        <ColumnDefinition Width="Auto" />
+                        <ColumnDefinition Width="*" />
+                        <ColumnDefinition Width="210" />
+                        <ColumnDefinition Width="210" />
                     </Grid.ColumnDefinitions>
-                    <TextBlock Text="{Binding BalanceDue, StringFormat=Balance Due: {0:N2}}" VerticalAlignment="Center" Style="{StaticResource CaptionText}" />
-                    <TextBlock Grid.Column="1" Text="{Binding InvoiceTotal, StringFormat=Invoice Total: {0:N2}}" FontSize="22" FontWeight="Bold" Foreground="#111827" />
-                </Grid>
 
-                <StackPanel Grid.Row="3" Grid.ColumnSpan="4" Orientation="Horizontal" HorizontalAlignment="Right" Margin="0,14,0,0">
-                    <TextBlock Text="{Binding StatusMessage}" VerticalAlignment="Center" Margin="0,0,16,0" Style="{StaticResource CaptionText}" />
-                    <Button Content="Add Line" Command="{Binding AddLineCommand}" Style="{StaticResource SecondaryActionButton}" />
-                    <Button Content="Save Invoice" Command="{Binding SaveInvoiceCommand}" Style="{StaticResource PrimaryActionButton}" Margin="0" />
-                </StackPanel>
-            </Grid>
+                    <StackPanel Grid.ColumnSpan="4" Margin="0,0,0,14">
+                        <TextBlock Text="Invoice Builder" Style="{StaticResource CardTitleText}" />
+                        <TextBlock Text="Set customer, vehicle, sale type, and paid amount before finalizing the invoice."
+                                   Style="{StaticResource PageSubtitleText}"
+                                   Margin="0" />
+                    </StackPanel>
+
+                    <ComboBox Grid.Row="1" Grid.Column="0" Margin="0,0,12,12" ItemsSource="{Binding Customers}" SelectedItem="{Binding SelectedCustomer}" DisplayMemberPath="ShopName" materialDesign:HintAssist.Hint="Customer / Shop" />
+                    <ComboBox Grid.Row="1" Grid.Column="1" Margin="0,0,12,12" ItemsSource="{Binding Vehicles}" SelectedItem="{Binding SelectedVehicle}" DisplayMemberPath="VehicleNumber" materialDesign:HintAssist.Hint="Vehicle" />
+                    <ComboBox Grid.Row="1" Grid.Column="2" Margin="0,0,12,12" ItemsSource="{Binding SaleTypes}" SelectedItem="{Binding SaleType}" materialDesign:HintAssist.Hint="Sale Type" />
+                    <TextBox Grid.Row="1" Grid.Column="3" Margin="0,0,0,12" Text="{Binding PaidAmount}" materialDesign:HintAssist.Hint="Paid Amount" />
+
+                    <DockPanel Grid.Row="2" Grid.ColumnSpan="4" Margin="0,4,0,12">
+                        <StackPanel DockPanel.Dock="Left">
+                            <TextBlock Text="Invoice Lines" Style="{StaticResource FormLabel}" />
+                            <TextBlock Text="Add products, quantities, and prices before posting the invoice."
+                                       Style="{StaticResource PageSubtitleText}"
+                                       Margin="0,4,0,0" />
+                        </StackPanel>
+                        <WrapPanel DockPanel.Dock="Right" Margin="12,0,0,0" VerticalAlignment="Bottom">
+                            <Button Content="Add Line" Command="{Binding AddLineCommand}" Margin="0,0,8,0" />
+                            <Button Content="Save Invoice" Command="{Binding SaveInvoiceCommand}" />
+                        </WrapPanel>
+                    </DockPanel>
+
+                    <DataGrid Grid.Row="3" Grid.ColumnSpan="4" ItemsSource="{Binding Lines}" AutoGenerateColumns="False" CanUserAddRows="False" MaxHeight="260">
+                        <DataGrid.Columns>
+                            <DataGridTemplateColumn Header="Product" Width="*">
+                                <DataGridTemplateColumn.CellTemplate>
+                                    <DataTemplate>
+                                        <ComboBox ItemsSource="{Binding DataContext.Products, RelativeSource={RelativeSource AncestorType=UserControl}}"
+                                                  SelectedItem="{Binding Product}" DisplayMemberPath="Name" />
+                                    </DataTemplate>
+                                </DataGridTemplateColumn.CellTemplate>
+                            </DataGridTemplateColumn>
+                            <DataGridTextColumn Header="Qty" Binding="{Binding Quantity}" Width="120" />
+                            <DataGridTextColumn Header="Unit Price" Binding="{Binding UnitPrice}" Width="140" />
+                            <DataGridTextColumn Header="Line Total" Binding="{Binding LineTotal}" Width="140" IsReadOnly="True" />
+                        </DataGrid.Columns>
+                    </DataGrid>
+                </Grid>
             </Border>
         </StackPanel>
     </ScrollViewer>

@@ -5,44 +5,80 @@
     <ScrollViewer VerticalScrollBarVisibility="Auto">
         <StackPanel>
             <TextBlock Text="Supplier Payments" Style="{StaticResource PageTitleText}" />
-            <TextBlock Text="Review open invoices, record payment details, and confirm the selected balance before posting." Style="{StaticResource PageSubtitleText}" Margin="0,0,0,18" />
-            <Grid>
-                <Grid.ColumnDefinitions><ColumnDefinition Width="1.1*"/><ColumnDefinition Width="1.9*"/></Grid.ColumnDefinitions>
-                <Border Grid.Column="0" Style="{StaticResource SectionCard}" Margin="0,0,16,0">
+            <TextBlock Text="Track outgoing supplier settlements with a clearer invoice context and payment history."
+                       Style="{StaticResource PageSubtitleText}"
+                       Margin="0,0,0,18" />
+
+            <Grid Margin="0,0,0,16">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="Auto" />
+                    <ColumnDefinition Width="*" />
+                </Grid.ColumnDefinitions>
+
+                <Border Grid.Column="0" Style="{StaticResource InlineStatCard}" Margin="0,0,16,0">
                     <StackPanel>
-                <TextBlock Text="Supplier Payment Entry" Style="{StaticResource CardTitleText}" />
-                <TextBlock Text="Supplier" Style="{StaticResource FormLabel}" />
-                <ComboBox ItemsSource="{Binding Suppliers}" SelectedItem="{Binding SelectedSupplier}" DisplayMemberPath="Name" />
-                <TextBlock Text="Open Invoice" Style="{StaticResource FormLabel}" Margin="0,12,0,4" />
-                <ComboBox ItemsSource="{Binding OpenInvoices}" SelectedItem="{Binding SelectedInvoice}" DisplayMemberPath="InvoiceNo" />
-                <TextBlock Text="Reference Invoice" Style="{StaticResource FormLabel}" Margin="0,12,0,4" />
-                <TextBox Text="{Binding ReferenceInvoiceNo}" />
-                <TextBlock Text="{Binding SelectedInvoiceBalance, StringFormat=Selected Balance: {0:N2}}" Style="{StaticResource CaptionText}" Margin="0,6,0,0" />
-                <TextBlock Text="Amount" Style="{StaticResource FormLabel}" Margin="0,12,0,4" />
-                <TextBox Text="{Binding Amount}" />
-                <TextBlock Text="Payment Method" Style="{StaticResource FormLabel}" Margin="0,12,0,4" />
-                <TextBox Text="{Binding PaymentMethod}" />
-                <TextBlock Text="Notes" Style="{StaticResource FormLabel}" Margin="0,12,0,4" />
-                <TextBox Text="{Binding Notes}" Height="80" AcceptsReturn="True" TextWrapping="Wrap" />
-                <WrapPanel Margin="0,16,0,0">
-                    <Button Content="Save Payment" Command="{Binding SaveCommand}" Style="{StaticResource PrimaryActionButton}" />
-                    <Button Content="Refresh" Command="{Binding LoadCommand}" Style="{StaticResource SecondaryActionButton}" Margin="0" />
-                </WrapPanel>
-                <TextBlock Text="{Binding StatusMessage}" Style="{StaticResource StatusMessageText}" />
+                        <TextBlock Text="Payments Loaded" Style="{StaticResource InlineStatLabel}" />
+                        <TextBlock Text="{Binding Payments.Count}" Style="{StaticResource InlineStatValue}" />
                     </StackPanel>
                 </Border>
+
+                <Border Grid.Column="1" Style="{StaticResource UtilityPanel}">
+                    <StackPanel>
+                        <TextBlock Text="Invoice Balance" Style="{StaticResource InlineStatLabel}" />
+                        <TextBlock Text="{Binding SelectedInvoiceBalance, StringFormat=Selected Balance: {0:N2}}" Style="{StaticResource PageSubtitleText}" Margin="0,8,0,0" />
+                        <TextBlock Text="{Binding StatusMessage}" Style="{StaticResource PageSubtitleText}" Margin="0,8,0,0" />
+                    </StackPanel>
+                </Border>
+            </Grid>
+
+            <Grid>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="1.05*" />
+                    <ColumnDefinition Width="1.95*" />
+                </Grid.ColumnDefinitions>
+
+                <Border Grid.Column="0" Style="{StaticResource SectionCard}" Margin="0,0,16,0">
+                    <StackPanel>
+                        <TextBlock Text="Payment Entry" Style="{StaticResource CardTitleText}" />
+                        <TextBlock Text="Select the supplier invoice, then capture the payment method and settlement amount."
+                                   Style="{StaticResource PageSubtitleText}"
+                                   Margin="0,0,0,16" />
+                        <TextBlock Text="Supplier" Style="{StaticResource FormLabel}" />
+                        <ComboBox ItemsSource="{Binding Suppliers}" SelectedItem="{Binding SelectedSupplier}" DisplayMemberPath="Name" />
+                        <TextBlock Text="Open Invoice" Style="{StaticResource FormLabel}" Margin="0,12,0,4" />
+                        <ComboBox ItemsSource="{Binding OpenInvoices}" SelectedItem="{Binding SelectedInvoice}" DisplayMemberPath="InvoiceNo" />
+                        <TextBlock Text="Reference Invoice" Style="{StaticResource FormLabel}" Margin="0,12,0,4" />
+                        <TextBox Text="{Binding ReferenceInvoiceNo}" />
+                        <TextBlock Text="Amount" Style="{StaticResource FormLabel}" Margin="0,12,0,4" />
+                        <TextBox Text="{Binding Amount}" />
+                        <TextBlock Text="Payment Method" Style="{StaticResource FormLabel}" Margin="0,12,0,4" />
+                        <TextBox Text="{Binding PaymentMethod}" />
+                        <TextBlock Text="Notes" Style="{StaticResource FormLabel}" Margin="0,12,0,4" />
+                        <TextBox Text="{Binding Notes}" Height="80" AcceptsReturn="True" TextWrapping="Wrap" />
+                        <WrapPanel Margin="0,16,0,0">
+                            <Button Content="Save Payment" Command="{Binding SaveCommand}" Margin="0,0,8,0" />
+                            <Button Content="Refresh" Command="{Binding LoadCommand}" />
+                        </WrapPanel>
+                    </StackPanel>
+                </Border>
+
                 <Border Grid.Column="1" Style="{StaticResource SectionCard}">
                     <DockPanel>
-                        <TextBlock Text="Recent Supplier Payments" Style="{StaticResource CardTitleText}" DockPanel.Dock="Top" />
-                        <DataGrid ItemsSource="{Binding Payments}">
-                    <DataGrid.Columns>
-                        <DataGridTextColumn Header="Payment No" Binding="{Binding PaymentNo}" Width="160" />
-                        <DataGridTextColumn Header="Date" Binding="{Binding PaymentDate}" Width="150" />
-                        <DataGridTextColumn Header="Supplier" Binding="{Binding Supplier.Name}" Width="*" />
-                        <DataGridTextColumn Header="Ref Invoice" Binding="{Binding ReferenceInvoiceNo}" Width="140" />
-                        <DataGridTextColumn Header="Amount" Binding="{Binding Amount}" Width="120" />
-                        <DataGridTextColumn Header="Method" Binding="{Binding PaymentMethod}" Width="120" />
-                    </DataGrid.Columns>
+                        <StackPanel DockPanel.Dock="Top" Margin="0,0,0,12">
+                            <TextBlock Text="Recent Supplier Payments" Style="{StaticResource CardTitleText}" />
+                            <TextBlock Text="Review recently posted payments and referenced invoices."
+                                       Style="{StaticResource PageSubtitleText}"
+                                       Margin="0" />
+                        </StackPanel>
+                        <DataGrid ItemsSource="{Binding Payments}" AutoGenerateColumns="False" CanUserAddRows="False">
+                            <DataGrid.Columns>
+                                <DataGridTextColumn Header="Payment No" Binding="{Binding PaymentNo}" Width="160" />
+                                <DataGridTextColumn Header="Date" Binding="{Binding PaymentDate}" Width="150" />
+                                <DataGridTextColumn Header="Supplier" Binding="{Binding Supplier.Name}" Width="*" />
+                                <DataGridTextColumn Header="Ref Invoice" Binding="{Binding ReferenceInvoiceNo}" Width="140" />
+                                <DataGridTextColumn Header="Amount" Binding="{Binding Amount}" Width="120" />
+                                <DataGridTextColumn Header="Method" Binding="{Binding PaymentMethod}" Width="120" />
+                            </DataGrid.Columns>
                         </DataGrid>
                     </DockPanel>
                 </Border>
