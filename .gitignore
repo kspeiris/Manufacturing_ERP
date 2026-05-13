@@ -8,11 +8,15 @@ bin/
 obj/
 **/bin/
 **/obj/
+TestResults/
+publish/
+release/
 
 # Runtime databases and temp files
 *.db
 *.db-shm
 *.db-wal
+first-run-admin.txt
 
 # Logs
 *.log
@@ -25,11 +29,14 @@ desktop-run-build.log
 Exports/
 Reports/Exports/
 src/ManufacturingERP.Desktop/bin/**/Exports/
+Backups/
+src/ManufacturingERP.Desktop/bin/**/Backups/
 
 # Diagnostic and temporary files
 tmp_*.txt
 tmp_test.txt
 tmp_test2.txt
+*_wpftmp.csproj
 
 # IDE and user-specific files
 .vs/

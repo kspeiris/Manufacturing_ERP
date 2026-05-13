@@ -3,6 +3,7 @@ namespace ManufacturingERP.Application.DTOs;
 public class CreateJournalEntryRequest
 {
     public string Description { get; set; } = string.Empty;
+    public DateTime EntryDate { get; set; } = DateTime.Today;
     public List<CreateJournalLineRequest> Lines { get; set; } = new();
 }
 

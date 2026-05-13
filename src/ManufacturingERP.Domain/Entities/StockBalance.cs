@@ -9,4 +9,6 @@ public class StockBalance : BaseEntity
     public int WarehouseId { get; set; }
     public Warehouse? Warehouse { get; set; }
     public decimal QuantityOnHand { get; set; }
+    public decimal QuantityReserved { get; set; }
+    public decimal QuantityAvailable => QuantityOnHand - QuantityReserved;
 }

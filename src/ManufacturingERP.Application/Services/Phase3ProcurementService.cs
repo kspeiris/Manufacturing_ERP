@@ -79,9 +79,11 @@ public class Phase3ProcurementService
             Status = request.TotalAmount - request.PaidAmount <= 0 ? "Paid" : request.PaidAmount > 0 ? "Partially Paid" : "Open"
         };
 
+        await using var transaction = await _db.Database.BeginTransactionAsync();
         _db.SupplierInvoices.Add(invoice);
         await _db.SaveChangesAsync();
         await _auditService.LogAsync(GetActorUserId(actorUserId), "Create", "SupplierInvoice", invoice.Id.ToString(), null, invoice.InvoiceNo);
+        await transaction.CommitAsync();
         return Result<int>.Success(invoice.Id, invoice.InvoiceNo);
     }
 
@@ -137,6 +139,8 @@ public class Phase3ProcurementService
         };
         entity.TotalAmount = entity.Items.Sum(x => x.LineTotal);
 
+        await using var transaction = await _db.Database.BeginTransactionAsync();
+
         foreach (var line in request.Items)
         {
             var stock = await _db.StockBalances.FirstOrDefaultAsync(x => x.ProductId == line.ProductId && x.WarehouseId == request.WarehouseId);
@@ -159,6 +163,7 @@ public class Phase3ProcurementService
         _db.PurchaseReturns.Add(entity);
         await _db.SaveChangesAsync();
         await _auditService.LogAsync(GetActorUserId(actorUserId), "Create", "PurchaseReturn", entity.Id.ToString(), null, entity.ReturnNo);
+        await transaction.CommitAsync();
         return Result<int>.Success(entity.Id, entity.ReturnNo);
     }
 

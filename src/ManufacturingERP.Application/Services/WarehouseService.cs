@@ -100,6 +100,8 @@ public class WarehouseService
         if (newQty < 0)
             return Result.Failure("Adjustment would create negative stock.");
 
+        await using var transaction = await _db.Database.BeginTransactionAsync();
+
         stock.QuantityOnHand = newQty;
         var referenceNo = $"ADJ-{DateTime.Now:yyyyMMdd-HHmmssfff}";
         _db.WarehouseTransactions.Add(new WarehouseTransaction
@@ -115,6 +117,7 @@ public class WarehouseService
 
         await _db.SaveChangesAsync();
         await _auditService.LogAsync(GetActorUserId(actorUserId), "Create", "WarehouseAdjustment", referenceNo, null, $"{productId}|{warehouseId}|{quantityChange}|{reason.Trim()}");
+        await transaction.CommitAsync();
         return Result.Success("Stock adjustment saved.");
     }
 

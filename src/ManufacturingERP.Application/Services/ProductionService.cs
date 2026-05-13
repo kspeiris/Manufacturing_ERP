@@ -30,9 +30,11 @@ public class ProductionService
         if (product is null) return Result<int>.Failure("Finished product not found.");
         if (!string.Equals(product.ProductCategory?.Name, "Finished Goods", StringComparison.OrdinalIgnoreCase)) return Result<int>.Failure("Production orders can only be created for finished goods.");
         var entity = new ProductionOrder { OrderNo = $"PROD-{DateTime.Now:yyyyMMdd-HHmmssfff}", OrderDate = DateTime.Now, FinishedProductId = request.FinishedProductId, PlannedQuantity = request.PlannedQuantity, Status = "Planned" };
+        await using var transaction = await _db.Database.BeginTransactionAsync();
         _db.ProductionOrders.Add(entity);
         await _db.SaveChangesAsync();
         await _auditService.LogAsync(GetActorUserId(actorUserId), "Create", "ProductionOrder", entity.Id.ToString(), null, entity.OrderNo);
+        await transaction.CommitAsync();
         return Result<int>.Success(entity.Id, entity.OrderNo);
     }
 
@@ -62,9 +64,11 @@ public class ProductionService
             _db.BomLines.RemoveRange(existing.Lines);
             existing.Lines.Clear();
         }
+        await using var transaction = await _db.Database.BeginTransactionAsync();
         foreach (var line in request.Lines) existing.Lines.Add(new BomLine { MaterialProductId = line.MaterialProductId, QuantityRequired = line.QuantityRequired });
         await _db.SaveChangesAsync();
         await _auditService.LogAsync(GetActorUserId(actorUserId), "SaveBom", "BomHeader", existing.Id.ToString(), null, $"{request.FinishedProductId}|{existing.Version}|{request.Lines.Count}");
+        await transaction.CommitAsync();
         return Result<int>.Success(existing.Id, "BOM saved.");
     }
 
@@ -89,6 +93,7 @@ public class ProductionService
             var stock = await _db.StockBalances.FirstOrDefaultAsync(x => x.ProductId == bomLine.MaterialProductId && x.WarehouseId == warehouseId);
             if (stock is null || stock.QuantityOnHand < requiredQty) return Result.Failure($"Insufficient stock for material {bomLine.MaterialProduct?.Code ?? bomLine.MaterialProductId.ToString()}.");
         }
+        await using var transaction = await _db.Database.BeginTransactionAsync();
         decimal materialCost = 0;
         foreach (var bomLine in bom.Lines)
         {
@@ -104,6 +109,7 @@ public class ProductionService
         order.Status = order.Status == "Planned" ? "Materials Issued" : "In Progress";
         await _db.SaveChangesAsync();
         await _auditService.LogAsync(GetActorUserId(actorUserId), "IssueMaterials", "ProductionOrder", order.Id.ToString(), null, $"{order.OrderNo}|{basisQuantity}");
+        await transaction.CommitAsync();
         return Result.Success("Production materials issued.");
     }
 
@@ -125,6 +131,7 @@ public class ProductionService
         var newProcessedTotal = order.ProducedQuantity + order.ScrapQuantity + request.ProducedQuantity + request.ScrapQuantity;
         if (newProcessedTotal > order.PlannedQuantity) return Result.Failure("Finished goods receipt exceeds the planned quantity.");
         if (newProcessedTotal > issuedEquivalent) return Result.Failure("Finished goods receipt exceeds issued raw material coverage.");
+        await using var transaction = await _db.Database.BeginTransactionAsync();
         order.ProducedQuantity += request.ProducedQuantity;
         order.ScrapQuantity += request.ScrapQuantity;
         if (!string.IsNullOrWhiteSpace(request.BatchNo)) order.BatchNo = request.BatchNo.Trim();
@@ -140,6 +147,7 @@ public class ProductionService
         _db.WarehouseTransactions.Add(new WarehouseTransaction { ProductId = order.FinishedProductId, WarehouseId = request.WarehouseId, TransactionType = "PROD-RECEIPT", QuantityIn = request.ProducedQuantity, QuantityOut = 0, ReferenceNo = order.OrderNo, Remarks = string.IsNullOrWhiteSpace(order.BatchNo) ? "Finished goods receipt" : $"Finished goods receipt / {order.BatchNo}" });
         await _db.SaveChangesAsync();
         await _auditService.LogAsync(GetActorUserId(actorUserId), "ReceiveFinishedGoods", "ProductionOrder", order.Id.ToString(), null, $"{order.OrderNo}|{request.ProducedQuantity}|{request.ScrapQuantity}|{order.BatchNo}");
+        await transaction.CommitAsync();
         return Result.Success("Finished goods received.");
     }
 
@@ -154,8 +162,10 @@ public class ProductionService
         order.MaterialCost = issuedLines.Sum(x => x.QuantityIssued * x.CostPrice);
         order.LaborCost = laborCost;
         order.OverheadCost = overheadCost;
+        await using var transaction = await _db.Database.BeginTransactionAsync();
         await _db.SaveChangesAsync();
         await _auditService.LogAsync(GetActorUserId(actorUserId), "SaveCosting", "ProductionOrder", order.Id.ToString(), null, $"{order.OrderNo}|{laborCost}|{overheadCost}");
+        await transaction.CommitAsync();
         return Result.Success("Production costing updated.");
     }
 

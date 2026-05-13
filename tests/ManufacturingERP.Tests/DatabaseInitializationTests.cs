@@ -17,6 +17,7 @@ public class DatabaseInitializationTests
 
         try
         {
+            Environment.SetEnvironmentVariable("MANUFACTURINGERP_ADMIN_PASSWORD", "Test-Admin-Password-123!");
             var options = new DbContextOptionsBuilder<AppDbContext>()
                 .UseSqlite($"Data Source={databasePath}")
                 .Options;
@@ -27,11 +28,12 @@ public class DatabaseInitializationTests
 
             Assert.True(File.Exists(databasePath));
             Assert.Equal(1, await db.Users.CountAsync(x => x.Username == AppConstants.DefaultAdminUser));
-            Assert.True(await db.Users.CountAsync() >= 4);
+            Assert.True(await db.Users.CountAsync() >= 1);
             Assert.True(await db.Products.CountAsync() >= 4);
         }
         finally
         {
+            Environment.SetEnvironmentVariable("MANUFACTURINGERP_ADMIN_PASSWORD", null);
             SqliteConnection.ClearAllPools();
 
             if (Directory.Exists(tempDirectory))

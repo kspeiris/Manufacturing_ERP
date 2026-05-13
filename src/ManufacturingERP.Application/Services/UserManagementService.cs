@@ -45,6 +45,8 @@ public class UserManagementService
 
         if (string.IsNullOrWhiteSpace(request.Username))
             return Result<int>.Failure("Username is required.");
+        if (!request.Id.HasValue && string.IsNullOrWhiteSpace(request.Password))
+            return Result<int>.Failure("Password is required for new users.");
 
         var existingByUsername = await _db.Users.FirstOrDefaultAsync(x => x.Username == request.Username && x.Id != request.Id);
         if (existingByUsername is not null)
@@ -72,7 +74,7 @@ public class UserManagementService
         var user = new User
         {
             Username = request.Username,
-            PasswordHash = _passwordHasherService.Hash(string.IsNullOrWhiteSpace(request.Password) ? "1234" : request.Password),
+            PasswordHash = _passwordHasherService.Hash(request.Password),
             FullName = request.FullName,
             Role = request.Role,
             IsActive = request.IsActive
