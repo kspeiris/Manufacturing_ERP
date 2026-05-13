@@ -27,11 +27,16 @@
                 </Grid>
             </Border>
 
-            <WrapPanel Margin="0,0,0,4">
-                <Border Style="{StaticResource ResponsiveTileCard}"><StackPanel><TextBlock Text="Qty on Hand" Style="{StaticResource InlineStatLabel}" /><TextBlock Text="{Binding TotalQuantityOnHand, StringFormat=N2}" Style="{StaticResource InlineStatValue}" /><TextBlock Text="Current quantity available across stock rows." Style="{StaticResource PageSubtitleText}" /></StackPanel></Border>
-                <Border Style="{StaticResource ResponsiveTileCard}"><StackPanel><TextBlock Text="Stock Value" Style="{StaticResource InlineStatLabel}" /><TextBlock Text="{Binding TotalStockValue, StringFormat=N2}" Style="{StaticResource InlineStatValue}" /><TextBlock Text="Current carrying value of inventory." Style="{StaticResource PageSubtitleText}" /></StackPanel></Border>
-                <Border Style="{StaticResource ResponsiveTileCard}"><StackPanel><TextBlock Text="Selected Warehouse" Style="{StaticResource InlineStatLabel}" /><TextBlock Text="{Binding SelectedWarehouse.Name, TargetNullValue=Not selected}" Style="{StaticResource InlineStatValue}" /><TextBlock Text="Adjustment target location." Style="{StaticResource PageSubtitleText}" /></StackPanel></Border>
-            </WrapPanel>
+            <Grid Margin="0,0,0,4">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="*" />
+                    <ColumnDefinition Width="*" />
+                    <ColumnDefinition Width="*" />
+                </Grid.ColumnDefinitions>
+                <Border Grid.Column="0" Style="{StaticResource SectionCard}" Margin="0,0,16,16"><StackPanel><TextBlock Text="Qty on Hand" Style="{StaticResource InlineStatLabel}" /><TextBlock Text="{Binding TotalQuantityOnHand, StringFormat=N2}" Style="{StaticResource InlineStatValue}" /><TextBlock Text="Current quantity available across stock rows." Style="{StaticResource PageSubtitleText}" /></StackPanel></Border>
+                <Border Grid.Column="1" Style="{StaticResource SectionCard}" Margin="0,0,16,16"><StackPanel><TextBlock Text="Stock Value" Style="{StaticResource InlineStatLabel}" /><TextBlock Text="{Binding TotalStockValue, StringFormat=N2}" Style="{StaticResource InlineStatValue}" /><TextBlock Text="Current carrying value of inventory." Style="{StaticResource PageSubtitleText}" /></StackPanel></Border>
+                <Border Grid.Column="2" Style="{StaticResource SectionCard}" Margin="0,0,0,16"><StackPanel><TextBlock Text="Selected Warehouse" Style="{StaticResource InlineStatLabel}" /><TextBlock Text="{Binding SelectedWarehouse.Name, TargetNullValue=Not selected}" Style="{StaticResource InlineStatValue}" /><TextBlock Text="Adjustment target location." Style="{StaticResource PageSubtitleText}" /></StackPanel></Border>
+            </Grid>
 
             <Grid>
                 <Grid.ColumnDefinitions>
@@ -62,12 +67,28 @@
                 <StackPanel Grid.Column="1">
                     <Border Style="{StaticResource SectionCard}" Margin="0,0,0,16">
                         <DockPanel>
-                            <StackPanel DockPanel.Dock="Top" Margin="0,0,0,14">
-                                <TextBlock Text="Current Stock" Style="{StaticResource CardTitleText}" />
-                                <TextBlock Text="Review on-hand quantities and stock value by product and warehouse."
-                                           Style="{StaticResource PageSubtitleText}" Margin="0" />
-                            </StackPanel>
-                            <Border Background="#F8FBFF" BorderBrush="#DCE7F5" BorderThickness="1" CornerRadius="18" Padding="8">
+                            <Grid DockPanel.Dock="Top" Margin="0,0,0,14">
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition Width="*" />
+                                    <ColumnDefinition Width="Auto" />
+                                </Grid.ColumnDefinitions>
+                                <StackPanel>
+                                    <TextBlock Text="Current Stock" Style="{StaticResource CardTitleText}" />
+                                    <TextBlock Text="Review on-hand quantities and stock value by product and warehouse."
+                                               Style="{StaticResource PageSubtitleText}" Margin="0" />
+                                </StackPanel>
+                                <Border Grid.Column="1" Style="{StaticResource TableCountBadge}">
+                                    <TextBlock Text="{Binding StockRows.Count, StringFormat=Total: {0}}" Style="{StaticResource TableCountText}" />
+                                </Border>
+                            </Grid>
+                            <Border DockPanel.Dock="Top" Style="{StaticResource TableToolbarBorder}" Margin="0,0,0,14">
+                                <TextBlock Text="Warehouse stock register with quantity, cost, and total value visibility."
+                                           Style="{StaticResource PageSubtitleText}"
+                                           VerticalAlignment="Center"
+                                           Margin="0" />
+                            </Border>
+                            <Border Style="{StaticResource TableShellBorder}" Padding="8">
+                                <ScrollViewer Style="{StaticResource TableViewportScrollViewer}">
                                 <DataGrid ItemsSource="{Binding StockRows}" AutoGenerateColumns="False" CanUserAddRows="False" Height="240" MinWidth="760">
                                     <DataGrid.Columns>
                                         <DataGridTextColumn Header="Code" Binding="{Binding ProductCode}" Width="110" />
@@ -78,18 +99,35 @@
                                         <DataGridTextColumn Header="Value" Binding="{Binding StockValue}" Width="120" />
                                     </DataGrid.Columns>
                                 </DataGrid>
+                                </ScrollViewer>
                             </Border>
                         </DockPanel>
                     </Border>
 
                     <Border Style="{StaticResource SectionCard}">
                         <DockPanel>
-                            <StackPanel DockPanel.Dock="Top" Margin="0,0,0,14">
-                                <TextBlock Text="Stock Movement History" Style="{StaticResource CardTitleText}" />
-                                <TextBlock Text="Follow inbound, outbound, and adjustment references over time."
-                                           Style="{StaticResource PageSubtitleText}" Margin="0" />
-                            </StackPanel>
-                            <Border Background="#F8FBFF" BorderBrush="#DCE7F5" BorderThickness="1" CornerRadius="18" Padding="8">
+                            <Grid DockPanel.Dock="Top" Margin="0,0,0,14">
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition Width="*" />
+                                    <ColumnDefinition Width="Auto" />
+                                </Grid.ColumnDefinitions>
+                                <StackPanel>
+                                    <TextBlock Text="Stock Movement History" Style="{StaticResource CardTitleText}" />
+                                    <TextBlock Text="Follow inbound, outbound, and adjustment references over time."
+                                               Style="{StaticResource PageSubtitleText}" Margin="0" />
+                                </StackPanel>
+                                <Border Grid.Column="1" Style="{StaticResource TableCountBadge}">
+                                    <TextBlock Text="{Binding MovementRows.Count, StringFormat=Total: {0}}" Style="{StaticResource TableCountText}" />
+                                </Border>
+                            </Grid>
+                            <Border DockPanel.Dock="Top" Style="{StaticResource TableToolbarBorder}" Margin="0,0,0,14">
+                                <TextBlock Text="Movement ledger with dates, reference numbers, and quantity flow."
+                                           Style="{StaticResource PageSubtitleText}"
+                                           VerticalAlignment="Center"
+                                           Margin="0" />
+                            </Border>
+                            <Border Style="{StaticResource TableShellBorder}" Padding="8">
+                                <ScrollViewer Style="{StaticResource TableViewportScrollViewer}">
                                 <DataGrid ItemsSource="{Binding MovementRows}" AutoGenerateColumns="False" CanUserAddRows="False" Height="250" MinWidth="980">
                                     <DataGrid.Columns>
                                         <DataGridTextColumn Header="Date" Binding="{Binding TransactionDate}" Width="160" />
@@ -103,6 +141,7 @@
                                         <DataGridTextColumn Header="Remarks" Binding="{Binding Remarks}" Width="220" />
                                     </DataGrid.Columns>
                                 </DataGrid>
+                                </ScrollViewer>
                             </Border>
                         </DockPanel>
                     </Border>

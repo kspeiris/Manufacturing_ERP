@@ -15,3 +15,4 @@ C:\Projects\ManufacturingERP\src\ManufacturingERP.Application\obj\Debug\net8.0\M
 C:\Projects\ManufacturingERP\src\ManufacturingERP.Application\obj\Debug\net8.0\refint\ManufacturingERP.Application.dll
 C:\Projects\ManufacturingERP\src\ManufacturingERP.Application\obj\Debug\net8.0\ManufacturingERP.Application.pdb
 C:\Projects\ManufacturingERP\src\ManufacturingERP.Application\obj\Debug\net8.0\ref\ManufacturingERP.Application.dll
+C:\Projects\ManufacturingERP\src\ManufacturingERP.Application\obj\Debug\net8.0\ManufacturingERP.Application.sourcelink.json

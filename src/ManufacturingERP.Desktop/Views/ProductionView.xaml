@@ -27,11 +27,16 @@
                 </Grid>
             </Border>
 
-            <WrapPanel Margin="0,0,0,4">
-                <Border Style="{StaticResource ResponsiveTileCard}"><StackPanel><TextBlock Text="Orders Loaded" Style="{StaticResource InlineStatLabel}" /><TextBlock Text="{Binding ProductionOrders.Count}" Style="{StaticResource InlineStatValue}" /><TextBlock Text="Current production orders in view." Style="{StaticResource PageSubtitleText}" /></StackPanel></Border>
-                <Border Style="{StaticResource ResponsiveTileCard}"><StackPanel><TextBlock Text="Finished Goods" Style="{StaticResource InlineStatLabel}" /><TextBlock Text="{Binding FinishedProducts.Count}" Style="{StaticResource InlineStatValue}" /><TextBlock Text="Finished products available for order creation." Style="{StaticResource PageSubtitleText}" /></StackPanel></Border>
-                <Border Style="{StaticResource ResponsiveTileCard}"><StackPanel><TextBlock Text="Selected Order" Style="{StaticResource InlineStatLabel}" /><TextBlock Text="{Binding SelectedOrder.OrderNo, TargetNullValue=Not selected}" Style="{StaticResource InlineStatValue}" /><TextBlock Text="{Binding SelectedOrder.Status, StringFormat=Status: {0}, TargetNullValue=Choose an order from the grid}" Style="{StaticResource PageSubtitleText}" /></StackPanel></Border>
-            </WrapPanel>
+            <Grid Margin="0,0,0,4">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="*" />
+                    <ColumnDefinition Width="*" />
+                    <ColumnDefinition Width="*" />
+                </Grid.ColumnDefinitions>
+                <Border Grid.Column="0" Style="{StaticResource SectionCard}" Margin="0,0,16,16"><StackPanel><TextBlock Text="Orders Loaded" Style="{StaticResource InlineStatLabel}" /><TextBlock Text="{Binding ProductionOrders.Count}" Style="{StaticResource InlineStatValue}" /><TextBlock Text="Current production orders in view." Style="{StaticResource PageSubtitleText}" /></StackPanel></Border>
+                <Border Grid.Column="1" Style="{StaticResource SectionCard}" Margin="0,0,16,16"><StackPanel><TextBlock Text="Finished Goods" Style="{StaticResource InlineStatLabel}" /><TextBlock Text="{Binding FinishedProducts.Count}" Style="{StaticResource InlineStatValue}" /><TextBlock Text="Finished products available for order creation." Style="{StaticResource PageSubtitleText}" /></StackPanel></Border>
+                <Border Grid.Column="2" Style="{StaticResource SectionCard}" Margin="0,0,0,16"><StackPanel><TextBlock Text="Selected Order" Style="{StaticResource InlineStatLabel}" /><TextBlock Text="{Binding SelectedOrder.OrderNo, TargetNullValue=Not selected}" Style="{StaticResource InlineStatValue}" /><TextBlock Text="{Binding SelectedOrder.Status, StringFormat=Status: {0}, TargetNullValue=Choose an order from the grid}" Style="{StaticResource PageSubtitleText}" /></StackPanel></Border>
+            </Grid>
 
             <Grid>
                 <Grid.ColumnDefinitions>
@@ -69,15 +74,35 @@
 
                 <Border Grid.Column="1" Style="{StaticResource SectionCard}">
                     <DockPanel>
-                        <StackPanel DockPanel.Dock="Top" Margin="0,0,0,14">
-                            <WrapPanel>
-                                <TextBlock Text="Production Orders" Style="{StaticResource CardTitleText}" Margin="0,0,8,0" />
-                                <Button Content="Refresh" Command="{Binding RefreshOrdersCommand}" Style="{StaticResource PageActionButton}" Margin="0,0,0,8" />
-                            </WrapPanel>
-                            <TextBlock Text="Track planned, produced, and status values for all current production orders."
-                                       Style="{StaticResource PageSubtitleText}" Margin="0" />
-                        </StackPanel>
-                        <Border Background="#F8FBFF" BorderBrush="#DCE7F5" BorderThickness="1" CornerRadius="18" Padding="8">
+                        <Grid DockPanel.Dock="Top" Margin="0,0,0,14">
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="*" />
+                                <ColumnDefinition Width="Auto" />
+                            </Grid.ColumnDefinitions>
+                            <StackPanel>
+                                <TextBlock Text="Production Orders" Style="{StaticResource CardTitleText}" />
+                                <TextBlock Text="Track planned, produced, and status values for all current production orders."
+                                           Style="{StaticResource PageSubtitleText}" Margin="0" />
+                            </StackPanel>
+                            <Border Grid.Column="1" Style="{StaticResource TableCountBadge}">
+                                <TextBlock Text="{Binding ProductionOrders.Count, StringFormat=Total: {0}}" Style="{StaticResource TableCountText}" />
+                            </Border>
+                        </Grid>
+                        <Border DockPanel.Dock="Top" Style="{StaticResource TableToolbarBorder}" Margin="0,0,0,14">
+                            <Grid>
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition Width="*" />
+                                    <ColumnDefinition Width="Auto" />
+                                </Grid.ColumnDefinitions>
+                                <TextBlock Text="Production order register with quantities, finished output, and status."
+                                           Style="{StaticResource PageSubtitleText}"
+                                           VerticalAlignment="Center"
+                                           Margin="0" />
+                                <Button Grid.Column="1" Content="Refresh" Command="{Binding RefreshOrdersCommand}" Style="{StaticResource PageActionButton}" Margin="12,0,0,0" />
+                            </Grid>
+                        </Border>
+                        <Border Style="{StaticResource TableShellBorder}" Padding="8">
+                            <ScrollViewer Style="{StaticResource TableViewportScrollViewer}">
                             <DataGrid ItemsSource="{Binding ProductionOrders}" SelectedItem="{Binding SelectedOrder}" AutoGenerateColumns="False" CanUserAddRows="False" MinWidth="760" Height="460">
                                 <DataGrid.Columns>
                                     <DataGridTextColumn Header="Order No" Binding="{Binding OrderNo}" Width="180" />
@@ -88,6 +113,7 @@
                                     <DataGridTextColumn Header="Status" Binding="{Binding Status}" Width="130" />
                                 </DataGrid.Columns>
                             </DataGrid>
+                            </ScrollViewer>
                         </Border>
                     </DockPanel>
                 </Border>

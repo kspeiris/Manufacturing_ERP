@@ -66,8 +66,10 @@ public partial class SuppliersViewModel : ViewModelBase
     }
 
     [RelayCommand]
-    private async Task EditAsync()
+    private async Task EditAsync(Supplier? supplier = null)
     {
+        if (supplier is not null)
+            SelectedSupplier = supplier;
         var auth = _authorizationService.EnsureAdminAccess();
         if (!auth.IsSuccess) { StatusMessage = auth.Message; return; }
         if (SelectedSupplier is null) { StatusMessage = "Select a supplier."; return; }
@@ -107,8 +109,10 @@ public partial class SuppliersViewModel : ViewModelBase
     }
 
     [RelayCommand]
-    private async Task DeleteAsync()
+    private async Task DeleteAsync(Supplier? supplier = null)
     {
+        if (supplier is not null)
+            SelectedSupplier = supplier;
         var auth = _authorizationService.EnsureAdminAccess();
         if (!auth.IsSuccess) { StatusMessage = auth.Message; return; }
         if (SelectedSupplier is null) { StatusMessage = "Select a supplier."; return; }
@@ -133,6 +137,13 @@ public partial class SuppliersViewModel : ViewModelBase
     }
 
     partial void OnSearchTextChanged(string value) => ApplyFilter();
+
+    [RelayCommand]
+    private void SelectSupplier(Supplier? supplier)
+    {
+        if (supplier is not null)
+            SelectedSupplier = supplier;
+    }
 
     private void ApplyFilter()
     {

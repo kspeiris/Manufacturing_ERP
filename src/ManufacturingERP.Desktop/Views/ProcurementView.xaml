@@ -27,11 +27,16 @@
                 </Grid>
             </Border>
 
-            <WrapPanel Margin="0,0,0,4">
-                <Border Style="{StaticResource ResponsiveTileCard}"><StackPanel><TextBlock Text="PO Lines" Style="{StaticResource InlineStatLabel}" /><TextBlock Text="{Binding Lines.Count}" Style="{StaticResource InlineStatValue}" /><TextBlock Text="Current line items in the working document." Style="{StaticResource PageSubtitleText}" /></StackPanel></Border>
-                <Border Style="{StaticResource ResponsiveTileCard}"><StackPanel><TextBlock Text="Supplier" Style="{StaticResource InlineStatLabel}" /><TextBlock Text="{Binding SelectedSupplier.Name, TargetNullValue=Not selected}" Style="{StaticResource InlineStatValue}" /><TextBlock Text="Current supplier on the document." Style="{StaticResource PageSubtitleText}" /></StackPanel></Border>
-                <Border Style="{StaticResource ResponsiveTileCard}"><StackPanel><TextBlock Text="Warehouse" Style="{StaticResource InlineStatLabel}" /><TextBlock Text="{Binding SelectedWarehouse.Name, TargetNullValue=Not selected}" Style="{StaticResource InlineStatValue}" /><TextBlock Text="Receiving destination for the GRN." Style="{StaticResource PageSubtitleText}" /></StackPanel></Border>
-            </WrapPanel>
+            <Grid Margin="0,0,0,4">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="*" />
+                    <ColumnDefinition Width="*" />
+                    <ColumnDefinition Width="*" />
+                </Grid.ColumnDefinitions>
+                <Border Grid.Column="0" Style="{StaticResource SectionCard}" Margin="0,0,16,16"><StackPanel><TextBlock Text="PO Lines" Style="{StaticResource InlineStatLabel}" /><TextBlock Text="{Binding Lines.Count}" Style="{StaticResource InlineStatValue}" /><TextBlock Text="Current line items in the working document." Style="{StaticResource PageSubtitleText}" /></StackPanel></Border>
+                <Border Grid.Column="1" Style="{StaticResource SectionCard}" Margin="0,0,16,16"><StackPanel><TextBlock Text="Supplier" Style="{StaticResource InlineStatLabel}" /><TextBlock Text="{Binding SelectedSupplier.Name, TargetNullValue=Not selected}" Style="{StaticResource InlineStatValue}" /><TextBlock Text="Current supplier on the document." Style="{StaticResource PageSubtitleText}" /></StackPanel></Border>
+                <Border Grid.Column="2" Style="{StaticResource SectionCard}" Margin="0,0,0,16"><StackPanel><TextBlock Text="Warehouse" Style="{StaticResource InlineStatLabel}" /><TextBlock Text="{Binding SelectedWarehouse.Name, TargetNullValue=Not selected}" Style="{StaticResource InlineStatValue}" /><TextBlock Text="Receiving destination for the GRN." Style="{StaticResource PageSubtitleText}" /></StackPanel></Border>
+            </Grid>
 
             <Grid>
                 <Grid.ColumnDefinitions>
@@ -62,12 +67,28 @@
 
                 <Border Grid.Column="1" Style="{StaticResource SectionCard}">
                     <DockPanel>
-                        <StackPanel DockPanel.Dock="Top" Margin="0,0,0,14">
-                            <TextBlock Text="Line Items" Style="{StaticResource CardTitleText}" />
-                            <TextBlock Text="Complete the buying document with product quantities and prices."
-                                       Style="{StaticResource PageSubtitleText}" Margin="0" />
-                        </StackPanel>
-                        <Border Background="#F8FBFF" BorderBrush="#DCE7F5" BorderThickness="1" CornerRadius="18" Padding="8">
+                        <Grid DockPanel.Dock="Top" Margin="0,0,0,14">
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="*" />
+                                <ColumnDefinition Width="Auto" />
+                            </Grid.ColumnDefinitions>
+                            <StackPanel>
+                                <TextBlock Text="Line Items" Style="{StaticResource CardTitleText}" />
+                                <TextBlock Text="Complete the buying document with product quantities and prices."
+                                           Style="{StaticResource PageSubtitleText}" Margin="0" />
+                            </StackPanel>
+                            <Border Grid.Column="1" Style="{StaticResource TableCountBadge}">
+                                <TextBlock Text="{Binding Lines.Count, StringFormat=Total: {0}}" Style="{StaticResource TableCountText}" />
+                            </Border>
+                        </Grid>
+                        <Border DockPanel.Dock="Top" Style="{StaticResource TableToolbarBorder}" Margin="0,0,0,14">
+                            <TextBlock Text="Purchase document lines with product, quantity, and unit pricing."
+                                       Style="{StaticResource PageSubtitleText}"
+                                       VerticalAlignment="Center"
+                                       Margin="0" />
+                        </Border>
+                        <Border Style="{StaticResource TableShellBorder}" Padding="8">
+                            <ScrollViewer Style="{StaticResource TableViewportScrollViewer}">
                             <DataGrid ItemsSource="{Binding Lines}" AutoGenerateColumns="False" CanUserAddRows="False" Height="420" MinWidth="740">
                                 <DataGrid.Columns>
                                     <DataGridComboBoxColumn Header="Product" Width="*" SelectedItemBinding="{Binding Product}" DisplayMemberPath="Name"
@@ -77,6 +98,7 @@
                                     <DataGridTextColumn Header="Unit Price" Width="140" Binding="{Binding UnitPrice}" />
                                 </DataGrid.Columns>
                             </DataGrid>
+                            </ScrollViewer>
                         </Border>
                     </DockPanel>
                 </Border>

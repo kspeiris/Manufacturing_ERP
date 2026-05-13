@@ -80,8 +80,10 @@ public partial class CustomersViewModel : ViewModelBase
     }
 
     [RelayCommand]
-    private async Task EditAsync()
+    private async Task EditAsync(Customer? customer = null)
     {
+        if (customer is not null)
+            SelectedCustomer = customer;
         var auth = _authorizationService.EnsureSalesAccess();
         if (!auth.IsSuccess) { StatusMessage = auth.Message; return; }
         if (SelectedCustomer is null)
@@ -140,8 +142,10 @@ public partial class CustomersViewModel : ViewModelBase
     }
 
     [RelayCommand]
-    private async Task DeleteAsync()
+    private async Task DeleteAsync(Customer? customer = null)
     {
+        if (customer is not null)
+            SelectedCustomer = customer;
         var auth = _authorizationService.EnsureSalesAccess();
         if (!auth.IsSuccess) { StatusMessage = auth.Message; return; }
         if (SelectedCustomer is null)
@@ -171,6 +175,13 @@ public partial class CustomersViewModel : ViewModelBase
     }
 
     partial void OnSearchTextChanged(string value) => ApplyFilter();
+
+    [RelayCommand]
+    private void SelectCustomer(Customer? customer)
+    {
+        if (customer is not null)
+            SelectedCustomer = customer;
+    }
 
     private void ApplyFilter()
     {

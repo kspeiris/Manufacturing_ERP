@@ -59,8 +59,10 @@ public partial class RoutesViewModel : ViewModelBase
     }
 
     [RelayCommand]
-    private async Task EditAsync()
+    private async Task EditAsync(RoutePlan? route = null)
     {
+        if (route is not null)
+            SelectedRoute = route;
         var auth = _authorizationService.EnsureAdminAccess();
         if (!auth.IsSuccess) { StatusMessage = auth.Message; return; }
         if (SelectedRoute is null) { StatusMessage = "Select a route."; return; }
@@ -94,8 +96,10 @@ public partial class RoutesViewModel : ViewModelBase
     }
 
     [RelayCommand]
-    private async Task DeleteAsync()
+    private async Task DeleteAsync(RoutePlan? route = null)
     {
+        if (route is not null)
+            SelectedRoute = route;
         var auth = _authorizationService.EnsureAdminAccess();
         if (!auth.IsSuccess) { StatusMessage = auth.Message; return; }
         if (SelectedRoute is null) { StatusMessage = "Select a route."; return; }
@@ -120,6 +124,13 @@ public partial class RoutesViewModel : ViewModelBase
     }
 
     partial void OnSearchTextChanged(string value) => ApplyFilter();
+
+    [RelayCommand]
+    private void SelectRoute(RoutePlan? route)
+    {
+        if (route is not null)
+            SelectedRoute = route;
+    }
 
     private void ApplyFilter()
     {

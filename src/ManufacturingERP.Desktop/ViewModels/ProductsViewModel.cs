@@ -80,8 +80,10 @@ public partial class ProductsViewModel : ViewModelBase
     }
 
     [RelayCommand]
-    private async Task EditAsync()
+    private async Task EditAsync(Product? product = null)
     {
+        if (product is not null)
+            SelectedProduct = product;
         var auth = _authorizationService.EnsureSalesAccess();
         if (!auth.IsSuccess) { StatusMessage = auth.Message; return; }
         if (SelectedProduct is null)
@@ -138,8 +140,10 @@ public partial class ProductsViewModel : ViewModelBase
     }
 
     [RelayCommand]
-    private async Task DeleteAsync()
+    private async Task DeleteAsync(Product? product = null)
     {
+        if (product is not null)
+            SelectedProduct = product;
         var auth = _authorizationService.EnsureSalesAccess();
         if (!auth.IsSuccess) { StatusMessage = auth.Message; return; }
         if (SelectedProduct is null)
@@ -169,6 +173,13 @@ public partial class ProductsViewModel : ViewModelBase
     }
 
     partial void OnSearchTextChanged(string value) => ApplyFilter();
+
+    [RelayCommand]
+    private void SelectProduct(Product? product)
+    {
+        if (product is not null)
+            SelectedProduct = product;
+    }
 
     [RelayCommand]
     private void SetActiveTab(string? tab)

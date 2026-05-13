@@ -34,11 +34,10 @@
 
                         <Border Grid.Row="2" Background="#172554" BorderBrush="#2563EB" BorderThickness="1" CornerRadius="18" Padding="18">
                             <StackPanel>
-                                <TextBlock Text="Directory Search" Foreground="#93C5FD" FontWeight="SemiBold" />
-                                <TextBox Margin="0,12,0,0"
-                                         Text="{Binding SearchText, UpdateSourceTrigger=PropertyChanged}"
-                                         materialDesign:HintAssist.Hint="Search by code, shop, owner, route, or phone" />
-                                <TextBlock Text="{Binding StatusMessage}" Foreground="#CBD5E1" Margin="0,10,0,0" TextWrapping="Wrap" />
+                                <TextBlock Text="Selected Shop" Foreground="#93C5FD" FontWeight="SemiBold" />
+                                <TextBlock Text="{Binding SelectedCustomer.ShopName, TargetNullValue=No customer selected}" Foreground="White" FontSize="22" FontWeight="SemiBold" Margin="0,10,0,0" TextWrapping="Wrap" />
+                                <TextBlock Text="{Binding SelectedCustomer.Route, StringFormat=Route: {0}, TargetNullValue=Pick a row in the directory to inspect customer details.}" Foreground="#CBD5E1" Margin="0,8,0,0" TextWrapping="Wrap" />
+                                <TextBlock Text="{Binding StatusMessage}" Foreground="#93C5FD" Margin="0,10,0,0" TextWrapping="Wrap" />
                             </StackPanel>
                         </Border>
                     </Grid>
@@ -81,11 +80,36 @@
 
                 <Border Grid.Column="0" Style="{StaticResource SectionCard}" Margin="0,0,16,16">
                     <DockPanel>
-                        <StackPanel DockPanel.Dock="Top" Margin="0,0,0,14">
-                            <TextBlock Text="Customer Directory" Style="{StaticResource CardTitleText}" />
-                            <TextBlock Text="Use the directory to manage outlet details, routes, and outstanding balances." Style="{StaticResource PageSubtitleText}" Margin="0" />
-                        </StackPanel>
-                        <Border Background="#F8FBFF" BorderBrush="#DCE7F5" BorderThickness="1" CornerRadius="18" Padding="8">
+                        <Grid DockPanel.Dock="Top" Margin="0,0,0,14">
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="*" />
+                                <ColumnDefinition Width="Auto" />
+                            </Grid.ColumnDefinitions>
+                            <StackPanel>
+                                <TextBlock Text="Customer Directory" Style="{StaticResource CardTitleText}" />
+                                <TextBlock Text="Use the directory to manage outlet details, routes, and outstanding balances." Style="{StaticResource PageSubtitleText}" Margin="0" />
+                            </StackPanel>
+                            <Border Grid.Column="1" Style="{StaticResource TableCountBadge}">
+                                <TextBlock Text="{Binding Customers.Count, StringFormat=Total: {0}}" Style="{StaticResource TableCountText}" />
+                            </Border>
+                        </Grid>
+                        <Border DockPanel.Dock="Top" Style="{StaticResource TableToolbarBorder}" Margin="0,0,0,14">
+                            <Grid>
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition Width="*" />
+                                    <ColumnDefinition Width="Auto" />
+                                </Grid.ColumnDefinitions>
+                                <TextBox Text="{Binding SearchText, UpdateSourceTrigger=PropertyChanged}"
+                                         materialDesign:HintAssist.Hint="Search by code, shop, owner, route, or phone" />
+                                <Button Grid.Column="1"
+                                        Content="Refresh"
+                                        Command="{Binding LoadCommand}"
+                                        Style="{StaticResource PageActionButton}"
+                                        Margin="12,0,0,0" />
+                            </Grid>
+                        </Border>
+                        <Border Style="{StaticResource TableShellBorder}" Padding="8">
+                            <ScrollViewer Style="{StaticResource TableViewportScrollViewer}">
                             <DataGrid ItemsSource="{Binding Customers}" SelectedItem="{Binding SelectedCustomer}" AutoGenerateColumns="False" CanUserAddRows="False" MaxHeight="460" MinWidth="980">
                                 <DataGrid.Columns>
                                     <DataGridTextColumn Header="Code" Binding="{Binding CustomerCode}" Width="120" />
@@ -94,9 +118,43 @@
                                     <DataGridTextColumn Header="Route" Binding="{Binding Route}" Width="120" />
                                     <DataGridTextColumn Header="Phone" Binding="{Binding ContactNumber}" Width="140" />
                                     <DataGridTextColumn Header="Outstanding" Binding="{Binding OutstandingBalance, StringFormat=N2}" Width="140" />
-                                    <DataGridCheckBoxColumn Header="Active" Binding="{Binding IsActive}" Width="90" />
+                                    <DataGridTemplateColumn Header="Status" Width="120">
+                                        <DataGridTemplateColumn.CellTemplate>
+                                            <DataTemplate>
+                                                <Border x:Name="StatusBadge" Background="#FEE2E2" BorderBrush="#FECACA" BorderThickness="1" CornerRadius="999" Padding="10,4" HorizontalAlignment="Left">
+                                                    <TextBlock x:Name="StatusText" Text="Inactive" Foreground="#B91C1C" FontWeight="SemiBold" />
+                                                </Border>
+                                                <DataTemplate.Triggers>
+                                                    <DataTrigger Binding="{Binding IsActive}" Value="True">
+                                                        <Setter TargetName="StatusBadge" Property="Background" Value="#DCFCE7" />
+                                                        <Setter TargetName="StatusBadge" Property="BorderBrush" Value="#BBF7D0" />
+                                                        <Setter TargetName="StatusText" Property="Text" Value="Active" />
+                                                        <Setter TargetName="StatusText" Property="Foreground" Value="#15803D" />
+                                                    </DataTrigger>
+                                                </DataTemplate.Triggers>
+                                            </DataTemplate>
+                                        </DataGridTemplateColumn.CellTemplate>
+                                    </DataGridTemplateColumn>
+                                    <DataGridTemplateColumn Header="Actions" Width="132">
+                                        <DataGridTemplateColumn.CellTemplate>
+                                            <DataTemplate>
+                                                <StackPanel Orientation="Horizontal">
+                                                    <Button Style="{StaticResource TableActionIconButton}" ToolTip="View" Command="{Binding DataContext.SelectCustomerCommand, RelativeSource={RelativeSource AncestorType=UserControl}}" CommandParameter="{Binding}">
+                                                        <materialDesign:PackIcon Kind="EyeOutline" Width="18" Height="18" Foreground="#2563EB" />
+                                                    </Button>
+                                                    <Button Style="{StaticResource TableActionIconButton}" ToolTip="Edit" Command="{Binding DataContext.EditCommand, RelativeSource={RelativeSource AncestorType=UserControl}}" CommandParameter="{Binding}">
+                                                        <materialDesign:PackIcon Kind="PencilOutline" Width="18" Height="18" Foreground="#D97706" />
+                                                    </Button>
+                                                    <Button Style="{StaticResource TableActionIconButton}" ToolTip="Delete" Command="{Binding DataContext.DeleteCommand, RelativeSource={RelativeSource AncestorType=UserControl}}" CommandParameter="{Binding}" Margin="0">
+                                                        <materialDesign:PackIcon Kind="TrashCanOutline" Width="18" Height="18" Foreground="#DC2626" />
+                                                    </Button>
+                                                </StackPanel>
+                                            </DataTemplate>
+                                        </DataGridTemplateColumn.CellTemplate>
+                                    </DataGridTemplateColumn>
                                 </DataGrid.Columns>
                             </DataGrid>
+                            </ScrollViewer>
                         </Border>
                     </DockPanel>
                 </Border>

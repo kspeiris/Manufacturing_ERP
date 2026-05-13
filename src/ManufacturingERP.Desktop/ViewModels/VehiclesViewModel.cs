@@ -59,8 +59,10 @@ public partial class VehiclesViewModel : ViewModelBase
     }
 
     [RelayCommand]
-    private async Task EditAsync()
+    private async Task EditAsync(Vehicle? vehicle = null)
     {
+        if (vehicle is not null)
+            SelectedVehicle = vehicle;
         var auth = _authorizationService.EnsureAdminAccess();
         if (!auth.IsSuccess) { StatusMessage = auth.Message; return; }
         if (SelectedVehicle is null) { StatusMessage = "Select a vehicle."; return; }
@@ -94,8 +96,10 @@ public partial class VehiclesViewModel : ViewModelBase
     }
 
     [RelayCommand]
-    private async Task DeleteAsync()
+    private async Task DeleteAsync(Vehicle? vehicle = null)
     {
+        if (vehicle is not null)
+            SelectedVehicle = vehicle;
         var auth = _authorizationService.EnsureAdminAccess();
         if (!auth.IsSuccess) { StatusMessage = auth.Message; return; }
         if (SelectedVehicle is null) { StatusMessage = "Select a vehicle."; return; }
@@ -120,6 +124,13 @@ public partial class VehiclesViewModel : ViewModelBase
     }
 
     partial void OnSearchTextChanged(string value) => ApplyFilter();
+
+    [RelayCommand]
+    private void SelectVehicle(Vehicle? vehicle)
+    {
+        if (vehicle is not null)
+            SelectedVehicle = vehicle;
+    }
 
     private void ApplyFilter()
     {
