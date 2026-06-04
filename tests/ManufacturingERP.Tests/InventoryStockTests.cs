@@ -127,6 +127,66 @@ public class InventoryStockTests
         Assert.Equal(5m, movement!.QuantityOut);
     }
 
+    [Fact]
+    public async Task VehicleLoad_Should_Check_AggregatedQuantity_ForDuplicateProductLines()
+    {
+        await using var harness = await InventoryTestHarness.CreateAsync();
+
+        var opening = await harness.WarehouseService.CreateAdjustmentAsync(harness.Product.Id, harness.Warehouse.Id, 10m, "Opening stock");
+        Assert.True(opening.IsSuccess, opening.Message);
+
+        var load = await harness.InventoryService.CreateVehicleLoadAsync(new LoadVehicleRequest
+        {
+            VehicleId = harness.Vehicle.Id,
+            RouteName = "North Route",
+            LoadDate = DateTime.Today,
+            Items =
+            [
+                new LoadVehicleItemRequest { ProductId = harness.Product.Id, Quantity = 6m },
+                new LoadVehicleItemRequest { ProductId = harness.Product.Id, Quantity = 6m }
+            ]
+        }, harness.Warehouse.Id);
+
+        Assert.False(load.IsSuccess);
+        await harness.ReloadAsync();
+        Assert.Equal(10m, harness.Stock.QuantityOnHand);
+    }
+
+    [Fact]
+    public async Task VehicleLoad_Should_ConsumeBatchLots_ForBatchTrackedProducts()
+    {
+        await using var harness = await InventoryTestHarness.CreateAsync();
+
+        harness.Product.TrackBatch = true;
+        harness.Stock.QuantityOnHand = 10m;
+        harness.Db.BatchLots.Add(new BatchLot
+        {
+            LotNumber = "LOT-OLD",
+            ProductId = harness.Product.Id,
+            WarehouseId = harness.Warehouse.Id,
+            ManufacturingDate = DateTime.Today.AddDays(-10),
+            ExpiryDate = DateTime.Today.AddMonths(1),
+            QuantityReceived = 10m,
+            QuantityOnHand = 10m
+        });
+        await harness.Db.SaveChangesAsync();
+
+        var load = await harness.InventoryService.CreateVehicleLoadAsync(new LoadVehicleRequest
+        {
+            VehicleId = harness.Vehicle.Id,
+            RouteName = "North Route",
+            LoadDate = DateTime.Today,
+            Items = [new LoadVehicleItemRequest { ProductId = harness.Product.Id, Quantity = 4m }]
+        }, harness.Warehouse.Id);
+
+        Assert.True(load.IsSuccess, load.Message);
+
+        await harness.ReloadAsync();
+        var lot = await harness.Db.BatchLots.FirstAsync(x => x.ProductId == harness.Product.Id);
+        Assert.Equal(6m, harness.Stock.QuantityOnHand);
+        Assert.Equal(6m, lot.QuantityOnHand);
+    }
+
     private sealed class InventoryTestHarness : IAsyncDisposable
     {
         private readonly string _tempDirectory;

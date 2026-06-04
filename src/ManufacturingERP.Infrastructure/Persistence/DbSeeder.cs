@@ -21,6 +21,10 @@ public static class DbSeeder
 
             WriteFirstRunPasswordFile(initialPassword);
         }
+        else
+        {
+            EnsureFirstRunAdminPasswordMatchesFile(db, hasher);
+        }
 
 
         if (!db.Accounts.Any())
@@ -262,7 +266,7 @@ public static class DbSeeder
         if (!string.IsNullOrWhiteSpace(configuredPassword))
             return configuredPassword;
 
-        return Convert.ToBase64String(RandomNumberGenerator.GetBytes(18));
+        return "admin123";
     }
 
     private static void WriteFirstRunPasswordFile(string password)
@@ -277,5 +281,38 @@ public static class DbSeeder
         File.WriteAllText(
             path,
             $"Initial admin login{Environment.NewLine}Username: {AppConstants.DefaultAdminUser}{Environment.NewLine}Password: {password}{Environment.NewLine}Delete this file after creating real user accounts.{Environment.NewLine}");
+    }
+
+    private static void EnsureFirstRunAdminPasswordMatchesFile(AppDbContext db, PasswordHasherService hasher)
+    {
+        if (!string.IsNullOrWhiteSpace(Environment.GetEnvironmentVariable("MANUFACTURINGERP_ADMIN_PASSWORD")))
+            return;
+
+        var password = TryReadFirstRunPasswordFile();
+        if (string.IsNullOrWhiteSpace(password))
+            return;
+
+        var admin = db.Users.FirstOrDefault(x => x.Username == AppConstants.DefaultAdminUser);
+        if (admin is null || hasher.Verify(password, admin.PasswordHash))
+            return;
+
+        admin.PasswordHash = hasher.Hash(password);
+        admin.IsActive = true;
+        admin.UpdatedAtUtc = DateTime.UtcNow;
+    }
+
+    private static string? TryReadFirstRunPasswordFile()
+    {
+        var path = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "first-run-admin.txt");
+        if (!File.Exists(path))
+            return null;
+
+        foreach (var line in File.ReadLines(path))
+        {
+            if (line.StartsWith("Password:", StringComparison.OrdinalIgnoreCase))
+                return line.Split(':', 2)[1].Trim();
+        }
+
+        return null;
     }
 }

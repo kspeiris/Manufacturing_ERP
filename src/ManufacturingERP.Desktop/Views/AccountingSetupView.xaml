@@ -1,0 +1,194 @@
+<UserControl x:Class="ManufacturingERP.Desktop.Views.AccountingSetupView"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes">
+    <ScrollViewer VerticalScrollBarVisibility="Auto">
+        <StackPanel>
+            <TextBlock Text="Accounting Setup" Style="{StaticResource PageTitleText}" />
+            <TextBlock Text="{Binding StatusMessage}" Style="{StaticResource PageSubtitleText}" Margin="0,0,0,16" />
+
+            <TabControl>
+                <TabItem Header="Fiscal Periods">
+                    <Grid Margin="0,16,0,0">
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="1.05*" />
+                            <ColumnDefinition Width="1.95*" />
+                        </Grid.ColumnDefinitions>
+                        <Border Grid.Column="0" Style="{StaticResource SectionCard}" Margin="0,0,16,0">
+                            <StackPanel>
+                                <TextBlock Text="Period Setup" Style="{StaticResource CardTitleText}" />
+                                <TextBlock Text="Year" Style="{StaticResource FormLabel}" />
+                                <TextBox Text="{Binding FiscalYear}" />
+                                <TextBlock Text="Period No" Style="{StaticResource FormLabel}" Margin="0,12,0,4" />
+                                <TextBox Text="{Binding PeriodNumber}" />
+                                <TextBlock Text="Name" Style="{StaticResource FormLabel}" Margin="0,12,0,4" />
+                                <TextBox Text="{Binding PeriodName}" />
+                                <TextBlock Text="Start" Style="{StaticResource FormLabel}" Margin="0,12,0,4" />
+                                <DatePicker SelectedDate="{Binding PeriodStartDate}" />
+                                <TextBlock Text="End" Style="{StaticResource FormLabel}" Margin="0,12,0,4" />
+                                <DatePicker SelectedDate="{Binding PeriodEndDate}" />
+                                <WrapPanel Margin="0,16,0,0">
+                                    <Button Content="New" Command="{Binding NewFiscalPeriodCommand}" Margin="0,0,8,8" />
+                                    <Button Content="Save" Command="{Binding SaveFiscalPeriodCommand}" Margin="0,0,8,8" />
+                                    <Button Content="Close" Command="{Binding CloseFiscalPeriodCommand}" Margin="0,0,8,8" />
+                                    <Button Content="Lock" Command="{Binding LockFiscalPeriodCommand}" Margin="0,0,8,8" />
+                                    <Button Content="Reopen" Command="{Binding ReopenFiscalPeriodCommand}" />
+                                </WrapPanel>
+                            </StackPanel>
+                        </Border>
+                        <Border Grid.Column="1" Style="{StaticResource SectionCard}">
+                            <DataGrid ItemsSource="{Binding FiscalPeriods}" SelectedItem="{Binding SelectedFiscalPeriod}" AutoGenerateColumns="False" CanUserAddRows="False" Height="520">
+                                <DataGrid.Columns>
+                                    <DataGridTextColumn Header="Year" Binding="{Binding FiscalYear}" Width="90" />
+                                    <DataGridTextColumn Header="No" Binding="{Binding PeriodNumber}" Width="70" />
+                                    <DataGridTextColumn Header="Name" Binding="{Binding PeriodName}" Width="*" />
+                                    <DataGridTextColumn Header="Start" Binding="{Binding StartDate, StringFormat=d}" Width="120" />
+                                    <DataGridTextColumn Header="End" Binding="{Binding EndDate, StringFormat=d}" Width="120" />
+                                    <DataGridTextColumn Header="Status" Binding="{Binding Status}" Width="120" />
+                                </DataGrid.Columns>
+                            </DataGrid>
+                        </Border>
+                    </Grid>
+                </TabItem>
+
+                <TabItem Header="Chart of Accounts">
+                    <Grid Margin="0,16,0,0">
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="1.05*" />
+                            <ColumnDefinition Width="1.95*" />
+                        </Grid.ColumnDefinitions>
+                        <Border Grid.Column="0" Style="{StaticResource SectionCard}" Margin="0,0,16,0">
+                            <StackPanel>
+                                <TextBlock Text="Account" Style="{StaticResource CardTitleText}" />
+                                <TextBlock Text="Code" Style="{StaticResource FormLabel}" />
+                                <TextBox Text="{Binding AccountCode}" />
+                                <TextBlock Text="Name" Style="{StaticResource FormLabel}" Margin="0,12,0,4" />
+                                <TextBox Text="{Binding AccountName}" />
+                                <TextBlock Text="Type" Style="{StaticResource FormLabel}" Margin="0,12,0,4" />
+                                <ComboBox Text="{Binding AccountType}" IsEditable="True">
+                                    <ComboBoxItem Content="Asset" />
+                                    <ComboBoxItem Content="Liability" />
+                                    <ComboBoxItem Content="Equity" />
+                                    <ComboBoxItem Content="Revenue" />
+                                    <ComboBoxItem Content="Cost" />
+                                    <ComboBoxItem Content="Expense" />
+                                </ComboBox>
+                                <CheckBox Content="Active" IsChecked="{Binding AccountIsActive}" Margin="0,12,0,0" />
+                                <WrapPanel Margin="0,16,0,0">
+                                    <Button Content="New" Command="{Binding NewAccountCommand}" Margin="0,0,8,0" />
+                                    <Button Content="Save" Command="{Binding SaveAccountCommand}" />
+                                </WrapPanel>
+                            </StackPanel>
+                        </Border>
+                        <Border Grid.Column="1" Style="{StaticResource SectionCard}">
+                            <DataGrid ItemsSource="{Binding Accounts}" SelectedItem="{Binding SelectedAccount}" AutoGenerateColumns="False" CanUserAddRows="False" Height="520">
+                                <DataGrid.Columns>
+                                    <DataGridTextColumn Header="Code" Binding="{Binding AccountCode}" Width="110" />
+                                    <DataGridTextColumn Header="Account" Binding="{Binding AccountName}" Width="*" />
+                                    <DataGridTextColumn Header="Type" Binding="{Binding AccountType}" Width="130" />
+                                    <DataGridCheckBoxColumn Header="Active" Binding="{Binding IsActive}" Width="90" />
+                                </DataGrid.Columns>
+                            </DataGrid>
+                        </Border>
+                    </Grid>
+                </TabItem>
+
+                <TabItem Header="Tax Setup">
+                    <Grid Margin="0,16,0,0">
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="1.05*" />
+                            <ColumnDefinition Width="1.95*" />
+                        </Grid.ColumnDefinitions>
+                        <Border Grid.Column="0" Style="{StaticResource SectionCard}" Margin="0,0,16,0">
+                            <StackPanel>
+                                <TextBlock Text="Tax Rule" Style="{StaticResource CardTitleText}" />
+                                <TextBlock Text="Code" Style="{StaticResource FormLabel}" />
+                                <TextBox Text="{Binding TaxCode}" />
+                                <TextBlock Text="Name" Style="{StaticResource FormLabel}" Margin="0,12,0,4" />
+                                <TextBox Text="{Binding TaxName}" />
+                                <TextBlock Text="Type" Style="{StaticResource FormLabel}" Margin="0,12,0,4" />
+                                <ComboBox ItemsSource="{Binding TaxTypes}" SelectedItem="{Binding TaxType}" />
+                                <TextBlock Text="Rate" Style="{StaticResource FormLabel}" Margin="0,12,0,4" />
+                                <TextBox Text="{Binding TaxRate}" />
+                                <TextBlock Text="Input Account" Style="{StaticResource FormLabel}" Margin="0,12,0,4" />
+                                <ComboBox ItemsSource="{Binding ActiveAccounts}" SelectedItem="{Binding InputTaxAccount}" DisplayMemberPath="AccountName" />
+                                <TextBlock Text="Output Account" Style="{StaticResource FormLabel}" Margin="0,12,0,4" />
+                                <ComboBox ItemsSource="{Binding ActiveAccounts}" SelectedItem="{Binding OutputTaxAccount}" DisplayMemberPath="AccountName" />
+                                <WrapPanel Margin="0,12,0,0">
+                                    <CheckBox Content="Active" IsChecked="{Binding TaxIsActive}" Margin="0,0,16,0" />
+                                    <CheckBox Content="Default" IsChecked="{Binding TaxIsDefault}" />
+                                </WrapPanel>
+                                <WrapPanel Margin="0,16,0,0">
+                                    <Button Content="New" Command="{Binding NewTaxCommand}" Margin="0,0,8,0" />
+                                    <Button Content="Save" Command="{Binding SaveTaxCommand}" />
+                                </WrapPanel>
+                            </StackPanel>
+                        </Border>
+                        <Border Grid.Column="1" Style="{StaticResource SectionCard}">
+                            <DataGrid ItemsSource="{Binding Taxes}" SelectedItem="{Binding SelectedTax}" AutoGenerateColumns="False" CanUserAddRows="False" Height="520">
+                                <DataGrid.Columns>
+                                    <DataGridTextColumn Header="Code" Binding="{Binding TaxCode}" Width="110" />
+                                    <DataGridTextColumn Header="Name" Binding="{Binding TaxName}" Width="*" />
+                                    <DataGridTextColumn Header="Type" Binding="{Binding TaxType}" Width="130" />
+                                    <DataGridTextColumn Header="Rate" Binding="{Binding Rate}" Width="100" />
+                                    <DataGridCheckBoxColumn Header="Active" Binding="{Binding IsActive}" Width="90" />
+                                </DataGrid.Columns>
+                            </DataGrid>
+                        </Border>
+                    </Grid>
+                </TabItem>
+
+                <TabItem Header="Voucher Approval">
+                    <Grid Margin="0,16,0,0">
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="1.05*" />
+                            <ColumnDefinition Width="1.95*" />
+                        </Grid.ColumnDefinitions>
+                        <Border Grid.Column="0" Style="{StaticResource SectionCard}" Margin="0,0,16,0">
+                            <StackPanel>
+                                <TextBlock Text="Voucher" Style="{StaticResource CardTitleText}" />
+                                <TextBlock Text="Type" Style="{StaticResource FormLabel}" />
+                                <ComboBox ItemsSource="{Binding VoucherTypes}" SelectedItem="{Binding VoucherType}" />
+                                <TextBlock Text="Date" Style="{StaticResource FormLabel}" Margin="0,12,0,4" />
+                                <DatePicker SelectedDate="{Binding VoucherDate}" />
+                                <TextBlock Text="Description" Style="{StaticResource FormLabel}" Margin="0,12,0,4" />
+                                <TextBox Text="{Binding VoucherDescription}" />
+                                <TextBlock Text="Reference" Style="{StaticResource FormLabel}" Margin="0,12,0,4" />
+                                <TextBox Text="{Binding VoucherReference}" />
+                                <TextBlock Text="Debit" Style="{StaticResource FormLabel}" Margin="0,12,0,4" />
+                                <ComboBox ItemsSource="{Binding ActiveAccounts}" SelectedItem="{Binding VoucherDebitAccount}" DisplayMemberPath="AccountName" />
+                                <TextBlock Text="Credit" Style="{StaticResource FormLabel}" Margin="0,12,0,4" />
+                                <ComboBox ItemsSource="{Binding ActiveAccounts}" SelectedItem="{Binding VoucherCreditAccount}" DisplayMemberPath="AccountName" />
+                                <TextBlock Text="Amount" Style="{StaticResource FormLabel}" Margin="0,12,0,4" />
+                                <TextBox Text="{Binding VoucherAmount}" />
+                                <Button Content="Create Voucher" Command="{Binding CreateVoucherCommand}" Margin="0,16,0,0" />
+                            </StackPanel>
+                        </Border>
+                        <Border Grid.Column="1" Style="{StaticResource SectionCard}">
+                            <DockPanel>
+                                <WrapPanel DockPanel.Dock="Top" Margin="0,0,0,12">
+                                    <Button Content="Submit" Command="{Binding SubmitVoucherCommand}" Margin="0,0,8,8" />
+                                    <Button Content="Approve" Command="{Binding ApproveVoucherCommand}" Margin="0,0,8,8" />
+                                    <Button Content="Post" Command="{Binding PostVoucherCommand}" Margin="0,0,8,8" />
+                                    <Button Content="Reverse" Command="{Binding ReverseVoucherCommand}" Margin="0,0,8,8" />
+                                    <Button Content="Refresh" Command="{Binding LoadCommand}" />
+                                </WrapPanel>
+                                <DataGrid ItemsSource="{Binding Vouchers}" SelectedItem="{Binding SelectedVoucher}" AutoGenerateColumns="False" CanUserAddRows="False" Height="520">
+                                    <DataGrid.Columns>
+                                        <DataGridTextColumn Header="No" Binding="{Binding VoucherNo}" Width="160" />
+                                        <DataGridTextColumn Header="Date" Binding="{Binding VoucherDate, StringFormat=d}" Width="110" />
+                                        <DataGridTextColumn Header="Type" Binding="{Binding VoucherType}" Width="130" />
+                                        <DataGridTextColumn Header="Status" Binding="{Binding Status}" Width="130" />
+                                        <DataGridTextColumn Header="Description" Binding="{Binding Description}" Width="*" />
+                                        <DataGridTextColumn Header="Debit" Binding="{Binding TotalDebit}" Width="110" />
+                                        <DataGridTextColumn Header="Credit" Binding="{Binding TotalCredit}" Width="110" />
+                                    </DataGrid.Columns>
+                                </DataGrid>
+                            </DockPanel>
+                        </Border>
+                    </Grid>
+                </TabItem>
+            </TabControl>
+        </StackPanel>
+    </ScrollViewer>
+</UserControl>
