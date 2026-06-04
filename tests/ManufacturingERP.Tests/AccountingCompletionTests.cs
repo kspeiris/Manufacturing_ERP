@@ -37,6 +37,14 @@ public class AccountingCompletionTests
                 IsActive = true
             };
             db.Users.Add(user);
+            db.FiscalPeriods.Add(new FiscalPeriod
+            {
+                FiscalYear = DateTime.Today.Year,
+                PeriodNumber = DateTime.Today.Month,
+                PeriodName = "Test Period",
+                StartDate = DateTime.Today.AddDays(-30),
+                EndDate = DateTime.Today.AddDays(30)
+            });
             await db.SaveChangesAsync();
 
             var currentUserService = new CurrentUserService();

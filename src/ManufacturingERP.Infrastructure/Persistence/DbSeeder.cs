@@ -175,11 +175,12 @@ public static class DbSeeder
         if (!db.ExpenseEntries.Any())
             db.ExpenseEntries.Add(new ExpenseEntry { ExpenseDate = DateTime.Today, ExpenseType = "Fuel", Amount = 8500, Description = "Route vehicle fuel" });
 
-        if (!db.JournalEntries.Any())
-            if (!db.ProductionOrders.Any())
+        if (!db.ProductionOrders.Any())
             db.ProductionOrders.Add(new ProductionOrder { OrderNo = "PROD-SEED-001", OrderDate = DateTime.Today, FinishedProductId = db.Products.First(x => x.Code == "FG-001").Id, PlannedQuantity = 100, ProducedQuantity = 100, MaterialCost = 5000, LaborCost = 1200, OverheadCost = 800, Status = "Completed" });
 
-        db.JournalEntries.Add(new JournalEntry
+        if (!db.JournalEntries.Any())
+        {
+            db.JournalEntries.Add(new JournalEntry
             {
                 EntryNo = "JV-OPEN-001",
                 EntryDate = DateTime.Today,
@@ -192,6 +193,7 @@ public static class DbSeeder
                     new() { AccountCode = "3000", AccountName = "Capital", Debit = 0, Credit = 100000 }
                 }
             });
+        }
 
         await db.SaveChangesAsync();
 
