@@ -143,6 +143,14 @@ public class SecurityAuthorizationTests
             db.Accounts.AddRange(
                 new Account { AccountCode = "1000", AccountName = "Cash", AccountType = "Asset", IsActive = true },
                 new Account { AccountCode = "3000", AccountName = "Capital", AccountType = "Equity", IsActive = true });
+            db.FiscalPeriods.Add(new FiscalPeriod
+            {
+                FiscalYear = DateTime.Today.Year,
+                PeriodNumber = DateTime.Today.Month,
+                PeriodName = "Test Period",
+                StartDate = DateTime.Today.AddDays(-30),
+                EndDate = DateTime.Today.AddDays(30)
+            });
             await db.SaveChangesAsync();
 
             var currentUserService = new CurrentUserService();
