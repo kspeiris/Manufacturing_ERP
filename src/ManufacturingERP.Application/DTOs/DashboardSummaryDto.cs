@@ -8,4 +8,5 @@ public class DashboardSummaryDto
     public decimal TodaySales { get; set; }
     public decimal OutstandingBalance { get; set; }
     public DashboardAnalyticsDto Analytics { get; set; } = new();
+    public AdvancedAnalyticsDto AdvancedAnalytics { get; set; } = new();
 }

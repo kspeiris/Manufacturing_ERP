@@ -76,6 +76,7 @@ public partial class App : System.Windows.Application
         serviceCollection.AddScoped<ViewModels.LoginViewModel>();
         serviceCollection.AddScoped<ViewModels.MainViewModel>();
         serviceCollection.AddScoped<ViewModels.DashboardViewModel>();
+        serviceCollection.AddScoped<ViewModels.AnalyticsViewModel>();
         serviceCollection.AddScoped<ViewModels.ProductsViewModel>();
         serviceCollection.AddScoped<ViewModels.CustomersViewModel>();
         serviceCollection.AddScoped<ViewModels.SuppliersViewModel>();

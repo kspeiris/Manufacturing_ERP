@@ -1,0 +1,125 @@
+<UserControl x:Class="ManufacturingERP.Desktop.Views.AnalyticsView"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:lvc="clr-namespace:LiveChartsCore.SkiaSharpView.WPF;assembly=LiveChartsCore.SkiaSharpView.WPF"
+             xmlns:lvcx="clr-namespace:LiveChartsCore;assembly=LiveChartsCore"
+             xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes">
+    <UserControl.Resources>
+        <Style x:Key="AnalyticsKpiCard" TargetType="Border" BasedOn="{StaticResource SectionCard}">
+            <Setter Property="Background" Value="White" />
+            <Setter Property="Padding" Value="18" />
+            <Setter Property="Margin" Value="0,0,16,16" />
+            <Setter Property="Width" Value="260" />
+            <Setter Property="CornerRadius" Value="20" />
+        </Style>
+        <Style x:Key="AnalyticsChartCard" TargetType="Border" BasedOn="{StaticResource SectionCard}">
+            <Setter Property="Background" Value="White" />
+            <Setter Property="Padding" Value="18" />
+            <Setter Property="Margin" Value="0,0,16,16" />
+            <Setter Property="CornerRadius" Value="20" />
+        </Style>
+    </UserControl.Resources>
+
+    <ScrollViewer VerticalScrollBarVisibility="Auto" HorizontalScrollBarVisibility="Disabled">
+        <StackPanel Margin="0,0,0,8">
+            <Border Style="{StaticResource HeroCard}">
+                <Grid>
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="3*" />
+                        <ColumnDefinition Width="1.2*" />
+                    </Grid.ColumnDefinitions>
+
+                    <StackPanel>
+                        <TextBlock Text="Analytics Center" Style="{StaticResource HeroTitleText}" />
+                        <TextBlock Text="A modern overview of sales, inventory, cash flow and production performance." Style="{StaticResource HeroEyebrowText}" Margin="0,6,0,0" />
+                        <TextBlock Text="This analytics dashboard brings together trend charts, category insights and working capital metrics to help managers make faster decisions." Style="{StaticResource HeroBodyText}" Margin="0,12,0,0" MaxWidth="720" />
+                    </StackPanel>
+
+                    <Border Grid.Column="1" Background="#172554" BorderBrush="#2563EB" BorderThickness="1" CornerRadius="18" Padding="20">
+                        <StackPanel>
+                            <TextBlock Text="Executive score" Foreground="#93C5FD" FontWeight="SemiBold" />
+                            <TextBlock Text="{Binding Analytics.KpiSummary.HealthStatus}" Foreground="White" FontSize="26" FontWeight="Bold" Margin="0,10,0,0" />
+                            <TextBlock Text="Overall operational health index based on sales, inventory and cash flow." Foreground="#CBD5E1" Margin="0,8,0,0" TextWrapping="Wrap" />
+                            <TextBlock Text="{Binding Analytics.KpiSummary.HealthScore, StringFormat=Score: {0}}" Foreground="White" FontWeight="SemiBold" FontSize="16" Margin="0,14,0,0" />
+                        </StackPanel>
+                    </Border>
+                </Grid>
+            </Border>
+
+            <WrapPanel Margin="0,0,0,4">
+                <ItemsControl ItemsSource="{Binding KpiCards}">
+                    <ItemsControl.ItemsPanel>
+                        <ItemsPanelTemplate>
+                            <WrapPanel />
+                        </ItemsPanelTemplate>
+                    </ItemsControl.ItemsPanel>
+                    <ItemsControl.ItemTemplate>
+                        <DataTemplate>
+                            <Border Style="{StaticResource AnalyticsKpiCard}">
+                                <StackPanel>
+                                    <TextBlock Text="{Binding Title}" FontSize="14" FontWeight="SemiBold" Foreground="#334155" />
+                                    <TextBlock Text="{Binding Value, StringFormat=C0}" FontSize="26" FontWeight="Bold" Margin="0,10,0,0" />
+                                    <TextBlock Text="{Binding Description}" FontSize="13" Foreground="#64748B" Margin="0,10,0,0" TextWrapping="Wrap" />
+                                    <TextBlock Text="{Binding ChangeLabel}" FontSize="13" FontWeight="SemiBold" Foreground="{Binding ChangeColor}" Margin="0,12,0,0" />
+                                </StackPanel>
+                            </Border>
+                        </DataTemplate>
+                    </ItemsControl.ItemTemplate>
+                </ItemsControl>
+            </WrapPanel>
+
+            <Grid Margin="0,0,0,8">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="3*" />
+                    <ColumnDefinition Width="2*" />
+                </Grid.ColumnDefinitions>
+
+                <Border Style="{StaticResource AnalyticsChartCard}">
+                    <StackPanel>
+                        <TextBlock Text="Sales Trend" Style="{StaticResource CardTitleText}" />
+                        <TextBlock Text="Six-month booking performance" Style="{StaticResource PageSubtitleText}" />
+                        <lvc:CartesianChart Series="{Binding SalesTrendSeries}" ZoomMode="X" LegendPosition="Top" Height="320" />
+                    </StackPanel>
+                </Border>
+
+                <Border Style="{StaticResource AnalyticsChartCard}">
+                    <StackPanel>
+                        <TextBlock Text="Profit &amp; Cost" Style="{StaticResource CardTitleText}" />
+                        <TextBlock Text="Margin and expense visibility" Style="{StaticResource PageSubtitleText}" />
+                        <lvc:CartesianChart Series="{Binding ProfitTrendSeries}" ZoomMode="X" LegendPosition="Top" Height="320" />
+                    </StackPanel>
+                </Border>
+            </Grid>
+
+            <Grid>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="2.1*" />
+                    <ColumnDefinition Width="1.4*" />
+                </Grid.ColumnDefinitions>
+
+                <Border Style="{StaticResource AnalyticsChartCard}">
+                    <StackPanel>
+                        <TextBlock Text="Inventory Distribution" Style="{StaticResource CardTitleText}" />
+                        <TextBlock Text="Value share by product category" Style="{StaticResource PageSubtitleText}" />
+                        <lvc:PieChart Series="{Binding InventorySeries}" LegendPosition="Right" Height="320" />
+                    </StackPanel>
+                </Border>
+
+                <Border Style="{StaticResource AnalyticsChartCard}">
+                    <StackPanel>
+                        <TextBlock Text="Working Capital" Style="{StaticResource CardTitleText}" />
+                        <TextBlock Text="Receivables, payables and cash view" Style="{StaticResource PageSubtitleText}" />
+                        <StackPanel Margin="0,18,0,0">
+                            <TextBlock Text="Total receivables" FontWeight="SemiBold" Foreground="#334155" />
+                            <TextBlock Text="{Binding Analytics.TotalReceivables, StringFormat=C0}" FontSize="24" FontWeight="Bold" Margin="0,6,0,0" />
+                            <TextBlock Text="Total payables" FontWeight="SemiBold" Foreground="#334155" Margin="0,14,0,0" />
+                            <TextBlock Text="{Binding Analytics.TotalPayables, StringFormat=C0}" FontSize="24" FontWeight="Bold" Margin="0,6,0,0" />
+                            <TextBlock Text="Cash collected" FontWeight="SemiBold" Foreground="#334155" Margin="0,14,0,0" />
+                            <TextBlock Text="{Binding Analytics.CashOnHand, StringFormat=C0}" FontSize="24" FontWeight="Bold" Margin="0,6,0,0" />
+                        </StackPanel>
+                    </StackPanel>
+                </Border>
+            </Grid>
+        </StackPanel>
+    </ScrollViewer>
+</UserControl>
