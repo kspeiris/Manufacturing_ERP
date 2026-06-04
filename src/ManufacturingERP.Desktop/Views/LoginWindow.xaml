@@ -6,7 +6,7 @@
         Height="520"
         Width="880"
         WindowStartupLocation="CenterScreen"
-        ResizeMode="NoResize"
+        ResizeMode="CanResize"
         Background="#DCE7F5">
     <Grid Margin="18">
         <Border CornerRadius="30" Background="#0F172A" BorderBrush="#1E3A8A" BorderThickness="1">

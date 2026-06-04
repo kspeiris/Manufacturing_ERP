@@ -29,7 +29,9 @@ public partial class MainViewModel : ViewModelBase
     public ProductionCostingViewModel ProductionCosting { get; }
     public MobileSyncViewModel MobileSync { get; }
     public AccountingViewModel Accounting { get; }
+    public AccountingSetupViewModel AccountingSetup { get; }
     public LedgersViewModel Ledgers { get; }
+    public InventoryAccuracyViewModel InventoryAccuracy { get; }
     public ReportsViewModel Reports { get; }
     public ReportViewerViewModel ReportViewer { get; }
     public UserManagementViewModel Users { get; }
@@ -48,7 +50,7 @@ public partial class MainViewModel : ViewModelBase
         VehicleSalesViewModel vehicleSales, PosSalesViewModel posSales, CollectionsViewModel collections, ProcurementViewModel procurement,
         Phase3ProcurementViewModel supplierFinance, SupplierPaymentsViewModel supplierPayments, WarehouseViewModel warehouse,
         ProductionViewModel production, ProductionCostingViewModel productionCosting, MobileSyncViewModel mobileSync,
-        AccountingViewModel accounting, LedgersViewModel ledgers, ReportsViewModel reports, ReportViewerViewModel reportViewer,
+        AccountingViewModel accounting, AccountingSetupViewModel accountingSetup, LedgersViewModel ledgers, InventoryAccuracyViewModel inventoryAccuracy, ReportsViewModel reports, ReportViewerViewModel reportViewer,
         UserManagementViewModel users, AuditLogsViewModel auditLogs)
     {
         _currentUserService = currentUserService;
@@ -57,7 +59,7 @@ public partial class MainViewModel : ViewModelBase
         Warehouses = warehouses; Routes = routes; VehicleSales = vehicleSales; PosSales = posSales; Collections = collections;
         Procurement = procurement; SupplierFinance = supplierFinance; SupplierPayments = supplierPayments; Warehouse = warehouse;
         Production = production; ProductionCosting = productionCosting; MobileSync = mobileSync; Accounting = accounting;
-        Ledgers = ledgers; Reports = reports; ReportViewer = reportViewer; Users = users; AuditLogs = auditLogs;
+        AccountingSetup = accountingSetup; Ledgers = ledgers; InventoryAccuracy = inventoryAccuracy; Reports = reports; ReportViewer = reportViewer; Users = users; AuditLogs = auditLogs;
         CurrentView = Dashboard;
     }
 
@@ -84,7 +86,9 @@ public partial class MainViewModel : ViewModelBase
     [RelayCommand] private void ShowProductionCosting() => NavigateTo(ProductionCosting, _authorizationService.EnsureProductionAccess());
     [RelayCommand] private void ShowMobileSync() => NavigateTo(MobileSync, _authorizationService.EnsureSalesAccess());
     [RelayCommand] private void ShowAccounting() => NavigateTo(Accounting, _authorizationService.EnsureAccountingAccess());
+    [RelayCommand] private void ShowAccountingSetup() => NavigateTo(AccountingSetup, _authorizationService.EnsureAccountingAccess());
     [RelayCommand] private void ShowLedgers() => NavigateTo(Ledgers, _authorizationService.EnsureLedgersAccess());
+    [RelayCommand] private void ShowInventoryAccuracy() => NavigateTo(InventoryAccuracy, _authorizationService.EnsureWarehouseAccess());
     [RelayCommand] private void ShowReports() => NavigateTo(Reports, _authorizationService.EnsureReportsAccess());
     [RelayCommand] private void ShowReportViewer() => NavigateTo(ReportViewer, _authorizationService.EnsureReportsAccess());
     [RelayCommand] private void ShowUsers() => NavigateTo(Users, _authorizationService.EnsureAdminAccess());

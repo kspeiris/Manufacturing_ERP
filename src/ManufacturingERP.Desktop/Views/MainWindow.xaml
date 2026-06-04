@@ -6,7 +6,10 @@
         Title="Manufacturing ERP"
         Height="920"
         Width="1620"
+        MinWidth="1000"
+        MinHeight="600"
         WindowStartupLocation="CenterScreen"
+        ResizeMode="CanResizeWithGrip"
         Background="#DCE7F5">
     <Window.Resources>
         <DataTemplate DataType="{x:Type vm:DashboardViewModel}"><views:DashboardView /></DataTemplate>
@@ -27,7 +30,9 @@
         <DataTemplate DataType="{x:Type vm:ProductionViewModel}"><views:ProductionView /></DataTemplate>
         <DataTemplate DataType="{x:Type vm:ProductionCostingViewModel}"><views:ProductionCostingView /></DataTemplate>
         <DataTemplate DataType="{x:Type vm:AccountingViewModel}"><views:AccountingView /></DataTemplate>
+        <DataTemplate DataType="{x:Type vm:AccountingSetupViewModel}"><views:AccountingSetupView /></DataTemplate>
         <DataTemplate DataType="{x:Type vm:LedgersViewModel}"><views:LedgersView /></DataTemplate>
+        <DataTemplate DataType="{x:Type vm:InventoryAccuracyViewModel}"><views:InventoryAccuracyView /></DataTemplate>
         <DataTemplate DataType="{x:Type vm:ReportsViewModel}"><views:ReportsView /></DataTemplate>
         <DataTemplate DataType="{x:Type vm:ReportViewerViewModel}"><views:ReportViewerView /></DataTemplate>
         <DataTemplate DataType="{x:Type vm:UserManagementViewModel}"><views:UserManagementView /></DataTemplate>
@@ -88,12 +93,14 @@
                         <Button Content="Supplier Invoices &amp; Returns" Style="{StaticResource SidebarButton}" Command="{Binding ShowSupplierFinanceCommand}" Visibility="{Binding CanManageAccounting, Converter={StaticResource BoolToVisibilityConverter}}" />
                         <Button Content="Supplier Payments" Style="{StaticResource SidebarButton}" Command="{Binding ShowSupplierPaymentsCommand}" Visibility="{Binding CanManageAccounting, Converter={StaticResource BoolToVisibilityConverter}}" />
                         <Button Content="Warehouse" Style="{StaticResource SidebarButton}" Command="{Binding ShowWarehouseCommand}" Visibility="{Binding CanManageWarehouse, Converter={StaticResource BoolToVisibilityConverter}}" />
+                        <Button Content="Inventory Accuracy" Style="{StaticResource SidebarButton}" Command="{Binding ShowInventoryAccuracyCommand}" Visibility="{Binding CanManageWarehouse, Converter={StaticResource BoolToVisibilityConverter}}" />
                         <Button Content="Production" Style="{StaticResource SidebarButton}" Command="{Binding ShowProductionCommand}" Visibility="{Binding CanManageProduction, Converter={StaticResource BoolToVisibilityConverter}}" />
                         <Button Content="Production Costing" Style="{StaticResource SidebarButton}" Command="{Binding ShowProductionCostingCommand}" Visibility="{Binding CanManageProduction, Converter={StaticResource BoolToVisibilityConverter}}" />
                         <Button Content="Mobile Sync" Style="{StaticResource SidebarButton}" Command="{Binding ShowMobileSyncCommand}" Visibility="{Binding CanManageSales, Converter={StaticResource BoolToVisibilityConverter}}" />
 
                         <TextBlock Style="{StaticResource SidebarSectionText}" Text="Finance &amp; Admin" />
                         <Button Content="Accounting" Style="{StaticResource SidebarButton}" Command="{Binding ShowAccountingCommand}" Visibility="{Binding CanManageAccounting, Converter={StaticResource BoolToVisibilityConverter}}" />
+                        <Button Content="Accounting Setup" Style="{StaticResource SidebarButton}" Command="{Binding ShowAccountingSetupCommand}" Visibility="{Binding CanManageAccounting, Converter={StaticResource BoolToVisibilityConverter}}" />
                         <Button Content="Ledgers" Style="{StaticResource SidebarButton}" Command="{Binding ShowLedgersCommand}" Visibility="{Binding CanManageAccounting, Converter={StaticResource BoolToVisibilityConverter}}" />
                         <Button Content="Reports" Style="{StaticResource SidebarButton}" Command="{Binding ShowReportsCommand}" Visibility="{Binding CanViewReports, Converter={StaticResource BoolToVisibilityConverter}}" />
                         <Button Content="Report Center" Style="{StaticResource SidebarButton}" Command="{Binding ShowReportViewerCommand}" Visibility="{Binding CanViewReports, Converter={StaticResource BoolToVisibilityConverter}}" />

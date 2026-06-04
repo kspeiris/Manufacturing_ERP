@@ -93,7 +93,9 @@ public partial class App : System.Windows.Application
         serviceCollection.AddScoped<ViewModels.ProductionCostingViewModel>();
         serviceCollection.AddScoped<ViewModels.MobileSyncViewModel>();
         serviceCollection.AddScoped<ViewModels.AccountingViewModel>();
+        serviceCollection.AddScoped<ViewModels.AccountingSetupViewModel>();
         serviceCollection.AddScoped<ViewModels.LedgersViewModel>();
+        serviceCollection.AddScoped<ViewModels.InventoryAccuracyViewModel>();
         serviceCollection.AddScoped<ViewModels.ReportsViewModel>();
         serviceCollection.AddScoped<ViewModels.ReportViewerViewModel>();
         serviceCollection.AddScoped<ViewModels.UserManagementViewModel>();

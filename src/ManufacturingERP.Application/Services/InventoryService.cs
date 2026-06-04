@@ -222,12 +222,18 @@ public class InventoryService
                 }
 
                 var delta = line.VarianceQuantity;
+                if (stock.QuantityOnHand + delta < 0)
+                    return Result.Failure($"Stock count adjustment would make product ID {line.ProductId} negative.");
+
                 stock.QuantityOnHand += delta;
 
                 if (line.BatchLotId.HasValue)
                 {
                     var lot = await _db.BatchLots.FirstOrDefaultAsync(x => x.Id == line.BatchLotId.Value);
                     if (lot is null) return Result.Failure($"Batch lot not found for product ID {line.ProductId}.");
+                    if (lot.QuantityOnHand + delta < 0)
+                        return Result.Failure($"Stock count adjustment would make lot {lot.LotNumber} negative.");
+
                     lot.QuantityOnHand += delta;
                     lot.UpdatedAtUtc = DateTime.UtcNow;
                 }
@@ -282,14 +288,38 @@ public class InventoryService
 
         await using var transaction = await _db.Database.BeginTransactionAsync();
 
+        foreach (var group in request.Items.GroupBy(x => x.ProductId))
+        {
+            var requestedQuantity = group.Sum(x => x.Quantity);
+            if (requestedQuantity <= 0)
+                return Result<int>.Failure("Vehicle load quantities must be greater than zero.");
+
+            var stock = await _db.StockBalances.FirstOrDefaultAsync(x => x.ProductId == group.Key && x.WarehouseId == warehouseId);
+            if (stock is null || stock.QuantityAvailable < requestedQuantity)
+                return Result<int>.Failure($"Insufficient available warehouse stock for product ID {group.Key}.");
+        }
+
         foreach (var item in request.Items)
         {
             if (item.Quantity <= 0)
                 return Result<int>.Failure("Vehicle load quantities must be greater than zero.");
 
             var stock = await _db.StockBalances.FirstOrDefaultAsync(x => x.ProductId == item.ProductId && x.WarehouseId == warehouseId);
-            if (stock is null || stock.QuantityAvailable < item.Quantity)
+            if (stock is null)
                 return Result<int>.Failure($"Insufficient available warehouse stock for product ID {item.ProductId}.");
+
+            var product = await _db.Products.FirstAsync(x => x.Id == item.ProductId);
+            if (product.TrackBatch)
+            {
+                var lotSelection = await SelectLotsAsync(item.ProductId, warehouseId, item.Quantity);
+                if (!lotSelection.IsSuccess || lotSelection.Value is null)
+                    return Result<int>.Failure(lotSelection.Message);
+
+                var lotIds = lotSelection.Value.Select(x => x.BatchLotId).ToList();
+                var lots = await _db.BatchLots.Where(x => lotIds.Contains(x.Id)).ToDictionaryAsync(x => x.Id);
+                foreach (var selected in lotSelection.Value)
+                    lots[selected.BatchLotId].Consume(selected.QuantitySelected);
+            }
 
             stock.QuantityOnHand -= item.Quantity;
 
