@@ -12,6 +12,7 @@ public partial class MainViewModel : ViewModelBase
     [ObservableProperty] private string _statusMessage = string.Empty;
 
     public DashboardViewModel Dashboard { get; }
+    public AnalyticsViewModel Analytics { get; }
     public ProductsViewModel Products { get; }
     public CustomersViewModel Customers { get; }
     public SuppliersViewModel Suppliers { get; }
@@ -45,7 +46,7 @@ public partial class MainViewModel : ViewModelBase
     public bool CanManageProduction => _currentUserService.IsInRole("Admin", "Manager", "Production");
     public bool CanViewReports => _currentUserService.CurrentUser is not null;
 
-    public MainViewModel(CurrentUserService currentUserService, AuthorizationService authorizationService, DashboardViewModel dashboard, ProductsViewModel products, CustomersViewModel customers,
+    public MainViewModel(CurrentUserService currentUserService, AuthorizationService authorizationService, DashboardViewModel dashboard, AnalyticsViewModel analytics, ProductsViewModel products, CustomersViewModel customers,
         SuppliersViewModel suppliers, VehiclesViewModel vehicles, WarehousesViewModel warehouses, RoutesViewModel routes,
         VehicleSalesViewModel vehicleSales, PosSalesViewModel posSales, CollectionsViewModel collections, ProcurementViewModel procurement,
         Phase3ProcurementViewModel supplierFinance, SupplierPaymentsViewModel supplierPayments, WarehouseViewModel warehouse,
@@ -55,7 +56,7 @@ public partial class MainViewModel : ViewModelBase
     {
         _currentUserService = currentUserService;
         _authorizationService = authorizationService;
-        Dashboard = dashboard; Products = products; Customers = customers; Suppliers = suppliers; Vehicles = vehicles;
+        Dashboard = dashboard; Analytics = analytics; Products = products; Customers = customers; Suppliers = suppliers; Vehicles = vehicles;
         Warehouses = warehouses; Routes = routes; VehicleSales = vehicleSales; PosSales = posSales; Collections = collections;
         Procurement = procurement; SupplierFinance = supplierFinance; SupplierPayments = supplierPayments; Warehouse = warehouse;
         Production = production; ProductionCosting = productionCosting; MobileSync = mobileSync; Accounting = accounting;
@@ -69,6 +70,8 @@ public partial class MainViewModel : ViewModelBase
         StatusMessage = string.Empty;
         CurrentView = Dashboard;
     }
+    [RelayCommand]
+    private void ShowAnalytics() => NavigateTo(Analytics, _authorizationService.EnsureSalesAccess());
     [RelayCommand] private void ShowProducts() => NavigateTo(Products, _authorizationService.EnsureSalesAccess());
     [RelayCommand] private void ShowCustomers() => NavigateTo(Customers, _authorizationService.EnsureSalesAccess());
     [RelayCommand] private void ShowSuppliers() => NavigateTo(Suppliers, _authorizationService.EnsureAdminAccess());

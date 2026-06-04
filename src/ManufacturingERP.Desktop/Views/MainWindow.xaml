@@ -13,6 +13,7 @@
         Background="#DCE7F5">
     <Window.Resources>
         <DataTemplate DataType="{x:Type vm:DashboardViewModel}"><views:DashboardView /></DataTemplate>
+        <DataTemplate DataType="{x:Type vm:AnalyticsViewModel}"><views:AnalyticsView /></DataTemplate>
         <DataTemplate DataType="{x:Type vm:ProductsViewModel}"><views:ProductsView /></DataTemplate>
         <DataTemplate DataType="{x:Type vm:CustomersViewModel}"><views:CustomersView /></DataTemplate>
         <DataTemplate DataType="{x:Type vm:SuppliersViewModel}"><views:SuppliersView /></DataTemplate>
@@ -76,6 +77,7 @@
                     <StackPanel>
                         <TextBlock Style="{StaticResource SidebarSectionText}" Text="Sales &amp; Distribution" />
                         <Button Content="Dashboard" Style="{StaticResource SidebarButton}" Command="{Binding ShowDashboardCommand}" />
+                        <Button Content="Analytics" Style="{StaticResource SidebarButton}" Command="{Binding ShowAnalyticsCommand}" Visibility="{Binding CanManageSales, Converter={StaticResource BoolToVisibilityConverter}}" />
                         <Button Content="Products" Style="{StaticResource SidebarButton}" Command="{Binding ShowProductsCommand}" Visibility="{Binding CanManageSales, Converter={StaticResource BoolToVisibilityConverter}}" />
                         <Button Content="Customers" Style="{StaticResource SidebarButton}" Command="{Binding ShowCustomersCommand}" Visibility="{Binding CanManageSales, Converter={StaticResource BoolToVisibilityConverter}}" />
                         <Button Content="Vehicle Sales" Style="{StaticResource SidebarButton}" Command="{Binding ShowVehicleSalesCommand}" Visibility="{Binding CanManageSales, Converter={StaticResource BoolToVisibilityConverter}}" />
