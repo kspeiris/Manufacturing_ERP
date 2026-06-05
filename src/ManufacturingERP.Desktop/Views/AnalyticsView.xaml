@@ -78,7 +78,7 @@
                     <StackPanel>
                         <TextBlock Text="Sales Trend" Style="{StaticResource CardTitleText}" />
                         <TextBlock Text="Six-month booking performance" Style="{StaticResource PageSubtitleText}" />
-                        <lvc:CartesianChart Series="{Binding SalesTrendSeries}" ZoomMode="X" LegendPosition="Top" Height="320" />
+                        <lvc:CartesianChart x:Name="SalesTrendChart" Series="{Binding SalesTrendSeries}" ZoomMode="X" LegendPosition="Top" Height="320" Background="#F8FAFB" AnimationsSpeed="00:00:00.800" />
                     </StackPanel>
                 </Border>
 
@@ -86,7 +86,7 @@
                     <StackPanel>
                         <TextBlock Text="Profit &amp; Cost" Style="{StaticResource CardTitleText}" />
                         <TextBlock Text="Margin and expense visibility" Style="{StaticResource PageSubtitleText}" />
-                        <lvc:CartesianChart Series="{Binding ProfitTrendSeries}" ZoomMode="X" LegendPosition="Top" Height="320" />
+                        <lvc:CartesianChart x:Name="ProfitTrendChart" Series="{Binding ProfitTrendSeries}" ZoomMode="X" LegendPosition="Top" Height="320" Background="#F8FAFB" AnimationsSpeed="00:00:00.800" />
                     </StackPanel>
                 </Border>
             </Grid>
@@ -101,7 +101,7 @@
                     <StackPanel>
                         <TextBlock Text="Inventory Distribution" Style="{StaticResource CardTitleText}" />
                         <TextBlock Text="Value share by product category" Style="{StaticResource PageSubtitleText}" />
-                        <lvc:PieChart Series="{Binding InventorySeries}" LegendPosition="Right" Height="320" />
+                        <lvc:PieChart Series="{Binding InventorySeries}" LegendPosition="Right" Height="320" Background="#F8FAFB" AnimationsSpeed="00:00:00.800" />
                     </StackPanel>
                 </Border>
 

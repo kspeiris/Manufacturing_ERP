@@ -34,6 +34,7 @@
         <DataTemplate DataType="{x:Type vm:AccountingSetupViewModel}"><views:AccountingSetupView /></DataTemplate>
         <DataTemplate DataType="{x:Type vm:LedgersViewModel}"><views:LedgersView /></DataTemplate>
         <DataTemplate DataType="{x:Type vm:InventoryAccuracyViewModel}"><views:InventoryAccuracyView /></DataTemplate>
+        <DataTemplate DataType="{x:Type vm:DatabaseExplorerViewModel}"><views:DatabaseExplorerView /></DataTemplate>
         <DataTemplate DataType="{x:Type vm:ReportsViewModel}"><views:ReportsView /></DataTemplate>
         <DataTemplate DataType="{x:Type vm:ReportViewerViewModel}"><views:ReportViewerView /></DataTemplate>
         <DataTemplate DataType="{x:Type vm:UserManagementViewModel}"><views:UserManagementView /></DataTemplate>
@@ -104,6 +105,7 @@
                         <Button Content="Accounting" Style="{StaticResource SidebarButton}" Command="{Binding ShowAccountingCommand}" Visibility="{Binding CanManageAccounting, Converter={StaticResource BoolToVisibilityConverter}}" />
                         <Button Content="Accounting Setup" Style="{StaticResource SidebarButton}" Command="{Binding ShowAccountingSetupCommand}" Visibility="{Binding CanManageAccounting, Converter={StaticResource BoolToVisibilityConverter}}" />
                         <Button Content="Ledgers" Style="{StaticResource SidebarButton}" Command="{Binding ShowLedgersCommand}" Visibility="{Binding CanManageAccounting, Converter={StaticResource BoolToVisibilityConverter}}" />
+                        <Button Content="Database Explorer" Style="{StaticResource SidebarButton}" Command="{Binding ShowDatabaseExplorerCommand}" Visibility="{Binding CanManageAdmin, Converter={StaticResource BoolToVisibilityConverter}}" />
                         <Button Content="Reports" Style="{StaticResource SidebarButton}" Command="{Binding ShowReportsCommand}" Visibility="{Binding CanViewReports, Converter={StaticResource BoolToVisibilityConverter}}" />
                         <Button Content="Report Center" Style="{StaticResource SidebarButton}" Command="{Binding ShowReportViewerCommand}" Visibility="{Binding CanViewReports, Converter={StaticResource BoolToVisibilityConverter}}" />
                         <Button Content="Users" Style="{StaticResource SidebarButton}" Command="{Binding ShowUsersCommand}" Visibility="{Binding CanManageAdmin, Converter={StaticResource BoolToVisibilityConverter}}" />
