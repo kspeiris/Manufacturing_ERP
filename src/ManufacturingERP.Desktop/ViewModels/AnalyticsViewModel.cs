@@ -59,7 +59,8 @@ public partial class AnalyticsViewModel : ViewModelBase
                 Values = Analytics.MonthlySalesData.Select(x => x.Amount).ToArray(),
                 Fill = null,
                 GeometrySize = 8,
-                Stroke = new SolidColorPaint(SKColor.Parse("#2563EB"), 3)
+                Stroke = new SolidColorPaint(SKColor.Parse("#2563EB"), 3),
+                GeometryStroke = new SolidColorPaint(SKColors.White, 2)
             }
         };
 
@@ -72,7 +73,8 @@ public partial class AnalyticsViewModel : ViewModelBase
                 Values = Analytics.MonthlyProfitData.Select(x => x.Profit).ToArray(),
                 Fill = null,
                 GeometrySize = 8,
-                Stroke = new SolidColorPaint(SKColor.Parse("#16A34A"), 3)
+                Stroke = new SolidColorPaint(SKColor.Parse("#16A34A"), 3),
+                GeometryStroke = new SolidColorPaint(SKColors.White, 2)
             },
             new LineSeries<decimal>
             {
@@ -80,7 +82,8 @@ public partial class AnalyticsViewModel : ViewModelBase
                 Values = Analytics.MonthlyProfitData.Select(x => x.Cost).ToArray(),
                 Fill = null,
                 GeometrySize = 8,
-                Stroke = new SolidColorPaint(SKColor.Parse("#F97316"), 3)
+                Stroke = new SolidColorPaint(SKColor.Parse("#F97316"), 3),
+                GeometryStroke = new SolidColorPaint(SKColors.White, 2)
             }
         };
 
@@ -91,7 +94,8 @@ public partial class AnalyticsViewModel : ViewModelBase
             {
                 Name = x.CategoryName,
                 Values = new[] { x.TotalValue },
-                Fill = new SolidColorPaint(SKColor.Parse("#" + Guid.NewGuid().ToString("N").Substring(0, 6)))
+                Fill = new SolidColorPaint(SKColor.Parse("#" + Guid.NewGuid().ToString("N").Substring(0, 6))),
+                Stroke = new SolidColorPaint(SKColors.White, 1)
             })
             .Cast<ISeries>()
             .ToArray();
