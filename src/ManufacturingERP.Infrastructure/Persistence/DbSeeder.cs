@@ -47,31 +47,58 @@ public static class DbSeeder
             var rm = new ProductCategory { Name = "Raw Materials" };
             db.ProductCategories.AddRange(fg, rm);
             await db.SaveChangesAsync();
+        }
+
+        if (!db.Products.Any())
+        {
+            var fg = db.ProductCategories.First(c => c.Name == "Finished Goods");
+            var rm = db.ProductCategories.First(c => c.Name == "Raw Materials");
 
             db.Products.AddRange(
                 new Product { Code = "FG-001", Name = "Sample Product A", ProductCategoryId = fg.Id, CostPrice = 100, SellingPrice = 140, Unit = "PCS" },
                 new Product { Code = "FG-002", Name = "Sample Product B", ProductCategoryId = fg.Id, CostPrice = 80, SellingPrice = 120, Unit = "PCS", ReorderLevel = 50 },
+                new Product { Code = "FG-003", Name = "Premium Product C", ProductCategoryId = fg.Id, CostPrice = 150, SellingPrice = 220, Unit = "PCS", ReorderLevel = 30 },
+                new Product { Code = "FG-004", Name = "Economy Product D", ProductCategoryId = fg.Id, CostPrice = 50, SellingPrice = 75, Unit = "PCS", ReorderLevel = 100 },
+                new Product { Code = "FG-005", Name = "Bulk Product E", ProductCategoryId = fg.Id, CostPrice = 200, SellingPrice = 280, Unit = "BOX", ReorderLevel = 20 },
                 new Product { Code = "RM-001", Name = "Raw Material X", ProductCategoryId = rm.Id, CostPrice = 30, SellingPrice = 0, Unit = "KG", ReorderLevel = 100, TrackBatch = true },
-                new Product { Code = "RM-002", Name = "Packing Material Y", ProductCategoryId = rm.Id, CostPrice = 10, SellingPrice = 0, Unit = "PCS", ReorderLevel = 100 }
+                new Product { Code = "RM-002", Name = "Packing Material Y", ProductCategoryId = rm.Id, CostPrice = 10, SellingPrice = 0, Unit = "PCS", ReorderLevel = 100 },
+                new Product { Code = "RM-003", Name = "Chemical Z", ProductCategoryId = rm.Id, CostPrice = 45, SellingPrice = 0, Unit = "LIT", ReorderLevel = 50, TrackBatch = true },
+                new Product { Code = "RM-004", Name = "Base Powder W", ProductCategoryId = rm.Id, CostPrice = 20, SellingPrice = 0, Unit = "KG", ReorderLevel = 200, TrackBatch = true },
+                new Product { Code = "RM-005", Name = "Cardboard Box", ProductCategoryId = rm.Id, CostPrice = 5, SellingPrice = 0, Unit = "PCS", ReorderLevel = 500 }
             );
+            await db.SaveChangesAsync();
         }
 
         if (!db.RoutePlans.Any())
             db.RoutePlans.AddRange(
                 new RoutePlan { Code = "R001", Name = "Colombo Town Route", Territory = "Colombo" },
-                new RoutePlan { Code = "R002", Name = "Gampaha Route", Territory = "Gampaha" }
+                new RoutePlan { Code = "R002", Name = "Gampaha Route", Territory = "Gampaha" },
+                new RoutePlan { Code = "R003", Name = "Kandy Hill Route", Territory = "Kandy" },
+                new RoutePlan { Code = "R004", Name = "Galle Coastal", Territory = "Galle" },
+                new RoutePlan { Code = "R005", Name = "Negombo Suburbs", Territory = "Negombo" }
             );
 
         if (!db.Customers.Any())
             db.Customers.AddRange(
                 new Customer { CustomerCode = "C001", ShopName = "Nimal Stores", OwnerName = "Nimal", Route = "Colombo Town Route", Address = "Colombo", ContactNumber = "0771234567", CreditLimit = 50000, OutstandingBalance = 18000 },
-                new Customer { CustomerCode = "C002", ShopName = "Kamal Traders", OwnerName = "Kamal", Route = "Gampaha Route", Address = "Gampaha", ContactNumber = "0777654321", CreditLimit = 40000, OutstandingBalance = 9500 }
+                new Customer { CustomerCode = "C002", ShopName = "Kamal Traders", OwnerName = "Kamal", Route = "Gampaha Route", Address = "Gampaha", ContactNumber = "0777654321", CreditLimit = 40000, OutstandingBalance = 9500 },
+                new Customer { CustomerCode = "C003", ShopName = "Saman Grocery", OwnerName = "Saman", Route = "Kandy Hill Route", Address = "Kandy", ContactNumber = "0812234567", CreditLimit = 60000, OutstandingBalance = 0 },
+                new Customer { CustomerCode = "C004", ShopName = "Ruwan Mini Mart", OwnerName = "Ruwan", Route = "Galle Coastal", Address = "Galle", ContactNumber = "0917654321", CreditLimit = 30000, OutstandingBalance = 12500 },
+                new Customer { CustomerCode = "C005", ShopName = "Perera Super", OwnerName = "Amal Perera", Route = "Negombo Suburbs", Address = "Negombo", ContactNumber = "0311234567", CreditLimit = 100000, OutstandingBalance = 45000 },
+                new Customer { CustomerCode = "C006", ShopName = "Silva Distributors", OwnerName = "Sarath Silva", Route = "Colombo Town Route", Address = "Bambalapitiya", ContactNumber = "0112233445", CreditLimit = 200000, OutstandingBalance = 85000 },
+                new Customer { CustomerCode = "C007", ShopName = "Lanka City Food", OwnerName = "Nayana", Route = "Gampaha Route", Address = "Kadawatha", ContactNumber = "0712233445", CreditLimit = 45000, OutstandingBalance = 2000 },
+                new Customer { CustomerCode = "C008", ShopName = "Kandy Traders", OwnerName = "Nuwan", Route = "Kandy Hill Route", Address = "Peradeniya", ContactNumber = "0811234567", CreditLimit = 50000, OutstandingBalance = 25000 },
+                new Customer { CustomerCode = "C009", ShopName = "Galle City Stores", OwnerName = "Chathura", Route = "Galle Coastal", Address = "Unawatuna", ContactNumber = "0911234567", CreditLimit = 35000, OutstandingBalance = 5000 },
+                new Customer { CustomerCode = "C010", ShopName = "Fernando Bros", OwnerName = "Roshan", Route = "Negombo Suburbs", Address = "Kochchikade", ContactNumber = "0317654321", CreditLimit = 75000, OutstandingBalance = 15000 }
             );
 
         if (!db.Suppliers.Any())
             db.Suppliers.AddRange(
                 new Supplier { SupplierCode = "S001", Name = "ABC Raw Materials", ContactNumber = "0112233445", Address = "Colombo" },
-                new Supplier { SupplierCode = "S002", Name = "Premier Packaging", ContactNumber = "0116677889", Address = "Ja-Ela" }
+                new Supplier { SupplierCode = "S002", Name = "Premier Packaging", ContactNumber = "0116677889", Address = "Ja-Ela" },
+                new Supplier { SupplierCode = "S003", Name = "Global Chemicals", ContactNumber = "0113344556", Address = "Kelaniya" },
+                new Supplier { SupplierCode = "S004", Name = "National Plastics", ContactNumber = "0117788990", Address = "Maharagama" },
+                new Supplier { SupplierCode = "S005", Name = "Island wide Transports", ContactNumber = "0772233445", Address = "Pettah" }
             );
 
         if (!db.Vehicles.Any())

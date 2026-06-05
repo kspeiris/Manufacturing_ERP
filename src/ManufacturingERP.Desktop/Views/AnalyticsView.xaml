@@ -82,7 +82,7 @@
                     </StackPanel>
                 </Border>
 
-                <Border Style="{StaticResource AnalyticsChartCard}">
+                <Border Grid.Column="1" Style="{StaticResource AnalyticsChartCard}">
                     <StackPanel>
                         <TextBlock Text="Profit &amp; Cost" Style="{StaticResource CardTitleText}" />
                         <TextBlock Text="Margin and expense visibility" Style="{StaticResource PageSubtitleText}" />
@@ -105,7 +105,7 @@
                     </StackPanel>
                 </Border>
 
-                <Border Style="{StaticResource AnalyticsChartCard}">
+                <Border Grid.Column="1" Style="{StaticResource AnalyticsChartCard}">
                     <StackPanel>
                         <TextBlock Text="Working Capital" Style="{StaticResource CardTitleText}" />
                         <TextBlock Text="Receivables, payables and cash view" Style="{StaticResource PageSubtitleText}" />

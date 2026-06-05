@@ -1,4 +1,4 @@
-﻿using ManufacturingERP.Application.Abstractions;
+using ManufacturingERP.Application.Abstractions;
 using ManufacturingERP.Application.DTOs;
 using Microsoft.EntityFrameworkCore;
 
@@ -20,8 +20,8 @@ public class AnalyticsService
         var collections = await _db.CollectionEntries.Where(x => x.CollectionDate >= monthStart).SumAsync(x => (decimal?)x.Amount) ?? 0;
         var supplierPayables = await _db.SupplierInvoices.SumAsync(x => (decimal?)x.BalanceAmount) ?? 0;
         var customerReceivables = await _db.Customers.SumAsync(x => (decimal?)x.OutstandingBalance) ?? 0;
-        var inventoryValue = await _db.StockBalances.Include(x => x.Product).Select(x => x.QuantityOnHand * x.Product!.CostPrice).SumAsync();
-        var productionCost = await _db.ProductionOrders.Where(x => x.OrderDate >= monthStart).Select(x => x.MaterialCost + x.LaborCost + x.OverheadCost).SumAsync();
+        var inventoryValue = await _db.StockBalances.Include(x => x.Product).SumAsync(x => (decimal?)(x.QuantityOnHand * x.Product!.CostPrice)) ?? 0;
+        var productionCost = await _db.ProductionOrders.Where(x => x.OrderDate >= monthStart).SumAsync(x => (decimal?)(x.MaterialCost + x.LaborCost + x.OverheadCost)) ?? 0;
 
         return new DashboardAnalyticsDto
         {
@@ -78,7 +78,7 @@ public class AnalyticsService
                 AverageOrderValue = recentInvoices
                     .Where(x => x.InvoiceDate.Year == month.Year && x.InvoiceDate.Month == month.Month)
                     .Select(x => x.TotalAmount)
-                    .DefaultIfEmpty(0)
+                    .DefaultIfEmpty(0m)
                     .Average()
             })
             .ToList();
@@ -179,7 +179,7 @@ public class AnalyticsService
                 Month = new DateTime(g.Key.Year, g.Key.Month, 1).ToString("MMM yyyy"),
                 TotalAmount = g.Sum(x => x.TotalAmount),
                 OrderCount = g.Count(),
-                AverageOrderValue = g.Average(x => x.TotalAmount)
+                AverageOrderValue = g.Any() ? g.Average(x => x.TotalAmount) : 0m
             })
             .OrderBy(x => DateTime.ParseExact(x.Month, "MMM yyyy", null))
             .ToListAsync();
@@ -206,27 +206,16 @@ public class AnalyticsService
             })
             .ToList();
 
-        var productionCostBreakdown = productionOrders
-            .Where(x => x.OrderDate >= currentMonthStart)
-            .GroupBy(x => 1)
-            .Select(g => new ProductionCostBreakdownDto
-            {
-                CostType = "Material",
-                Amount = g.Sum(x => x.MaterialCost),
-                PercentageOfTotal = g.Sum(x => x.MaterialCost) / g.Sum(x => x.TotalCost == 0 ? 1 : x.TotalCost)
-            })
-            .ToList();
+        var productionCostBreakdown = new List<ProductionCostBreakdownDto>();
+        var currentMonthProductionOrders = productionOrders.Where(x => x.OrderDate >= currentMonthStart).ToList();
+        var totalMaterialCost = currentMonthProductionOrders.Sum(x => x.MaterialCost);
+        var totalLaborCost = currentMonthProductionOrders.Sum(x => x.LaborCost);
+        var totalOverheadCost = currentMonthProductionOrders.Sum(x => x.OverheadCost);
+        var totalProductionCostSum = totalMaterialCost + totalLaborCost + totalOverheadCost;
 
-        if (productionCostBreakdown.Count == 1)
-        {
-            var total = productionCostBreakdown[0].Amount;
-            productionCostBreakdown = new List<ProductionCostBreakdownDto>
-            {
-                new() { CostType = "Material", Amount = productionOrders.Where(x => x.OrderDate >= currentMonthStart).Sum(x => x.MaterialCost), PercentageOfTotal = 0 },
-                new() { CostType = "Labor", Amount = productionOrders.Where(x => x.OrderDate >= currentMonthStart).Sum(x => x.LaborCost), PercentageOfTotal = 0 },
-                new() { CostType = "Overhead", Amount = productionOrders.Where(x => x.OrderDate >= currentMonthStart).Sum(x => x.OverheadCost), PercentageOfTotal = 0 }
-            };
-        }
+        productionCostBreakdown.Add(new ProductionCostBreakdownDto { CostType = "Material", Amount = totalMaterialCost, PercentageOfTotal = totalProductionCostSum == 0 ? 0 : totalMaterialCost / totalProductionCostSum });
+        productionCostBreakdown.Add(new ProductionCostBreakdownDto { CostType = "Labor", Amount = totalLaborCost, PercentageOfTotal = totalProductionCostSum == 0 ? 0 : totalLaborCost / totalProductionCostSum });
+        productionCostBreakdown.Add(new ProductionCostBreakdownDto { CostType = "Overhead", Amount = totalOverheadCost, PercentageOfTotal = totalProductionCostSum == 0 ? 0 : totalOverheadCost / totalProductionCostSum });
 
         var totalEmployees = await _db.Users.CountAsync();
         var totalSuppliers = await _db.Suppliers.CountAsync();
@@ -270,7 +259,7 @@ public class AnalyticsService
             TotalProductionCost = productionOrders.Where(x => x.OrderDate >= currentMonthStart).Sum(x => x.TotalCost),
             ActiveProductionOrders = productionOrders.Count(x => x.Status != "Completed"),
             CompletedProductionOrders = productionOrders.Count(x => x.Status == "Completed"),
-            AverageProductionCostPerUnit = productionOrders.Where(x => x.ProducedQuantity > 0).Select(x => x.TotalCost / x.ProducedQuantity).DefaultIfEmpty(0).Average(),
+            AverageProductionCostPerUnit = productionOrders.Where(x => x.ProducedQuantity > 0).Select(x => x.TotalCost / x.ProducedQuantity).DefaultIfEmpty(0m).Average(),
             ProductionCostBreakdown = productionCostBreakdown,
             ProductionOrdersStatus = productionOrdersStatus,
             TotalPurchaseOrders = totalPurchaseOrders,
