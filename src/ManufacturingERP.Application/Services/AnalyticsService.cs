@@ -16,12 +16,17 @@ public class AnalyticsService
     public async Task<DashboardAnalyticsDto> GetAnalyticsAsync()
     {
         var monthStart = new DateTime(DateTime.Today.Year, DateTime.Today.Month, 1);
-        var monthlySales = await _db.SalesInvoices.Where(x => x.InvoiceDate >= monthStart).SumAsync(x => (decimal?)x.TotalAmount) ?? 0;
-        var collections = await _db.CollectionEntries.Where(x => x.CollectionDate >= monthStart).SumAsync(x => (decimal?)x.Amount) ?? 0;
-        var supplierPayables = await _db.SupplierInvoices.SumAsync(x => (decimal?)x.BalanceAmount) ?? 0;
-        var customerReceivables = await _db.Customers.SumAsync(x => (decimal?)x.OutstandingBalance) ?? 0;
-        var inventoryValue = await _db.StockBalances.Include(x => x.Product).SumAsync(x => (decimal?)(x.QuantityOnHand * x.Product!.CostPrice)) ?? 0;
-        var productionCost = await _db.ProductionOrders.Where(x => x.OrderDate >= monthStart).SumAsync(x => (decimal?)(x.MaterialCost + x.LaborCost + x.OverheadCost)) ?? 0;
+
+        // SQLite cannot aggregate decimal directly — cast to double?, then back to decimal
+        var monthlySales    = (decimal)(await _db.SalesInvoices.Where(x => x.InvoiceDate >= monthStart).SumAsync(x => (double?)x.TotalAmount) ?? 0);
+        var collections     = (decimal)(await _db.CollectionEntries.Where(x => x.CollectionDate >= monthStart).SumAsync(x => (double?)x.Amount) ?? 0);
+        var supplierPayables= (decimal)(await _db.SupplierInvoices.SumAsync(x => (double?)x.BalanceAmount) ?? 0);
+        var customerReceivables = (decimal)(await _db.Customers.SumAsync(x => (double?)x.OutstandingBalance) ?? 0);
+        var productionCost  = (decimal)(await _db.ProductionOrders.Where(x => x.OrderDate >= monthStart).SumAsync(x => (double?)(x.MaterialCost + x.LaborCost + x.OverheadCost)) ?? 0);
+
+        // Inventory value: load to memory then sum (product navigation required)
+        var stockBalances = await _db.StockBalances.Include(x => x.Product).ToListAsync();
+        var inventoryValue = stockBalances.Where(x => x.Product != null).Sum(x => x.QuantityOnHand * x.Product!.CostPrice);
 
         return new DashboardAnalyticsDto
         {
@@ -38,10 +43,10 @@ public class AnalyticsService
     {
         var today = DateTime.Today;
         var currentMonthStart = new DateTime(today.Year, today.Month, 1);
-        var previousMonthStart = currentMonthStart.AddMonths(-1);
         var sixMonthStart = currentMonthStart.AddMonths(-5);
         var yearStart = new DateTime(today.Year, 1, 1);
 
+        // --- Sales & Profit (all in-memory after loading with includes) ---
         var recentInvoices = await _db.SalesInvoices
             .Include(x => x.Items)
                 .ThenInclude(x => x.Product)
@@ -85,7 +90,11 @@ public class AnalyticsService
 
         var currentSales = monthlySalesData.Last().Amount;
         var previousSales = monthlySalesData.ElementAtOrDefault(4)?.Amount ?? 0;
-        var totalSalesThisYear = await _db.SalesInvoices.Where(x => x.InvoiceDate >= yearStart).SumAsync(x => (decimal?)x.TotalAmount) ?? 0;
+
+        // Year-to-date sales via double cast for SQLite
+        var totalSalesThisYear = (decimal)(await _db.SalesInvoices
+            .Where(x => x.InvoiceDate >= yearStart)
+            .SumAsync(x => (double?)x.TotalAmount) ?? 0);
 
         var monthlyProfitData = monthlySalesData
             .Select(data =>
@@ -104,6 +113,7 @@ public class AnalyticsService
             })
             .ToList();
 
+        // --- Inventory (in-memory, needs navigation) ---
         var inventoryBalances = await _db.StockBalances
             .Include(x => x.Product)
                 .ThenInclude(x => x.ProductCategory)
@@ -127,6 +137,7 @@ public class AnalyticsService
         var outOfStockProductsCount = inventoryBalances.Count(x => x.QuantityOnHand <= 0);
         var inventoryTurnoverRate = totalInventoryValue <= 0 ? 0 : currentSales / totalInventoryValue;
 
+        // --- Customers ---
         var topCustomers = recentInvoices
             .Where(x => x.Customer is not null)
             .GroupBy(x => new { x.CustomerId, x.Customer!.ShopName })
@@ -150,18 +161,23 @@ public class AnalyticsService
                 OutstandingAmount = c.OutstandingBalance,
                 DaysOverdue = c.OutstandingBalance > 0 ? 15 : 0,
                 LastPaymentDate = today.AddDays(-Math.Min(30, c.TransactionCount * 3)),
-                Status = c.OutstandingBalance <= 0 ? "Current" : c.OutstandingBalance > 0 ? "Overdue" : "Current"
+                Status = c.OutstandingBalance <= 0 ? "Current" : "Overdue"
             })
             .ToList();
 
-        var supplierPerformance = await _db.PurchaseOrders
+        // --- Supplier performance (in-memory grouping) ---
+        var supplierOrdersRaw = await _db.PurchaseOrders
             .Include(x => x.Supplier)
             .Where(x => x.OrderDate >= sixMonthStart)
-            .GroupBy(x => new { x.SupplierId, x.Supplier!.Name })
+            .Select(x => new { x.SupplierId, SupplierName = x.Supplier!.Name, x.TotalAmount })
+            .ToListAsync();
+
+        var supplierPerformance = supplierOrdersRaw
+            .GroupBy(x => new { x.SupplierId, x.SupplierName })
             .Select(g => new SupplierPerformanceDto
             {
                 SupplierId = g.Key.SupplierId,
-                SupplierName = g.Key.Name,
+                SupplierName = g.Key.SupplierName,
                 TotalPurchaseAmount = g.Sum(x => x.TotalAmount),
                 OrderCount = g.Count(),
                 OnTimeDeliveryPercentage = 0.92m,
@@ -169,28 +185,42 @@ public class AnalyticsService
             })
             .OrderByDescending(x => x.TotalPurchaseAmount)
             .Take(5)
-            .ToListAsync();
+            .ToList();
 
-        var procurementTrends = await _db.PurchaseOrders
+        // --- Procurement trends (in-memory sort/format, no DateTime.ParseExact in EF) ---
+        var procurementTrendsRaw = await _db.PurchaseOrders
             .Where(x => x.OrderDate >= sixMonthStart)
             .GroupBy(x => new { Year = x.OrderDate.Year, Month = x.OrderDate.Month })
-            .Select(g => new ProcurementTrendDto
+            .Select(g => new
             {
-                Month = new DateTime(g.Key.Year, g.Key.Month, 1).ToString("MMM yyyy"),
-                TotalAmount = g.Sum(x => x.TotalAmount),
+                Year = g.Key.Year,
+                Month = g.Key.Month,
+                TotalAmount = g.Sum(x => (double)x.TotalAmount),
                 OrderCount = g.Count(),
-                AverageOrderValue = g.Any() ? g.Average(x => x.TotalAmount) : 0m
+                AverageOrderValue = g.Count() > 0 ? g.Average(x => (double)x.TotalAmount) : 0.0
             })
-            .OrderBy(x => DateTime.ParseExact(x.Month, "MMM yyyy", null))
             .ToListAsync();
 
-        var supplierPayables = await _db.SupplierInvoices.SumAsync(x => (decimal?)x.BalanceAmount) ?? 0;
-        var cashOnHand = await _db.CollectionEntries.Where(x => x.CollectionDate >= currentMonthStart).SumAsync(x => (decimal?)x.Amount) ?? 0;
-        var totalReceivables = await _db.Customers.SumAsync(x => (decimal?)x.OutstandingBalance) ?? 0;
-        var totalPurchaseAmount = await _db.PurchaseOrders.SumAsync(x => (decimal?)x.TotalAmount) ?? 0;
-        var totalPurchaseOrders = await _db.PurchaseOrders.CountAsync();
-        var pendingDeliveries = await _db.PurchaseOrders.CountAsync(x => x.Status != "Completed");
+        var procurementTrends = procurementTrendsRaw
+            .OrderBy(x => x.Year).ThenBy(x => x.Month)
+            .Select(x => new ProcurementTrendDto
+            {
+                Month = new DateTime(x.Year, x.Month, 1).ToString("MMM yyyy"),
+                TotalAmount = (decimal)x.TotalAmount,
+                OrderCount = x.OrderCount,
+                AverageOrderValue = (decimal)x.AverageOrderValue
+            })
+            .ToList();
 
+        // --- Scalar aggregates (all via double cast for SQLite) ---
+        var supplierPayables   = (decimal)(await _db.SupplierInvoices.SumAsync(x => (double?)x.BalanceAmount) ?? 0);
+        var cashOnHand         = (decimal)(await _db.CollectionEntries.Where(x => x.CollectionDate >= currentMonthStart).SumAsync(x => (double?)x.Amount) ?? 0);
+        var totalReceivables   = (decimal)(await _db.Customers.SumAsync(x => (double?)x.OutstandingBalance) ?? 0);
+        var totalPurchaseAmount= (decimal)(await _db.PurchaseOrders.SumAsync(x => (double?)x.TotalAmount) ?? 0);
+        var totalPurchaseOrders= await _db.PurchaseOrders.CountAsync();
+        var pendingDeliveries  = await _db.PurchaseOrders.CountAsync(x => x.Status != "Completed");
+
+        // --- Production (in-memory after ToListAsync) ---
         var productionOrders = await _db.ProductionOrders.ToListAsync();
         var productionOrdersStatus = productionOrders
             .OrderBy(x => x.Status)
@@ -206,20 +236,41 @@ public class AnalyticsService
             })
             .ToList();
 
-        var productionCostBreakdown = new List<ProductionCostBreakdownDto>();
         var currentMonthProductionOrders = productionOrders.Where(x => x.OrderDate >= currentMonthStart).ToList();
         var totalMaterialCost = currentMonthProductionOrders.Sum(x => x.MaterialCost);
-        var totalLaborCost = currentMonthProductionOrders.Sum(x => x.LaborCost);
+        var totalLaborCost    = currentMonthProductionOrders.Sum(x => x.LaborCost);
         var totalOverheadCost = currentMonthProductionOrders.Sum(x => x.OverheadCost);
         var totalProductionCostSum = totalMaterialCost + totalLaborCost + totalOverheadCost;
 
-        productionCostBreakdown.Add(new ProductionCostBreakdownDto { CostType = "Material", Amount = totalMaterialCost, PercentageOfTotal = totalProductionCostSum == 0 ? 0 : totalMaterialCost / totalProductionCostSum });
-        productionCostBreakdown.Add(new ProductionCostBreakdownDto { CostType = "Labor", Amount = totalLaborCost, PercentageOfTotal = totalProductionCostSum == 0 ? 0 : totalLaborCost / totalProductionCostSum });
-        productionCostBreakdown.Add(new ProductionCostBreakdownDto { CostType = "Overhead", Amount = totalOverheadCost, PercentageOfTotal = totalProductionCostSum == 0 ? 0 : totalOverheadCost / totalProductionCostSum });
+        var productionCostBreakdown = new List<ProductionCostBreakdownDto>
+        {
+            new() { CostType = "Material", Amount = totalMaterialCost, PercentageOfTotal = totalProductionCostSum == 0 ? 0 : totalMaterialCost / totalProductionCostSum },
+            new() { CostType = "Labor",    Amount = totalLaborCost,    PercentageOfTotal = totalProductionCostSum == 0 ? 0 : totalLaborCost    / totalProductionCostSum },
+            new() { CostType = "Overhead", Amount = totalOverheadCost, PercentageOfTotal = totalProductionCostSum == 0 ? 0 : totalOverheadCost / totalProductionCostSum }
+        };
+
+        // --- Supplier payment status (in-memory after select) ---
+        var supplierInvoices = await _db.SupplierInvoices
+            .Include(x => x.Supplier)
+            .OrderBy(x => (double)x.BalanceAmount)
+            .Take(5)
+            .ToListAsync();
+
+        var supplierPaymentStatus = supplierInvoices
+            .Select(x => new SupplierPaymentStatusDto
+            {
+                SupplierId = x.SupplierId,
+                SupplierName = x.Supplier!.Name,
+                OutstandingAmount = x.BalanceAmount,
+                DaysDue = 7,
+                DueDate = x.InvoiceDate.AddDays(30),
+                Status = x.BalanceAmount <= 0 ? "Current" : "Due"
+            })
+            .ToList();
 
         var totalEmployees = await _db.Users.CountAsync();
         var totalSuppliers = await _db.Suppliers.CountAsync();
-        var totalProducts = await _db.Products.CountAsync();
+        var totalProducts  = await _db.Products.CountAsync();
         var totalCustomers = await _db.Customers.CountAsync();
 
         return new AdvancedAnalyticsDto
@@ -242,20 +293,7 @@ public class AnalyticsService
             ProfitMargin = monthlyProfitData.LastOrDefault()?.ProfitMargin ?? 0,
             MonthlyProfitData = monthlyProfitData,
             ReceivablesStatus = receivablesStatus,
-            SupplierPaymentStatus = await _db.SupplierInvoices
-                .Include(x => x.Supplier)
-                .OrderBy(x => x.BalanceAmount)
-                .Take(5)
-                .Select(x => new SupplierPaymentStatusDto
-                {
-                    SupplierId = x.SupplierId,
-                    SupplierName = x.Supplier!.Name,
-                    OutstandingAmount = x.BalanceAmount,
-                    DaysDue = 7,
-                    DueDate = x.InvoiceDate.AddDays(30),
-                    Status = x.BalanceAmount <= 0 ? "Current" : "Due"
-                })
-                .ToListAsync(),
+            SupplierPaymentStatus = supplierPaymentStatus,
             TotalProductionCost = productionOrders.Where(x => x.OrderDate >= currentMonthStart).Sum(x => x.TotalCost),
             ActiveProductionOrders = productionOrders.Count(x => x.Status != "Completed"),
             CompletedProductionOrders = productionOrders.Count(x => x.Status == "Completed"),
@@ -275,7 +313,7 @@ public class AnalyticsService
             OnTimeDeliveryRate = 0.88m,
             KpiSummary = new KpiSummaryDto
             {
-                SalesGrowthPercentage = previousSales == 0 ? 0 : (currentSales - previousSales) / (previousSales == 0 ? 1 : previousSales),
+                SalesGrowthPercentage = previousSales == 0 ? 0 : (currentSales - previousSales) / previousSales,
                 ProfitMarginPercentage = monthlyProfitData.LastOrDefault()?.ProfitMargin ?? 0,
                 InventoryTurnover = inventoryTurnoverRate,
                 CollectionEfficiency = currentSales == 0 ? 0 : cashOnHand / currentSales,

@@ -286,6 +286,60 @@ public static class DbSeeder
                 ActionAtUtc = DateTime.UtcNow
             });
 
+        if (!db.PurchaseOrders.Any())
+        {
+            var supplier = db.Suppliers.First();
+            var rawMaterial = db.Products.First(x => x.Code == "RM-001");
+            
+            var orders = new List<PurchaseOrder>();
+            for (int i = 0; i < 15; i++)
+            {
+                var orderDate = DateTime.Today.AddDays(-i * 12);
+                orders.Add(new PurchaseOrder
+                {
+                    OrderNo = $"PO-SEED-{i:D3}",
+                    OrderDate = orderDate,
+                    SupplierId = supplier.Id,
+                    Status = i < 3 ? "Pending" : "Completed",
+                    TotalAmount = 15000 + (i * 500),
+                    Items = new List<PurchaseOrderItem>
+                    {
+                        new() { ProductId = rawMaterial.Id, Quantity = 500, UnitPrice = 30 }
+                    }
+                });
+            }
+            db.PurchaseOrders.AddRange(orders);
+        }
+
+        if (!db.SalesInvoices.Any())
+        {
+            var customer = db.Customers.First();
+            var vehicle = db.Vehicles.First();
+            var product = db.Products.First(x => x.Code == "FG-001");
+            
+            var invoices = new List<SalesInvoice>();
+            for (int i = 0; i < 30; i++)
+            {
+                var invoiceDate = DateTime.Today.AddDays(-i * 5);
+                var qty = 10 + (i % 5) * 5;
+                invoices.Add(new SalesInvoice
+                {
+                    InvoiceNo = $"INV-SEED-{i:D3}",
+                    InvoiceDate = invoiceDate,
+                    CustomerId = customer.Id,
+                    VehicleId = vehicle.Id,
+                    SaleType = SaleType.Cash,
+                    TotalAmount = qty * product.SellingPrice,
+                    PaidAmount = (i % 3 == 0) ? 0 : qty * product.SellingPrice,
+                    Items = new List<SalesInvoiceItem>
+                    {
+                        new() { ProductId = product.Id, Quantity = qty, UnitPrice = product.SellingPrice }
+                    }
+                });
+            }
+            db.SalesInvoices.AddRange(invoices);
+        }
+
         await db.SaveChangesAsync();
     }
 

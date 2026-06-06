@@ -23,8 +23,11 @@ public class DashboardService
             TotalCustomers = await _db.Customers.CountAsync(),
             TotalProducts = await _db.Products.CountAsync(),
             TotalVehicles = await _db.Vehicles.CountAsync(),
-            TodaySales = await _db.SalesInvoices.Where(x => x.InvoiceDate.Date == today).SumAsync(x => (decimal?)x.TotalAmount) ?? 0,
-            OutstandingBalance = await _db.Customers.SumAsync(x => (decimal?)x.OutstandingBalance) ?? 0,
+            TodaySales = (decimal)(await _db.SalesInvoices
+                .Where(x => x.InvoiceDate.Date == today)
+                .SumAsync(x => (double?)x.TotalAmount) ?? 0),
+            OutstandingBalance = (decimal)(await _db.Customers
+                .SumAsync(x => (double?)x.OutstandingBalance) ?? 0),
             Analytics = await _analyticsService.GetAnalyticsAsync()
         };
     }
