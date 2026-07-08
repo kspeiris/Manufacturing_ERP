@@ -58,7 +58,7 @@
                                 </Grid.ColumnDefinitions>
                                 <StackPanel>
                                     <TextBlock Text="Outstanding Balance"
-                                               Foreground="#93C5FD"
+                                               Foreground="{StaticResource AppPrimaryLightBrush}"
                                                FontWeight="SemiBold" />
                                     <TextBlock Text="{Binding Summary.OutstandingBalance, StringFormat=N2}"
                                                Foreground="White"
@@ -66,14 +66,14 @@
                                                FontWeight="Bold"
                                                Margin="0,8,0,0" />
                                     <TextBlock Text="Open customer exposure needing attention."
-                                               Foreground="#CBD5E1"
+                                               Foreground="{StaticResource AppMutedLightBrush}"
                                                Margin="0,8,0,0"
                                                TextWrapping="Wrap" />
                                 </StackPanel>
 
                                 <StackPanel Grid.Column="1" Margin="20,0,0,0">
                                     <TextBlock Text="Collections This Month"
-                                               Foreground="#93C5FD"
+                                               Foreground="{StaticResource AppPrimaryLightBrush}"
                                                FontWeight="SemiBold" />
                                     <TextBlock Text="{Binding Summary.Analytics.CollectionsThisMonth, StringFormat=N2}"
                                                Foreground="White"
@@ -81,7 +81,7 @@
                                                FontWeight="Bold"
                                                Margin="0,8,0,0" />
                                     <TextBlock Text="Cash recovery posted during the current period."
-                                               Foreground="#CBD5E1"
+                                               Foreground="{StaticResource AppMutedLightBrush}"
                                                Margin="0,8,0,0"
                                                TextWrapping="Wrap" />
                                 </StackPanel>
@@ -97,14 +97,14 @@
                             <RowDefinition Height="*" />
                         </Grid.RowDefinitions>
 
-                        <Border Background="#172554"
-                                BorderBrush="#2563EB"
+                        <Border Background="{StaticResource AppDarkPanelBrush}"
+                                BorderBrush="{StaticResource AppPrimaryBrush}"
                                 BorderThickness="1"
                                 CornerRadius="18"
                                 Padding="20">
                             <StackPanel VerticalAlignment="Center">
                                 <TextBlock Text="Today's Sales"
-                                           Foreground="#93C5FD"
+                                           Foreground="{StaticResource AppPrimaryLightBrush}"
                                            FontWeight="SemiBold" />
                                 <TextBlock Text="{Binding Summary.TodaySales, StringFormat=N2}"
                                            Foreground="White"
@@ -112,20 +112,20 @@
                                            FontWeight="Bold"
                                            Margin="0,10,0,0" />
                                 <TextBlock Text="Live daily billing total."
-                                           Foreground="#CBD5E1"
+                                           Foreground="{StaticResource AppMutedLightBrush}"
                                            Margin="0,8,0,0" />
                             </StackPanel>
                         </Border>
 
                         <Border Grid.Row="2"
-                                Background="#172554"
-                                BorderBrush="#2563EB"
+                                Background="{StaticResource AppDarkPanelBrush}"
+                                BorderBrush="{StaticResource AppPrimaryBrush}"
                                 BorderThickness="1"
                                 CornerRadius="18"
                                 Padding="20">
                             <StackPanel VerticalAlignment="Center">
                                 <TextBlock Text="Inventory Value"
-                                           Foreground="#93C5FD"
+                                           Foreground="{StaticResource AppPrimaryLightBrush}"
                                            FontWeight="SemiBold" />
                                 <TextBlock Text="{Binding Summary.Analytics.InventoryValue, StringFormat=N2}"
                                            Foreground="White"
@@ -133,7 +133,7 @@
                                            FontWeight="Bold"
                                            Margin="0,10,0,0" />
                                 <TextBlock Text="Current stock value on hand."
-                                           Foreground="#CBD5E1"
+                                           Foreground="{StaticResource AppMutedLightBrush}"
                                            Margin="0,8,0,0" />
                             </StackPanel>
                         </Border>

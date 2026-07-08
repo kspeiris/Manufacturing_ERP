@@ -21,7 +21,7 @@
     </UserControl.Resources>
 
     <Grid>
-        <TextBlock Text="{Binding ErrorMessage}" Foreground="#DC2626" FontWeight="SemiBold" FontSize="14"
+        <TextBlock Text="{Binding ErrorMessage}" Foreground="{StaticResource AppDangerBrush}" FontWeight="SemiBold" FontSize="14"
                    Margin="24" VerticalAlignment="Top" HorizontalAlignment="Left" Panel.ZIndex="10" />
     <ScrollViewer VerticalScrollBarVisibility="Auto" HorizontalScrollBarVisibility="Disabled">
         <StackPanel Margin="0,0,0,8">
@@ -38,11 +38,11 @@
                         <TextBlock Text="This analytics dashboard brings together trend charts, category insights and working capital metrics to help managers make faster decisions." Style="{StaticResource HeroBodyText}" Margin="0,12,0,0" MaxWidth="720" />
                     </StackPanel>
 
-                    <Border Grid.Column="1" Background="#172554" BorderBrush="#2563EB" BorderThickness="1" CornerRadius="18" Padding="20">
+                    <Border Grid.Column="1" Background="{StaticResource AppDarkPanelBrush}" BorderBrush="{StaticResource AppPrimaryBrush}" BorderThickness="1" CornerRadius="18" Padding="20">
                         <StackPanel>
-                            <TextBlock Text="Executive score" Foreground="#93C5FD" FontWeight="SemiBold" />
+                            <TextBlock Text="Executive score" Foreground="{StaticResource AppPrimaryLightBrush}" FontWeight="SemiBold" />
                             <TextBlock Text="{Binding Analytics.KpiSummary.HealthStatus}" Foreground="White" FontSize="26" FontWeight="Bold" Margin="0,10,0,0" />
-                            <TextBlock Text="Overall operational health index based on sales, inventory and cash flow." Foreground="#CBD5E1" Margin="0,8,0,0" TextWrapping="Wrap" />
+                            <TextBlock Text="Overall operational health index based on sales, inventory and cash flow." Foreground="{StaticResource AppMutedLightBrush}" Margin="0,8,0,0" TextWrapping="Wrap" />
                             <TextBlock Text="{Binding Analytics.KpiSummary.HealthScore, StringFormat=Score: {0}}" Foreground="White" FontWeight="SemiBold" FontSize="16" Margin="0,14,0,0" />
                         </StackPanel>
                     </Border>
@@ -60,9 +60,9 @@
                         <DataTemplate>
                             <Border Style="{StaticResource AnalyticsKpiCard}">
                                 <StackPanel>
-                                    <TextBlock Text="{Binding Title}" FontSize="14" FontWeight="SemiBold" Foreground="#334155" />
+                                    <TextBlock Text="{Binding Title}" FontSize="14" FontWeight="SemiBold" Foreground="{StaticResource AppTextDarkBrush}" />
                                     <TextBlock Text="{Binding Value, StringFormat=C0}" FontSize="26" FontWeight="Bold" Margin="0,10,0,0" />
-                                    <TextBlock Text="{Binding Description}" FontSize="13" Foreground="#64748B" Margin="0,10,0,0" TextWrapping="Wrap" />
+                                    <TextBlock Text="{Binding Description}" FontSize="13" Foreground="{StaticResource AppMutedTextBrush}" Margin="0,10,0,0" TextWrapping="Wrap" />
                                     <TextBlock Text="{Binding ChangeLabel}" FontSize="13" FontWeight="SemiBold" Foreground="{Binding ChangeColor}" Margin="0,12,0,0" />
                                 </StackPanel>
                             </Border>
@@ -81,7 +81,7 @@
                     <StackPanel>
                         <TextBlock Text="Sales Trend" Style="{StaticResource CardTitleText}" />
                         <TextBlock Text="Six-month booking performance" Style="{StaticResource PageSubtitleText}" />
-                        <lvc:CartesianChart x:Name="SalesTrendChart" Series="{Binding SalesTrendSeries}" XAxes="{Binding SalesTrendXAxes}" ZoomMode="X" LegendPosition="Top" Height="320" Background="#F8FAFB" AnimationsSpeed="00:00:00.800" />
+                        <lvc:CartesianChart x:Name="SalesTrendChart" Series="{Binding SalesTrendSeries}" XAxes="{Binding SalesTrendXAxes}" ZoomMode="X" LegendPosition="Top" Height="320" Background="{StaticResource AppChartBackgroundBrush}" AnimationsSpeed="00:00:00.800" />
                     </StackPanel>
                 </Border>
 
@@ -89,7 +89,7 @@
                     <StackPanel>
                         <TextBlock Text="Profit &amp; Cost" Style="{StaticResource CardTitleText}" />
                         <TextBlock Text="Margin and expense visibility" Style="{StaticResource PageSubtitleText}" />
-                        <lvc:CartesianChart x:Name="ProfitTrendChart" Series="{Binding ProfitTrendSeries}" XAxes="{Binding ProfitTrendXAxes}" ZoomMode="X" LegendPosition="Top" Height="320" Background="#F8FAFB" AnimationsSpeed="00:00:00.800" />
+                        <lvc:CartesianChart x:Name="ProfitTrendChart" Series="{Binding ProfitTrendSeries}" XAxes="{Binding ProfitTrendXAxes}" ZoomMode="X" LegendPosition="Top" Height="320" Background="{StaticResource AppChartBackgroundBrush}" AnimationsSpeed="00:00:00.800" />
                     </StackPanel>
                 </Border>
             </Grid>
@@ -104,7 +104,7 @@
                     <StackPanel>
                         <TextBlock Text="Inventory Distribution" Style="{StaticResource CardTitleText}" />
                         <TextBlock Text="Value share by product category" Style="{StaticResource PageSubtitleText}" />
-                        <lvc:PieChart Series="{Binding InventorySeries}" LegendPosition="Right" Height="320" Background="#F8FAFB" AnimationsSpeed="00:00:00.800" />
+                        <lvc:PieChart Series="{Binding InventorySeries}" LegendPosition="Right" Height="320" Background="{StaticResource AppChartBackgroundBrush}" AnimationsSpeed="00:00:00.800" />
                     </StackPanel>
                 </Border>
 
@@ -113,11 +113,11 @@
                         <TextBlock Text="Working Capital" Style="{StaticResource CardTitleText}" />
                         <TextBlock Text="Receivables, payables and cash view" Style="{StaticResource PageSubtitleText}" />
                         <StackPanel Margin="0,18,0,0">
-                            <TextBlock Text="Total receivables" FontWeight="SemiBold" Foreground="#334155" />
+                            <TextBlock Text="Total receivables" FontWeight="SemiBold" Foreground="{StaticResource AppTextDarkBrush}" />
                             <TextBlock Text="{Binding Analytics.TotalReceivables, StringFormat=C0}" FontSize="24" FontWeight="Bold" Margin="0,6,0,0" />
-                            <TextBlock Text="Total payables" FontWeight="SemiBold" Foreground="#334155" Margin="0,14,0,0" />
+                            <TextBlock Text="Total payables" FontWeight="SemiBold" Foreground="{StaticResource AppTextDarkBrush}" Margin="0,14,0,0" />
                             <TextBlock Text="{Binding Analytics.TotalPayables, StringFormat=C0}" FontSize="24" FontWeight="Bold" Margin="0,6,0,0" />
-                            <TextBlock Text="Cash collected" FontWeight="SemiBold" Foreground="#334155" Margin="0,14,0,0" />
+                            <TextBlock Text="Cash collected" FontWeight="SemiBold" Foreground="{StaticResource AppTextDarkBrush}" Margin="0,14,0,0" />
                             <TextBlock Text="{Binding Analytics.CashOnHand, StringFormat=C0}" FontSize="24" FontWeight="Bold" Margin="0,6,0,0" />
                         </StackPanel>
                     </StackPanel>
