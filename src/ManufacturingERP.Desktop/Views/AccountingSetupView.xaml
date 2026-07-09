@@ -180,8 +180,8 @@
                                         <DataGridTextColumn Header="Type" Binding="{Binding VoucherType}" Width="130" />
                                         <DataGridTextColumn Header="Status" Binding="{Binding Status}" Width="130" />
                                         <DataGridTextColumn Header="Description" Binding="{Binding Description}" Width="*" />
-                                        <DataGridTextColumn Header="Debit" Binding="{Binding TotalDebit}" Width="110" />
-                                        <DataGridTextColumn Header="Credit" Binding="{Binding TotalCredit}" Width="110" />
+                                         <DataGridTextColumn Header="Debit" Binding="{Binding TotalDebit, StringFormat=LKR {0:N2}}" Width="110" />
+                                         <DataGridTextColumn Header="Credit" Binding="{Binding TotalCredit, StringFormat=LKR {0:N2}}" Width="110" />
                                     </DataGrid.Columns>
                                 </DataGrid>
                             </DockPanel>

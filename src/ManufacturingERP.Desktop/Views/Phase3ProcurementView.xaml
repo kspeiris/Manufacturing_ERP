@@ -84,7 +84,7 @@
                                                         SelectedValuePath="."
                                                         ItemsSource="{Binding DataContext.Products, RelativeSource={RelativeSource AncestorType=UserControl}}" />
                                 <DataGridTextColumn Header="Qty" Binding="{Binding Quantity}" Width="110" />
-                                <DataGridTextColumn Header="Unit Cost" Binding="{Binding UnitCost}" Width="120" />
+                                <DataGridTextColumn Header="Unit Cost" Binding="{Binding UnitCost, StringFormat=LKR {0:N2}}" Width="120" />
                             </DataGrid.Columns>
                         </DataGrid>
                     </StackPanel>
@@ -105,8 +105,8 @@
                                 <DataGridTextColumn Header="Invoice No" Binding="{Binding InvoiceNo}" Width="160" />
                                 <DataGridTextColumn Header="Date" Binding="{Binding InvoiceDate}" Width="140" />
                                 <DataGridTextColumn Header="Supplier" Binding="{Binding Supplier.Name}" Width="*" />
-                                <DataGridTextColumn Header="Total" Binding="{Binding TotalAmount}" Width="120" />
-                                <DataGridTextColumn Header="Balance" Binding="{Binding BalanceAmount}" Width="120" />
+                                <DataGridTextColumn Header="Total" Binding="{Binding TotalAmount, StringFormat=LKR {0:N2}}" Width="120" />
+                                <DataGridTextColumn Header="Balance" Binding="{Binding BalanceAmount, StringFormat=LKR {0:N2}}" Width="120" />
                                 <DataGridTextColumn Header="Status" Binding="{Binding Status}" Width="100" />
                             </DataGrid.Columns>
                         </DataGrid>
@@ -125,7 +125,7 @@
                                 <DataGridTextColumn Header="Date" Binding="{Binding ReturnDate}" Width="140" />
                                 <DataGridTextColumn Header="Supplier" Binding="{Binding Supplier.Name}" Width="*" />
                                 <DataGridTextColumn Header="Warehouse" Binding="{Binding Warehouse.Name}" Width="160" />
-                                <DataGridTextColumn Header="Total" Binding="{Binding TotalAmount}" Width="120" />
+                                    <DataGridTextColumn Header="Total" Binding="{Binding TotalAmount, StringFormat=LKR {0:N2}}" Width="120" />
                             </DataGrid.Columns>
                         </DataGrid>
                     </DockPanel>

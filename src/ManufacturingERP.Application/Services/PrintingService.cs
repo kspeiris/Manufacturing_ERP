@@ -80,9 +80,9 @@ public class PrintingService
 
         var footer = $"""
             <div class='totals'>
-                <div><span>Subtotal</span><strong>{invoice.TotalAmount:N2}</strong></div>
-                <div><span>Paid</span><strong>{invoice.PaidAmount:N2}</strong></div>
-                <div class='grand'><span>Balance</span><strong>{(invoice.TotalAmount - invoice.PaidAmount):N2}</strong></div>
+                <div><span>Subtotal</span><strong>LKR {invoice.TotalAmount:N2}</strong></div>
+                <div><span>Paid</span><strong>LKR {invoice.PaidAmount:N2}</strong></div>
+                <div class='grand'><span>Balance</span><strong>LKR {(invoice.TotalAmount - invoice.PaidAmount):N2}</strong></div>
             </div>
             """;
 
@@ -91,8 +91,8 @@ public class PrintingService
             Encode(i.Product?.Code ?? string.Empty),
             Encode(i.Product?.Name ?? string.Empty),
             i.Quantity.ToString("N2"),
-            i.UnitPrice.ToString("N2"),
-            i.LineTotal.ToString("N2")
+            $"LKR {i.UnitPrice:N2}",
+            $"LKR {i.LineTotal:N2}"
         });
 
         var html = BuildDocumentHtml(
@@ -137,7 +137,7 @@ public class PrintingService
 
         var footer = $"""
             <div class='totals'>
-                <div class='grand'><span>Order Total</span><strong>{po.TotalAmount:N2}</strong></div>
+                <div class='grand'><span>Order Total</span><strong>LKR {po.TotalAmount:N2}</strong></div>
             </div>
             """;
 
@@ -146,8 +146,8 @@ public class PrintingService
             Encode(i.Product?.Code ?? string.Empty),
             Encode(i.Product?.Name ?? string.Empty),
             i.Quantity.ToString("N2"),
-            i.UnitPrice.ToString("N2"),
-            i.LineTotal.ToString("N2")
+            $"LKR {i.UnitPrice:N2}",
+            $"LKR {i.LineTotal:N2}"
         });
 
         var html = BuildDocumentHtml(
@@ -174,9 +174,9 @@ public class PrintingService
                 r.EntryDate.ToString("yyyy-MM-dd"),
                 Encode(r.EntryType),
                 Encode(r.ReferenceNo),
-                r.Debit.ToString("N2"),
-                r.Credit.ToString("N2"),
-                r.RunningBalance.ToString("N2")
+                $"LKR {r.Debit:N2}",
+                $"LKR {r.Credit:N2}",
+                $"LKR {r.RunningBalance:N2}"
             }));
 
         EnsureOutputDirectory(outputPath);
@@ -196,9 +196,9 @@ public class PrintingService
                 r.EntryDate.ToString("yyyy-MM-dd"),
                 Encode(r.EntryType),
                 Encode(r.ReferenceNo),
-                r.Debit.ToString("N2"),
-                r.Credit.ToString("N2"),
-                r.RunningBalance.ToString("N2")
+                $"LKR {r.Debit:N2}",
+                $"LKR {r.Credit:N2}",
+                $"LKR {r.RunningBalance:N2}"
             }));
 
         EnsureOutputDirectory(outputPath);

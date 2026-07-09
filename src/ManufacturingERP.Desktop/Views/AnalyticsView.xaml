@@ -61,7 +61,7 @@
                             <Border Style="{StaticResource AnalyticsKpiCard}">
                                 <StackPanel>
                                     <TextBlock Text="{Binding Title}" FontSize="14" FontWeight="SemiBold" Foreground="{StaticResource AppTextDarkBrush}" />
-                                    <TextBlock Text="{Binding Value, StringFormat=C0}" FontSize="26" FontWeight="Bold" Margin="0,10,0,0" />
+                                    <TextBlock Text="{Binding Value, StringFormat=LKR {0:N0}}" FontSize="26" FontWeight="Bold" Margin="0,10,0,0" />
                                     <TextBlock Text="{Binding Description}" FontSize="13" Foreground="{StaticResource AppMutedTextBrush}" Margin="0,10,0,0" TextWrapping="Wrap" />
                                     <TextBlock Text="{Binding ChangeLabel}" FontSize="13" FontWeight="SemiBold" Foreground="{Binding ChangeColor}" Margin="0,12,0,0" />
                                 </StackPanel>
@@ -114,11 +114,11 @@
                         <TextBlock Text="Receivables, payables and cash view" Style="{StaticResource PageSubtitleText}" />
                         <StackPanel Margin="0,18,0,0">
                             <TextBlock Text="Total receivables" FontWeight="SemiBold" Foreground="{StaticResource AppTextDarkBrush}" />
-                            <TextBlock Text="{Binding Analytics.TotalReceivables, StringFormat=C0}" FontSize="24" FontWeight="Bold" Margin="0,6,0,0" />
+                            <TextBlock Text="{Binding Analytics.TotalReceivables, StringFormat=LKR {0:N0}}" FontSize="24" FontWeight="Bold" Margin="0,6,0,0" />
                             <TextBlock Text="Total payables" FontWeight="SemiBold" Foreground="{StaticResource AppTextDarkBrush}" Margin="0,14,0,0" />
-                            <TextBlock Text="{Binding Analytics.TotalPayables, StringFormat=C0}" FontSize="24" FontWeight="Bold" Margin="0,6,0,0" />
+                            <TextBlock Text="{Binding Analytics.TotalPayables, StringFormat=LKR {0:N0}}" FontSize="24" FontWeight="Bold" Margin="0,6,0,0" />
                             <TextBlock Text="Cash collected" FontWeight="SemiBold" Foreground="{StaticResource AppTextDarkBrush}" Margin="0,14,0,0" />
-                            <TextBlock Text="{Binding Analytics.CashOnHand, StringFormat=C0}" FontSize="24" FontWeight="Bold" Margin="0,6,0,0" />
+                            <TextBlock Text="{Binding Analytics.CashOnHand, StringFormat=LKR {0:N0}}" FontSize="24" FontWeight="Bold" Margin="0,6,0,0" />
                         </StackPanel>
                     </StackPanel>
                 </Border>

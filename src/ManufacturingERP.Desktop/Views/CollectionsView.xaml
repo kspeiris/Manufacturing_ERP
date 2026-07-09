@@ -21,7 +21,7 @@
                         <StackPanel>
                             <TextBlock Text="Selected Customer Position" Foreground="#93C5FD" FontWeight="SemiBold" />
                             <TextBlock Text="{Binding SelectedCustomer.ShopName, TargetNullValue=No customer selected}" Foreground="White" FontSize="22" FontWeight="SemiBold" Margin="0,10,0,0" TextWrapping="Wrap" />
-                            <TextBlock Text="{Binding SelectedCustomerOutstanding, StringFormat=Outstanding: {0:N2}}" Foreground="#CBD5E1" Margin="0,8,0,0" TextWrapping="Wrap" />
+                            <TextBlock Text="{Binding SelectedCustomerOutstanding, StringFormat=Outstanding: LKR {0:N2}}" Foreground="#CBD5E1" Margin="0,8,0,0" TextWrapping="Wrap" />
                             <TextBlock Text="{Binding StatusMessage}" Foreground="#93C5FD" Margin="0,10,0,0" TextWrapping="Wrap" />
                         </StackPanel>
                     </Border>
@@ -98,7 +98,7 @@
                                 <DataGrid.Columns>
                                     <DataGridTextColumn Header="Date" Binding="{Binding CollectionDate}" Width="160" />
                                     <DataGridTextColumn Header="Customer" Binding="{Binding Customer.ShopName}" Width="*" />
-                                    <DataGridTextColumn Header="Amount" Binding="{Binding Amount, StringFormat=N2}" Width="120" />
+                                     <DataGridTextColumn Header="Amount" Binding="{Binding Amount, StringFormat=LKR {0:N2}}" Width="120" />
                                     <DataGridTextColumn Header="Reference" Binding="{Binding ReferenceNo}" Width="140" />
                                     <DataGridTextColumn Header="Notes" Binding="{Binding Notes}" Width="220" />
                                 </DataGrid.Columns>

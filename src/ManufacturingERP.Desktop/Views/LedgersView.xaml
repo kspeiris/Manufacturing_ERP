@@ -60,9 +60,9 @@
                                 <DataGridTextColumn Header="Date" Binding="{Binding EntryDate}" Width="140" />
                                 <DataGridTextColumn Header="Type" Binding="{Binding EntryType}" Width="120" />
                                 <DataGridTextColumn Header="Ref" Binding="{Binding ReferenceNo}" Width="140" />
-                                <DataGridTextColumn Header="Debit" Binding="{Binding Debit}" Width="100" />
-                                <DataGridTextColumn Header="Credit" Binding="{Binding Credit}" Width="100" />
-                                <DataGridTextColumn Header="Balance" Binding="{Binding RunningBalance}" Width="120" />
+                                <DataGridTextColumn Header="Debit" Binding="{Binding Debit, StringFormat=LKR {0:N2}}" Width="100" />
+                                <DataGridTextColumn Header="Credit" Binding="{Binding Credit, StringFormat=LKR {0:N2}}" Width="100" />
+                                <DataGridTextColumn Header="Balance" Binding="{Binding RunningBalance, StringFormat=LKR {0:N2}}" Width="120" />
                             </DataGrid.Columns>
                         </DataGrid>
                     </DockPanel>
@@ -82,9 +82,9 @@
                                 <DataGridTextColumn Header="Date" Binding="{Binding EntryDate}" Width="140" />
                                 <DataGridTextColumn Header="Type" Binding="{Binding EntryType}" Width="120" />
                                 <DataGridTextColumn Header="Ref" Binding="{Binding ReferenceNo}" Width="140" />
-                                <DataGridTextColumn Header="Debit" Binding="{Binding Debit}" Width="100" />
-                                <DataGridTextColumn Header="Credit" Binding="{Binding Credit}" Width="100" />
-                                <DataGridTextColumn Header="Balance" Binding="{Binding RunningBalance}" Width="120" />
+                                <DataGridTextColumn Header="Debit" Binding="{Binding Debit, StringFormat=LKR {0:N2}}" Width="100" />
+                                <DataGridTextColumn Header="Credit" Binding="{Binding Credit, StringFormat=LKR {0:N2}}" Width="100" />
+                                <DataGridTextColumn Header="Balance" Binding="{Binding RunningBalance, StringFormat=LKR {0:N2}}" Width="120" />
                             </DataGrid.Columns>
                         </DataGrid>
                     </DockPanel>

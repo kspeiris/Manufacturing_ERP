@@ -75,10 +75,10 @@
                                 <DataGridTextColumn Header="Order No" Binding="{Binding OrderNo}" Width="150" />
                                 <DataGridTextColumn Header="Product" Binding="{Binding FinishedProduct.Name}" Width="*" />
                                 <DataGridTextColumn Header="Produced Qty" Binding="{Binding ProducedQuantity}" Width="110" />
-                                <DataGridTextColumn Header="Material" Binding="{Binding MaterialCost}" Width="110" />
-                                <DataGridTextColumn Header="Labor" Binding="{Binding LaborCost}" Width="110" />
-                                <DataGridTextColumn Header="Overhead" Binding="{Binding OverheadCost}" Width="110" />
-                                <DataGridTextColumn Header="Unit Cost" Binding="{Binding UnitCost}" Width="110" />
+                                 <DataGridTextColumn Header="Material" Binding="{Binding MaterialCost, StringFormat=LKR {0:N2}}" Width="110" />
+                                 <DataGridTextColumn Header="Labor" Binding="{Binding LaborCost, StringFormat=LKR {0:N2}}" Width="110" />
+                                 <DataGridTextColumn Header="Overhead" Binding="{Binding OverheadCost, StringFormat=LKR {0:N2}}" Width="110" />
+                                 <DataGridTextColumn Header="Unit Cost" Binding="{Binding UnitCost, StringFormat=LKR {0:N2}}" Width="110" />
                             </DataGrid.Columns>
                         </DataGrid>
                     </DockPanel>

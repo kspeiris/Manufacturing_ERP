@@ -25,7 +25,7 @@ public partial class AnalyticsViewModel : ViewModelBase
     [ObservableProperty] private bool _isLoading = true;
     [ObservableProperty] private string _errorMessage = string.Empty;
 
-    public Func<double, string> CurrencyLabeler { get; } = value => value.ToString("C0");
+    public Func<double, string> CurrencyLabeler { get; } = value => $"LKR {value:N0}";
     public Func<double, string> PercentLabeler { get; } = value => $"{value:P0}";
 
     public AnalyticsViewModel(AnalyticsService analyticsService)

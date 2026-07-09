@@ -117,7 +117,7 @@
                                     <DataGridTextColumn Header="Owner" Binding="{Binding OwnerName}" Width="180" />
                                     <DataGridTextColumn Header="Route" Binding="{Binding Route}" Width="120" />
                                     <DataGridTextColumn Header="Phone" Binding="{Binding ContactNumber}" Width="140" />
-                                    <DataGridTextColumn Header="Outstanding" Binding="{Binding OutstandingBalance, StringFormat=N2}" Width="140" />
+                                    <DataGridTextColumn Header="Outstanding" Binding="{Binding OutstandingBalance, StringFormat=LKR {0:N2}}" Width="140" />
                                     <DataGridTemplateColumn Header="Status" Width="120">
                                         <DataGridTemplateColumn.CellTemplate>
                                             <DataTemplate>
@@ -183,8 +183,8 @@
                         <Border Background="#ECFDF5" BorderBrush="#BBF7D0" BorderThickness="1" CornerRadius="16" Padding="16">
                             <StackPanel>
                                 <TextBlock Text="Financial Snapshot" Style="{StaticResource InlineStatLabel}" />
-                                <TextBlock Text="{Binding SelectedCustomer.OutstandingBalance, StringFormat=Outstanding: {0:N2}, TargetNullValue=Outstanding: -}" Style="{StaticResource PageSubtitleText}" Margin="0,8,0,0" />
-                                <TextBlock Text="{Binding SelectedCustomer.CreditLimit, StringFormat=Credit Limit: {0:N2}, TargetNullValue=Credit Limit: -}" Style="{StaticResource PageSubtitleText}" />
+                                <TextBlock Text="{Binding SelectedCustomer.OutstandingBalance, StringFormat=Outstanding: LKR {0:N2}, TargetNullValue=Outstanding: -}" Style="{StaticResource PageSubtitleText}" Margin="0,8,0,0" />
+                                <TextBlock Text="{Binding SelectedCustomer.CreditLimit, StringFormat=Credit Limit: LKR {0:N2}, TargetNullValue=Credit Limit: -}" Style="{StaticResource PageSubtitleText}" />
                                 <TextBlock Text="{Binding SelectedCustomer.IsActive, StringFormat=Active: {0}, TargetNullValue=Active: -}" Style="{StaticResource PageSubtitleText}" />
                             </StackPanel>
                         </Border>

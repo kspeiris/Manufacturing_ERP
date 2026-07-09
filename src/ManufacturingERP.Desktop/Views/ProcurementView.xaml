@@ -95,7 +95,7 @@
                                                             SelectedValuePath="."
                                                             ItemsSource="{Binding DataContext.Products, RelativeSource={RelativeSource AncestorType=UserControl}}" />
                                     <DataGridTextColumn Header="Quantity" Width="120" Binding="{Binding Quantity}" />
-                                    <DataGridTextColumn Header="Unit Price" Width="140" Binding="{Binding UnitPrice}" />
+                                    <DataGridTextColumn Header="Unit Price" Width="140" Binding="{Binding UnitPrice, StringFormat=LKR {0:N2}}" />
                                 </DataGrid.Columns>
                             </DataGrid>
                             </ScrollViewer>

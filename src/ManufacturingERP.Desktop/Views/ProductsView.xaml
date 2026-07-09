@@ -302,7 +302,7 @@
                                             <Border Grid.Row="0" Grid.Column="0" Background="#F8FBFF" BorderBrush="#DCE7F5" BorderThickness="1" CornerRadius="16" Padding="16" Margin="0,0,12,12">
                                                 <StackPanel>
                                                     <TextBlock Text="Average Selling Price" Style="{StaticResource InlineStatLabel}" />
-                                                    <TextBlock Text="{Binding AverageSellingPrice, StringFormat=N2}" Style="{StaticResource InlineStatValue}" />
+                                                    <TextBlock Text="{Binding AverageSellingPrice, StringFormat=LKR {0:N2}}" Style="{StaticResource InlineStatValue}" />
                                                     <TextBlock Text="Average listed selling price across visible records."
                                                                Style="{StaticResource PageSubtitleText}" />
                                                 </StackPanel>
@@ -364,8 +364,8 @@
                                         <Border Background="#ECFDF5" BorderBrush="#BBF7D0" BorderThickness="1" CornerRadius="16" Padding="16">
                                             <StackPanel>
                                                 <TextBlock Text="Pricing" Style="{StaticResource InlineStatLabel}" />
-                                                <TextBlock Text="{Binding SelectedProduct.SellingPrice, StringFormat=Selling: {0:N2}, TargetNullValue=Selling: -}" Style="{StaticResource PageSubtitleText}" Margin="0,8,0,0" />
-                                                <TextBlock Text="{Binding SelectedProduct.CostPrice, StringFormat=Cost: {0:N2}, TargetNullValue=Cost: -}" Style="{StaticResource PageSubtitleText}" />
+                                                <TextBlock Text="{Binding SelectedProduct.SellingPrice, StringFormat=Selling: LKR {0:N2}, TargetNullValue=Selling: -}" Style="{StaticResource PageSubtitleText}" Margin="0,8,0,0" />
+                                                <TextBlock Text="{Binding SelectedProduct.CostPrice, StringFormat=Cost: LKR {0:N2}, TargetNullValue=Cost: -}" Style="{StaticResource PageSubtitleText}" />
                                                 <TextBlock Text="{Binding SelectedProduct.IsActive, StringFormat=Active: {0}, TargetNullValue=Active: -}" Style="{StaticResource PageSubtitleText}" />
                                             </StackPanel>
                                         </Border>
@@ -455,8 +455,8 @@
                                                 <DataGridTextColumn Header="Name" Binding="{Binding Name}" Width="260" />
                                                 <DataGridTextColumn Header="Category" Binding="{Binding ProductCategory.Name}" Width="220" />
                                                 <DataGridTextColumn Header="Unit" Binding="{Binding Unit}" Width="90" />
-                                                <DataGridTextColumn Header="Cost" Binding="{Binding CostPrice, StringFormat=N2}" Width="120" />
-                                                <DataGridTextColumn Header="Selling" Binding="{Binding SellingPrice, StringFormat=N2}" Width="120" />
+                                                <DataGridTextColumn Header="Cost" Binding="{Binding CostPrice, StringFormat=LKR {0:N2}}" Width="120" />
+                                                <DataGridTextColumn Header="Selling" Binding="{Binding SellingPrice, StringFormat=LKR {0:N2}}" Width="120" />
                                                 <DataGridTemplateColumn Header="Track Batch" Width="120">
                                                     <DataGridTemplateColumn.CellTemplate>
                                                         <DataTemplate>

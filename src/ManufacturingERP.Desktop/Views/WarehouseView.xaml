@@ -34,7 +34,7 @@
                     <ColumnDefinition Width="*" />
                 </Grid.ColumnDefinitions>
                 <Border Grid.Column="0" Style="{StaticResource SectionCard}" Margin="0,0,16,16"><StackPanel><TextBlock Text="Qty on Hand" Style="{StaticResource InlineStatLabel}" /><TextBlock Text="{Binding TotalQuantityOnHand, StringFormat=N2}" Style="{StaticResource InlineStatValue}" /><TextBlock Text="Current quantity available across stock rows." Style="{StaticResource PageSubtitleText}" /></StackPanel></Border>
-                <Border Grid.Column="1" Style="{StaticResource SectionCard}" Margin="0,0,16,16"><StackPanel><TextBlock Text="Stock Value" Style="{StaticResource InlineStatLabel}" /><TextBlock Text="{Binding TotalStockValue, StringFormat=N2}" Style="{StaticResource InlineStatValue}" /><TextBlock Text="Current carrying value of inventory." Style="{StaticResource PageSubtitleText}" /></StackPanel></Border>
+                <Border Grid.Column="1" Style="{StaticResource SectionCard}" Margin="0,0,16,16"><StackPanel><TextBlock Text="Stock Value" Style="{StaticResource InlineStatLabel}" /><TextBlock Text="{Binding TotalStockValue, StringFormat=LKR {0:N2}}" Style="{StaticResource InlineStatValue}" /><TextBlock Text="Current carrying value of inventory." Style="{StaticResource PageSubtitleText}" /></StackPanel></Border>
                 <Border Grid.Column="2" Style="{StaticResource SectionCard}" Margin="0,0,0,16"><StackPanel><TextBlock Text="Selected Warehouse" Style="{StaticResource InlineStatLabel}" /><TextBlock Text="{Binding SelectedWarehouse.Name, TargetNullValue=Not selected}" Style="{StaticResource InlineStatValue}" /><TextBlock Text="Adjustment target location." Style="{StaticResource PageSubtitleText}" /></StackPanel></Border>
             </Grid>
 
@@ -95,8 +95,8 @@
                                         <DataGridTextColumn Header="Product" Binding="{Binding ProductName}" Width="*" />
                                         <DataGridTextColumn Header="Warehouse" Binding="{Binding WarehouseName}" Width="180" />
                                         <DataGridTextColumn Header="Qty" Binding="{Binding QuantityOnHand}" Width="100" />
-                                        <DataGridTextColumn Header="Cost" Binding="{Binding CostPrice}" Width="100" />
-                                        <DataGridTextColumn Header="Value" Binding="{Binding StockValue}" Width="120" />
+                                         <DataGridTextColumn Header="Cost" Binding="{Binding CostPrice, StringFormat=LKR {0:N2}}" Width="100" />
+                                         <DataGridTextColumn Header="Value" Binding="{Binding StockValue, StringFormat=LKR {0:N2}}" Width="120" />
                                     </DataGrid.Columns>
                                 </DataGrid>
                                 </ScrollViewer>
