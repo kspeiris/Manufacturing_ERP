@@ -25,10 +25,17 @@ public partial class ProductionCostingViewModel : ViewModelBase
     [RelayCommand]
     public async Task LoadAsync()
     {
-        using var scope = App.Services.CreateScope();
-        var db = scope.ServiceProvider.GetRequiredService<AppDbContext>();
-        Orders.Clear();
-        foreach (var x in await db.ProductionOrders.Include(x => x.FinishedProduct).OrderByDescending(x => x.OrderDate).ToListAsync()) Orders.Add(x);
+        try
+        {
+            using var scope = App.Services.CreateScope();
+            var db = scope.ServiceProvider.GetRequiredService<AppDbContext>();
+            Orders.Clear();
+            foreach (var x in await db.ProductionOrders.Include(x => x.FinishedProduct).OrderByDescending(x => x.OrderDate).ToListAsync()) Orders.Add(x);
+        }
+        catch (Exception ex)
+        {
+            StatusMessage = $"Failed to load production orders: {ex.Message}";
+        }
     }
 
     partial void OnSelectedOrderChanged(ProductionOrder? value)
@@ -48,14 +55,21 @@ public partial class ProductionCostingViewModel : ViewModelBase
             return;
         }
 
-        using var scope = App.Services.CreateScope();
-        var db = scope.ServiceProvider.GetRequiredService<AppDbContext>();
-        var entity = await db.ProductionOrders.FirstAsync(x => x.Id == SelectedOrder.Id);
-        entity.MaterialCost = MaterialCost;
-        entity.LaborCost = LaborCost;
-        entity.OverheadCost = OverheadCost;
-        await db.SaveChangesAsync();
-        StatusMessage = "Production costing updated.";
-        await LoadAsync();
+        try
+        {
+            using var scope = App.Services.CreateScope();
+            var db = scope.ServiceProvider.GetRequiredService<AppDbContext>();
+            var entity = await db.ProductionOrders.FirstAsync(x => x.Id == SelectedOrder.Id);
+            entity.MaterialCost = MaterialCost;
+            entity.LaborCost = LaborCost;
+            entity.OverheadCost = OverheadCost;
+            await db.SaveChangesAsync();
+            StatusMessage = "Production costing updated.";
+            await LoadAsync();
+        }
+        catch (Exception ex)
+        {
+            StatusMessage = $"Failed to save costing: {ex.Message}";
+        }
     }
 }

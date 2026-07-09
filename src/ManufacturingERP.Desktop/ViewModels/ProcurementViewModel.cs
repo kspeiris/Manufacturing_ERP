@@ -32,18 +32,25 @@ public partial class ProcurementViewModel : ViewModelBase
 
     public async Task LoadAsync()
     {
-        using var scope = App.Services.CreateScope();
-        var db = scope.ServiceProvider.GetRequiredService<AppDbContext>();
+        try
+        {
+            using var scope = App.Services.CreateScope();
+            var db = scope.ServiceProvider.GetRequiredService<AppDbContext>();
 
-        Suppliers.Clear();
-        foreach (var item in await db.Suppliers.OrderBy(x => x.Name).ToListAsync()) Suppliers.Add(item);
-        Products.Clear();
-        foreach (var item in await db.Products.Where(x => x.IsActive).OrderBy(x => x.Name).ToListAsync()) Products.Add(item);
-        Warehouses.Clear();
-        foreach (var item in await db.Warehouses.Where(x => x.IsActive).OrderBy(x => x.Name).ToListAsync()) Warehouses.Add(item);
+            Suppliers.Clear();
+            foreach (var item in await db.Suppliers.OrderBy(x => x.Name).ToListAsync()) Suppliers.Add(item);
+            Products.Clear();
+            foreach (var item in await db.Products.Where(x => x.IsActive).OrderBy(x => x.Name).ToListAsync()) Products.Add(item);
+            Warehouses.Clear();
+            foreach (var item in await db.Warehouses.Where(x => x.IsActive).OrderBy(x => x.Name).ToListAsync()) Warehouses.Add(item);
 
-        if (!Lines.Any())
-            Lines.Add(new PurchaseLineEditor());
+            if (!Lines.Any())
+                Lines.Add(new PurchaseLineEditor());
+        }
+        catch (Exception ex)
+        {
+            StatusMessage = $"Failed to load procurement data: {ex.Message}";
+        }
     }
 
     [RelayCommand] private void AddLine() => Lines.Add(new PurchaseLineEditor());

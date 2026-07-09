@@ -70,7 +70,7 @@
                                        Style="{StaticResource PageSubtitleText}"
                                        Margin="0" />
                         </StackPanel>
-                        <DataGrid ItemsSource="{Binding Orders}" SelectedItem="{Binding SelectedOrder}" AutoGenerateColumns="False" CanUserAddRows="False">
+                        <DataGrid ItemsSource="{Binding Orders}" SelectedItem="{Binding SelectedOrder}" AutoGenerateColumns="False" CanUserAddRows="False" MaxHeight="420">
                             <DataGrid.Columns>
                                 <DataGridTextColumn Header="Order No" Binding="{Binding OrderNo}" Width="150" />
                                 <DataGridTextColumn Header="Product" Binding="{Binding FinishedProduct.Name}" Width="*" />

@@ -33,6 +33,10 @@ public partial class AuditLogsViewModel : ViewModelBase
             ApplyFilter();
             StatusMessage = $"Loaded {_allAuditLogs.Count} audit entries.";
         }
+        catch (Exception ex)
+        {
+            StatusMessage = $"Failed to load audit logs: {ex.Message}";
+        }
         finally
         {
             IsBusy = false;

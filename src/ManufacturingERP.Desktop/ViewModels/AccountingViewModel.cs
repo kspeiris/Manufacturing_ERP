@@ -58,8 +58,15 @@ public partial class AccountingViewModel : ViewModelBase
     [RelayCommand]
     public async Task LoadTrialBalanceAsync()
     {
-        TrialBalanceRows.Clear();
-        foreach (var row in await _accountingService.GetTrialBalanceAsync()) TrialBalanceRows.Add(row);
+        try
+        {
+            TrialBalanceRows.Clear();
+            foreach (var row in await _accountingService.GetTrialBalanceAsync()) TrialBalanceRows.Add(row);
+        }
+        catch (Exception ex)
+        {
+            StatusMessage = $"Failed to load trial balance: {ex.Message}";
+        }
     }
 }
 

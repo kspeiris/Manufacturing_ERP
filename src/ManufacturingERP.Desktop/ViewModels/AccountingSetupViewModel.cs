@@ -72,28 +72,35 @@ public partial class AccountingSetupViewModel : ViewModelBase
     [RelayCommand]
     public async Task LoadAsync()
     {
-        using var scope = App.Services.CreateScope();
-        var db = scope.ServiceProvider.GetRequiredService<AppDbContext>();
-
-        FiscalPeriods.Clear();
-        foreach (var item in await db.FiscalPeriods.OrderByDescending(x => x.FiscalYear).ThenBy(x => x.PeriodNumber).ToListAsync())
-            FiscalPeriods.Add(item);
-
-        Accounts.Clear();
-        ActiveAccounts.Clear();
-        foreach (var item in await db.Accounts.OrderBy(x => x.AccountCode).ToListAsync())
+        try
         {
-            Accounts.Add(item);
-            if (item.IsActive) ActiveAccounts.Add(item);
+            using var scope = App.Services.CreateScope();
+            var db = scope.ServiceProvider.GetRequiredService<AppDbContext>();
+
+            FiscalPeriods.Clear();
+            foreach (var item in await db.FiscalPeriods.OrderByDescending(x => x.FiscalYear).ThenBy(x => x.PeriodNumber).ToListAsync())
+                FiscalPeriods.Add(item);
+
+            Accounts.Clear();
+            ActiveAccounts.Clear();
+            foreach (var item in await db.Accounts.OrderBy(x => x.AccountCode).ToListAsync())
+            {
+                Accounts.Add(item);
+                if (item.IsActive) ActiveAccounts.Add(item);
+            }
+
+            Taxes.Clear();
+            foreach (var item in await db.Taxes.Include(x => x.InputTaxAccount).Include(x => x.OutputTaxAccount).OrderBy(x => x.TaxCode).ToListAsync())
+                Taxes.Add(item);
+
+            Vouchers.Clear();
+            foreach (var item in await db.Vouchers.Include(x => x.FiscalPeriod).OrderByDescending(x => x.VoucherDate).ThenByDescending(x => x.Id).Take(100).ToListAsync())
+                Vouchers.Add(item);
         }
-
-        Taxes.Clear();
-        foreach (var item in await db.Taxes.Include(x => x.InputTaxAccount).Include(x => x.OutputTaxAccount).OrderBy(x => x.TaxCode).ToListAsync())
-            Taxes.Add(item);
-
-        Vouchers.Clear();
-        foreach (var item in await db.Vouchers.Include(x => x.FiscalPeriod).OrderByDescending(x => x.VoucherDate).ThenByDescending(x => x.Id).Take(100).ToListAsync())
-            Vouchers.Add(item);
+        catch (Exception ex)
+        {
+            StatusMessage = $"Failed to load accounting setup: {ex.Message}";
+        }
     }
 
     [RelayCommand]

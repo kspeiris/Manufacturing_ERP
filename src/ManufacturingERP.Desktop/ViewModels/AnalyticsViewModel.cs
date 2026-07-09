@@ -6,6 +6,7 @@ using LiveChartsCore.SkiaSharpView;
 using LiveChartsCore.SkiaSharpView.Painting;
 using SkiaSharp;
 using System.Diagnostics;
+using System.Windows.Media;
 
 namespace ManufacturingERP.Desktop.ViewModels;
 
@@ -157,5 +158,5 @@ public sealed class AnalyticsKpiCard
     public decimal Change { get; }
     public string Description { get; }
     public string ChangeLabel => Change >= 0 ? $"+{Change:P0}" : Change.ToString("P0");
-    public string ChangeColor => Change >= 0 ? "#16A34A" : "#DC2626";
+    public Brush ChangeColor => Change >= 0 ? new SolidColorBrush((Color)ColorConverter.ConvertFromString("#16A34A")) : new SolidColorBrush((Color)ColorConverter.ConvertFromString("#DC2626"));
 }

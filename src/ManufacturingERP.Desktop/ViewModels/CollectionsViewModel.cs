@@ -34,15 +34,22 @@ public partial class CollectionsViewModel : ViewModelBase
     [RelayCommand]
     public async Task LoadAsync()
     {
-        using var scope = App.Services.CreateScope();
-        var db = scope.ServiceProvider.GetRequiredService<AppDbContext>();
+        try
+        {
+            using var scope = App.Services.CreateScope();
+            var db = scope.ServiceProvider.GetRequiredService<AppDbContext>();
 
-        Customers.Clear();
-        foreach (var item in await db.Customers.OrderBy(x => x.ShopName).ToListAsync()) Customers.Add(item);
+            Customers.Clear();
+            foreach (var item in await db.Customers.OrderBy(x => x.ShopName).ToListAsync()) Customers.Add(item);
 
-        Collections.Clear();
-        foreach (var item in await _salesService.GetCollectionsAsync()) Collections.Add(item);
-        OnPropertyChanged(nameof(SelectedCustomerOutstanding));
+            Collections.Clear();
+            foreach (var item in await _salesService.GetCollectionsAsync()) Collections.Add(item);
+            OnPropertyChanged(nameof(SelectedCustomerOutstanding));
+        }
+        catch (Exception ex)
+        {
+            StatusMessage = $"Failed to load collections: {ex.Message}";
+        }
     }
 
     [RelayCommand]

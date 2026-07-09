@@ -47,7 +47,7 @@
                                    Style="{StaticResource PageSubtitleText}"
                                    Margin="0" />
                     </StackPanel>
-                    <DataGrid ItemsSource="{Binding AuditLogs}" AutoGenerateColumns="False" CanUserAddRows="False">
+                    <DataGrid ItemsSource="{Binding AuditLogs}" AutoGenerateColumns="False" CanUserAddRows="False" MaxHeight="420">
                         <DataGrid.Columns>
                             <DataGridTextColumn Header="When (UTC)" Binding="{Binding ActionAtUtc}" Width="180" />
                             <DataGridTextColumn Header="User" Binding="{Binding User.Username}" Width="120" />

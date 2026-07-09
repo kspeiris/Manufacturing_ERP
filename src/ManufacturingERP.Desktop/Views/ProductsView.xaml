@@ -22,7 +22,7 @@
             <Setter Property="Background" Value="#FFFFFF" />
             <Setter Property="Padding" Value="18" />
             <Setter Property="Margin" Value="0,0,16,16" />
-            <Setter Property="Width" Value="248" />
+            <Setter Property="MinHeight" Value="140" />
         </Style>
 
         <Style x:Key="TabChipButton" TargetType="Button" BasedOn="{StaticResource MaterialDesignFlatButton}">
@@ -238,7 +238,7 @@
                         </Grid.Style>
 
                         <StackPanel>
-                            <WrapPanel Margin="0,0,0,4">
+                            <UniformGrid Columns="4" Margin="0,0,0,4">
                                 <Border Style="{StaticResource KpiCard}">
                                     <StackPanel>
                                         <TextBlock Text="Visible Products" Style="{StaticResource InlineStatLabel}" />
@@ -274,7 +274,7 @@
                                                    Style="{StaticResource PageSubtitleText}" />
                                     </StackPanel>
                                 </Border>
-                            </WrapPanel>
+                            </UniformGrid>
 
                             <Grid>
                                 <Grid.ColumnDefinitions>

@@ -23,8 +23,15 @@ public partial class MobileSyncViewModel : ViewModelBase
     [RelayCommand]
     public async Task LoadAsync()
     {
-        SyncLogs.Clear();
-        foreach (var item in await _mobileSyncService.GetRecentSyncsAsync()) SyncLogs.Add(item);
+        try
+        {
+            SyncLogs.Clear();
+            foreach (var item in await _mobileSyncService.GetRecentSyncsAsync()) SyncLogs.Add(item);
+        }
+        catch (Exception ex)
+        {
+            StatusMessage = $"Failed to load sync logs: {ex.Message}";
+        }
     }
 
     [RelayCommand]

@@ -29,12 +29,19 @@ public partial class ProductsViewModel : ViewModelBase
     [RelayCommand]
     public async Task LoadAsync()
     {
-        using var scope = App.Services.CreateScope();
-        var db = scope.ServiceProvider.GetRequiredService<AppDbContext>();
-        var items = await db.Products.Include(x => x.ProductCategory).OrderBy(x => x.Name).ToListAsync();
-        _allProducts.Clear();
-        _allProducts.AddRange(items);
-        ApplyFilter();
+        try
+        {
+            using var scope = App.Services.CreateScope();
+            var db = scope.ServiceProvider.GetRequiredService<AppDbContext>();
+            var items = await db.Products.Include(x => x.ProductCategory).OrderBy(x => x.Name).ToListAsync();
+            _allProducts.Clear();
+            _allProducts.AddRange(items);
+            ApplyFilter();
+        }
+        catch (Exception ex)
+        {
+            StatusMessage = $"Failed to load products: {ex.Message}";
+        }
     }
 
     [RelayCommand]
@@ -54,6 +61,7 @@ public partial class ProductsViewModel : ViewModelBase
             CostPrice = 0,
             SellingPrice = 0
         });
+        dialog.Owner = System.Windows.Application.Current.MainWindow;
 
         if (dialog.ShowDialog() == true)
         {
@@ -106,6 +114,7 @@ public partial class ProductsViewModel : ViewModelBase
         };
 
         var dialog = new Views.ProductDialogWindow(clone);
+        dialog.Owner = System.Windows.Application.Current.MainWindow;
         if (dialog.ShowDialog() == true)
         {
             using var scope = App.Services.CreateScope();

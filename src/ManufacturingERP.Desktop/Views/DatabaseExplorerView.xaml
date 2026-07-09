@@ -84,15 +84,17 @@
                         </Border>
 
                         <Border Margin="14,0,14,14" Background="#FFFFFF" CornerRadius="14" BorderBrush="#E5E7EB" BorderThickness="1">
-                            <DataGrid ItemsSource="{Binding TableData}"
-                                      AutoGenerateColumns="True"
-                                      IsReadOnly="True"
-                                      CanUserReorderColumns="True"
-                                      CanUserSortColumns="True"
-                                      HeadersVisibility="Column"
-                                      GridLinesVisibility="Horizontal"
-                                      AlternationCount="2"
-                                      MinHeight="560" />
+                        <DataGrid ItemsSource="{Binding TableData}"
+                                  AutoGenerateColumns="True"
+                                  IsReadOnly="True"
+                                  CanUserReorderColumns="True"
+                                  CanUserSortColumns="True"
+                                  HeadersVisibility="Column"
+                                  GridLinesVisibility="Horizontal"
+                                  AlternationCount="2"
+                                  MaxHeight="540"
+                                  ScrollViewer.HorizontalScrollBarVisibility="Auto"
+                                  ScrollViewer.VerticalScrollBarVisibility="Auto" />
                         </Border>
                     </DockPanel>
                 </Border>

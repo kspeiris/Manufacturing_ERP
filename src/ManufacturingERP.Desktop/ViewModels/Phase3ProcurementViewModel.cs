@@ -40,24 +40,31 @@ public partial class Phase3ProcurementViewModel : ViewModelBase
     [RelayCommand]
     public async Task LoadAsync()
     {
-        using var scope = App.Services.CreateScope();
-        var db = scope.ServiceProvider.GetRequiredService<AppDbContext>();
+        try
+        {
+            using var scope = App.Services.CreateScope();
+            var db = scope.ServiceProvider.GetRequiredService<AppDbContext>();
 
-        Suppliers.Clear();
-        foreach (var item in await db.Suppliers.OrderBy(x => x.Name).ToListAsync()) Suppliers.Add(item);
-        Warehouses.Clear();
-        foreach (var item in await db.Warehouses.Where(x => x.IsActive).OrderBy(x => x.Name).ToListAsync()) Warehouses.Add(item);
-        Products.Clear();
-        foreach (var item in await db.Products.Where(x => x.IsActive).OrderBy(x => x.Name).ToListAsync()) Products.Add(item);
-        GoodsReceipts.Clear();
-        foreach (var item in await db.GoodsReceipts.Include(x => x.Supplier).OrderByDescending(x => x.ReceiptDate).ToListAsync()) GoodsReceipts.Add(item);
+            Suppliers.Clear();
+            foreach (var item in await db.Suppliers.OrderBy(x => x.Name).ToListAsync()) Suppliers.Add(item);
+            Warehouses.Clear();
+            foreach (var item in await db.Warehouses.Where(x => x.IsActive).OrderBy(x => x.Name).ToListAsync()) Warehouses.Add(item);
+            Products.Clear();
+            foreach (var item in await db.Products.Where(x => x.IsActive).OrderBy(x => x.Name).ToListAsync()) Products.Add(item);
+            GoodsReceipts.Clear();
+            foreach (var item in await db.GoodsReceipts.Include(x => x.Supplier).OrderByDescending(x => x.ReceiptDate).ToListAsync()) GoodsReceipts.Add(item);
 
-        SupplierInvoices.Clear();
-        foreach (var item in await _phase3ProcurementService.GetSupplierInvoicesAsync()) SupplierInvoices.Add(item);
-        PurchaseReturns.Clear();
-        foreach (var item in await _phase3ProcurementService.GetPurchaseReturnsAsync()) PurchaseReturns.Add(item);
+            SupplierInvoices.Clear();
+            foreach (var item in await _phase3ProcurementService.GetSupplierInvoicesAsync()) SupplierInvoices.Add(item);
+            PurchaseReturns.Clear();
+            foreach (var item in await _phase3ProcurementService.GetPurchaseReturnsAsync()) PurchaseReturns.Add(item);
 
-        if (!ReturnLines.Any()) ReturnLines.Add(new PurchaseReturnLineEditor());
+            if (!ReturnLines.Any()) ReturnLines.Add(new PurchaseReturnLineEditor());
+        }
+        catch (Exception ex)
+        {
+            StatusMessage = $"Failed to load procurement data: {ex.Message}";
+        }
     }
 
     [RelayCommand]

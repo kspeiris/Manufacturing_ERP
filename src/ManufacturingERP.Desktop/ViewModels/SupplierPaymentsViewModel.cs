@@ -36,16 +36,37 @@ public partial class SupplierPaymentsViewModel : ViewModelBase
     [RelayCommand]
     public async Task LoadAsync()
     {
-        using var scope = App.Services.CreateScope();
-        var db = scope.ServiceProvider.GetRequiredService<AppDbContext>();
+        try
+        {
+            using var scope = App.Services.CreateScope();
+            var db = scope.ServiceProvider.GetRequiredService<AppDbContext>();
 
-        Suppliers.Clear();
-        foreach (var item in await db.Suppliers.OrderBy(x => x.Name).ToListAsync()) Suppliers.Add(item);
+            Suppliers.Clear();
+            foreach (var item in await db.Suppliers.OrderBy(x => x.Name).ToListAsync()) Suppliers.Add(item);
 
-        Payments.Clear();
-        foreach (var item in await _supplierPaymentService.GetRecentAsync()) Payments.Add(item);
+            Payments.Clear();
+            foreach (var item in await _supplierPaymentService.GetRecentAsync()) Payments.Add(item);
 
-        await LoadOpenInvoicesAsync();
+            await LoadOpenInvoicesAsync();
+        }
+        catch (Exception ex)
+        {
+            StatusMessage = $"Failed to load supplier payments: {ex.Message}";
+        }
+    }
+
+    partial void OnSelectedSupplierChanged(Supplier? value)
+    {
+        SelectedInvoice = null;
+        ReferenceInvoiceNo = string.Empty;
+        Amount = 0;
+        _ = LoadOpenInvoicesAsync();
+    }
+
+    partial void OnSelectedInvoiceChanged(SupplierInvoice? value)
+    {
+        ReferenceInvoiceNo = value?.InvoiceNo ?? string.Empty;
+        OnPropertyChanged(nameof(SelectedInvoiceBalance));
     }
 
     [RelayCommand]
@@ -89,20 +110,6 @@ public partial class SupplierPaymentsViewModel : ViewModelBase
             SelectedInvoice = null;
             await LoadAsync();
         }
-    }
-
-    partial void OnSelectedSupplierChanged(Supplier? value)
-    {
-        SelectedInvoice = null;
-        ReferenceInvoiceNo = string.Empty;
-        Amount = 0;
-        _ = LoadOpenInvoicesAsync();
-    }
-
-    partial void OnSelectedInvoiceChanged(SupplierInvoice? value)
-    {
-        ReferenceInvoiceNo = value?.InvoiceNo ?? string.Empty;
-        OnPropertyChanged(nameof(SelectedInvoiceBalance));
     }
 
     private async Task LoadOpenInvoicesAsync()

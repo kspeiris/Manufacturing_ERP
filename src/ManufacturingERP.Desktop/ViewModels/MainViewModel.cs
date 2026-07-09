@@ -66,9 +66,10 @@ public partial class MainViewModel : ViewModelBase
     }
 
     [RelayCommand]
-    private void ShowDashboard()
+    private async Task ShowDashboard()
     {
         StatusMessage = string.Empty;
+        await Dashboard.LoadAsync();
         CurrentView = Dashboard;
     }
     [RelayCommand]
