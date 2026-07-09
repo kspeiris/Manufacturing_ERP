@@ -25,7 +25,7 @@
                 <Border Grid.Column="1" Style="{StaticResource UtilityPanel}">
                     <StackPanel>
                         <TextBlock Text="Invoice Balance" Style="{StaticResource InlineStatLabel}" />
-                        <TextBlock Text="{Binding SelectedInvoiceBalance, StringFormat=Selected Balance: {0:N2}}" Style="{StaticResource PageSubtitleText}" Margin="0,8,0,0" />
+                        <TextBlock Text="{Binding SelectedInvoiceBalance, StringFormat=Selected Balance: LKR {0:N2}}" Style="{StaticResource PageSubtitleText}" Margin="0,8,0,0" />
                         <TextBlock Text="{Binding StatusMessage}" Style="{StaticResource PageSubtitleText}" Margin="0,8,0,0" />
                     </StackPanel>
                 </Border>
@@ -76,7 +76,7 @@
                                 <DataGridTextColumn Header="Date" Binding="{Binding PaymentDate}" Width="150" />
                                 <DataGridTextColumn Header="Supplier" Binding="{Binding Supplier.Name}" Width="*" />
                                 <DataGridTextColumn Header="Ref Invoice" Binding="{Binding ReferenceInvoiceNo}" Width="140" />
-                                <DataGridTextColumn Header="Amount" Binding="{Binding Amount}" Width="120" />
+                                 <DataGridTextColumn Header="Amount" Binding="{Binding Amount, StringFormat=LKR {0:N2}}" Width="120" />
                                 <DataGridTextColumn Header="Method" Binding="{Binding PaymentMethod}" Width="120" />
                             </DataGrid.Columns>
                         </DataGrid>

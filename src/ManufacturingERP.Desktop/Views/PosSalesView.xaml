@@ -29,7 +29,7 @@
                 <Border Grid.Column="1" Style="{StaticResource InlineStatCard}" Margin="0,0,16,0">
                     <StackPanel>
                         <TextBlock Text="Bill Total" Style="{StaticResource InlineStatLabel}" />
-                        <TextBlock Text="{Binding GrandTotal, StringFormat=N2}" Style="{StaticResource InlineStatValue}" />
+                        <TextBlock Text="{Binding GrandTotal, StringFormat=LKR {0:N2}}" Style="{StaticResource InlineStatValue}" />
                     </StackPanel>
                 </Border>
 
@@ -82,8 +82,8 @@
                                 <DataGridComboBoxColumn Header="Product" Width="*" SelectedItemBinding="{Binding Product}" DisplayMemberPath="Name" SelectedValuePath="."
                                     ItemsSource="{Binding DataContext.Products, RelativeSource={RelativeSource AncestorType=UserControl}}" />
                                 <DataGridTextColumn Header="Qty" Binding="{Binding Quantity}" Width="120" />
-                                <DataGridTextColumn Header="Unit Price" Binding="{Binding UnitPrice}" Width="140" />
-                                <DataGridTextColumn Header="Line Total" Binding="{Binding LineTotal}" Width="140" IsReadOnly="True" />
+                                <DataGridTextColumn Header="Unit Price" Binding="{Binding UnitPrice, StringFormat=LKR {0:N2}}" Width="140" />
+                                <DataGridTextColumn Header="Line Total" Binding="{Binding LineTotal, StringFormat=LKR {0:N2}}" Width="140" IsReadOnly="True" />
                             </DataGrid.Columns>
                         </DataGrid>
                     </DockPanel>

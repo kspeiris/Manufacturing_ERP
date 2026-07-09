@@ -72,8 +72,8 @@ public partial class ReportsViewModel : ViewModelBase
                 x.InvoiceNo,
                 x.CustomerName,
                 x.VehicleNo,
-                x.TotalAmount.ToString("N2"),
-                x.PaidAmount.ToString("N2"),
+                $"LKR {x.TotalAmount:N2}",
+                $"LKR {x.PaidAmount:N2}",
                 x.SaleType
             }),
             "Printable sales activity register");
@@ -106,7 +106,7 @@ public partial class ReportsViewModel : ViewModelBase
                 x.OrderNo,
                 x.SupplierName,
                 x.Status,
-                x.TotalAmount.ToString("N2")
+                $"LKR {x.TotalAmount:N2}"
             }),
             "Procurement orders by date");
         StatusMessage = result.Message;
@@ -138,8 +138,8 @@ public partial class ReportsViewModel : ViewModelBase
                 x.ProductName,
                 x.WarehouseName,
                 x.QuantityOnHand.ToString("N2"),
-                x.UnitCost.ToString("N2"),
-                x.StockValue.ToString("N2")
+                $"LKR {x.UnitCost:N2}",
+                $"LKR {x.StockValue:N2}"
             }),
             "Snapshot of available stock");
         StatusMessage = result.Message;
@@ -173,8 +173,8 @@ public partial class ReportsViewModel : ViewModelBase
                 x.BatchNo,
                 x.ProducedQuantity.ToString("N2"),
                 x.ScrapQuantity.ToString("N2"),
-                x.TotalCost.ToString("N2"),
-                x.UnitCost.ToString("N2"),
+                $"LKR {x.TotalCost:N2}",
+                $"LKR {x.UnitCost:N2}",
                 x.Status
             }),
             "Finished goods and costing summary");
@@ -204,7 +204,7 @@ public partial class ReportsViewModel : ViewModelBase
             {
                 x.PartyCode,
                 x.PartyName,
-                x.Balance.ToString("N2")
+                $"LKR {x.Balance:N2}"
             }),
             "Open receivables by customer");
         StatusMessage = result.Message;
@@ -233,7 +233,7 @@ public partial class ReportsViewModel : ViewModelBase
             {
                 x.PartyCode,
                 x.PartyName,
-                x.Balance.ToString("N2")
+                $"LKR {x.Balance:N2}"
             }),
             "Open payables by supplier");
         StatusMessage = result.Message;

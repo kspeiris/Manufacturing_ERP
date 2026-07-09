@@ -82,8 +82,8 @@
                                 <DataGridTextColumn Header="Date" Binding="{Binding InvoiceDate}" Width="150" />
                                 <DataGridTextColumn Header="Customer" Binding="{Binding CustomerName}" Width="*" />
                                 <DataGridTextColumn Header="Vehicle" Binding="{Binding VehicleNo}" Width="130" />
-                                <DataGridTextColumn Header="Amount" Binding="{Binding TotalAmount}" Width="120" />
-                                <DataGridTextColumn Header="Paid" Binding="{Binding PaidAmount}" Width="120" />
+                                 <DataGridTextColumn Header="Amount" Binding="{Binding TotalAmount, StringFormat=LKR {0:N2}}" Width="120" />
+                                 <DataGridTextColumn Header="Paid" Binding="{Binding PaidAmount, StringFormat=LKR {0:N2}}" Width="120" />
                                 <DataGridTextColumn Header="Type" Binding="{Binding SaleType}" Width="100" />
                             </DataGrid.Columns>
                         </DataGrid>
@@ -122,7 +122,7 @@
                                 <DataGridTextColumn Header="Date" Binding="{Binding OrderDate}" Width="150" />
                                 <DataGridTextColumn Header="Supplier" Binding="{Binding SupplierName}" Width="*" />
                                 <DataGridTextColumn Header="Status" Binding="{Binding Status}" Width="120" />
-                                <DataGridTextColumn Header="Total" Binding="{Binding TotalAmount}" Width="120" />
+                                 <DataGridTextColumn Header="Total" Binding="{Binding TotalAmount, StringFormat=LKR {0:N2}}" Width="120" />
                             </DataGrid.Columns>
                         </DataGrid>
                         </ScrollViewer>
@@ -162,15 +162,15 @@
                                 <DataGrid.Columns>
                                     <DataGridTextColumn Header="Code" Binding="{Binding PartyCode}" Width="120" />
                                     <DataGridTextColumn Header="Customer" Binding="{Binding PartyName}" Width="*" />
-                                    <DataGridTextColumn Header="Balance" Binding="{Binding Balance}" Width="120" />
-                                </DataGrid.Columns>
-                            </DataGrid>
-                            </ScrollViewer>
-                        </Border>
-                    </DockPanel>
-                </Border>
+                                     <DataGridTextColumn Header="Balance" Binding="{Binding Balance, StringFormat=LKR {0:N2}}" Width="120" />
+                                 </DataGrid.Columns>
+                             </DataGrid>
+                             </ScrollViewer>
+                         </Border>
+                     </DockPanel>
+                 </Border>
 
-                <Border Grid.Column="1" Style="{StaticResource SectionCard}">
+                 <Border Grid.Column="1" Style="{StaticResource SectionCard}">
                     <DockPanel>
                         <StackPanel DockPanel.Dock="Top" Margin="0,0,0,14">
                             <TextBlock Text="Supplier Ledger Summary" Style="{StaticResource CardTitleText}" />
@@ -197,14 +197,14 @@
                                 <DataGrid.Columns>
                                     <DataGridTextColumn Header="Code" Binding="{Binding PartyCode}" Width="120" />
                                     <DataGridTextColumn Header="Supplier" Binding="{Binding PartyName}" Width="*" />
-                                    <DataGridTextColumn Header="Balance" Binding="{Binding Balance}" Width="120" />
-                                </DataGrid.Columns>
-                            </DataGrid>
-                            </ScrollViewer>
-                        </Border>
-                    </DockPanel>
-                </Border>
-            </Grid>
+                                     <DataGridTextColumn Header="Balance" Binding="{Binding Balance, StringFormat=LKR {0:N2}}" Width="120" />
+                                 </DataGrid.Columns>
+                             </DataGrid>
+                             </ScrollViewer>
+                         </Border>
+                     </DockPanel>
+                 </Border>
+             </Grid>
         </StackPanel>
     </ScrollViewer>
 </UserControl>

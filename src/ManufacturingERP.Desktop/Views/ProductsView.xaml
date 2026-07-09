@@ -98,7 +98,7 @@
 
                                 <StackPanel>
                                     <TextBlock Text="Products Loaded"
-                                               Foreground="#93C5FD"
+                                               Foreground="{StaticResource AppPrimaryLightBrush}"
                                                FontWeight="SemiBold" />
                                     <TextBlock Text="{Binding Products.Count}"
                                                Foreground="White"
@@ -106,14 +106,14 @@
                                                FontWeight="Bold"
                                                Margin="0,8,0,0" />
                                     <TextBlock Text="Records currently visible in the directory."
-                                               Foreground="#CBD5E1"
+                                               Foreground="{StaticResource AppMutedLightBrush}"
                                                Margin="0,8,0,0"
                                                TextWrapping="Wrap" />
                                 </StackPanel>
 
                                 <StackPanel Grid.Column="1" Margin="20,0,0,0">
                                     <TextBlock Text="Active Products"
-                                               Foreground="#93C5FD"
+                                               Foreground="{StaticResource AppPrimaryLightBrush}"
                                                FontWeight="SemiBold" />
                                     <TextBlock Text="{Binding ActiveProductsCount}"
                                                Foreground="White"
@@ -121,7 +121,7 @@
                                                FontWeight="SemiBold"
                                                Margin="0,8,0,0" />
                                     <TextBlock Text="Items currently available for selling and downstream workflows."
-                                               Foreground="#CBD5E1"
+                                               Foreground="{StaticResource AppMutedLightBrush}"
                                                Margin="0,8,0,0"
                                                TextWrapping="Wrap" />
                                 </StackPanel>
@@ -153,14 +153,14 @@
                         </WrapPanel>
 
                         <Border Grid.Row="2"
-                                Background="#172554"
-                                BorderBrush="#2563EB"
+                                Background="{StaticResource AppDarkPanelBrush}"
+                                BorderBrush="{StaticResource AppPrimaryBrush}"
                                 BorderThickness="1"
                                 CornerRadius="18"
                                 Padding="18">
                             <StackPanel>
                                 <TextBlock Text="Selected Product"
-                                           Foreground="#93C5FD"
+                                           Foreground="{StaticResource AppPrimaryLightBrush}"
                                            FontWeight="SemiBold" />
                                 <TextBlock Text="{Binding SelectedProduct.Name, TargetNullValue=No product selected}"
                                            Foreground="White"
@@ -169,11 +169,11 @@
                                            Margin="0,10,0,0"
                                            TextWrapping="Wrap" />
                                 <TextBlock Text="{Binding SelectedProduct.Code, StringFormat=Code: {0}, TargetNullValue=Choose a product row to inspect the catalog record.}"
-                                           Foreground="#CBD5E1"
+                                           Foreground="{StaticResource AppMutedLightBrush}"
                                            Margin="0,8,0,0"
                                            TextWrapping="Wrap" />
                                 <TextBlock Text="{Binding StatusMessage}"
-                                           Foreground="#93C5FD"
+                                           Foreground="{StaticResource AppPrimaryLightBrush}"
                                            Margin="0,10,0,0"
                                            TextWrapping="Wrap" />
                             </StackPanel>
@@ -302,7 +302,7 @@
                                             <Border Grid.Row="0" Grid.Column="0" Background="#F8FBFF" BorderBrush="#DCE7F5" BorderThickness="1" CornerRadius="16" Padding="16" Margin="0,0,12,12">
                                                 <StackPanel>
                                                     <TextBlock Text="Average Selling Price" Style="{StaticResource InlineStatLabel}" />
-                                                    <TextBlock Text="{Binding AverageSellingPrice, StringFormat=N2}" Style="{StaticResource InlineStatValue}" />
+                                                    <TextBlock Text="{Binding AverageSellingPrice, StringFormat=LKR {0:N2}}" Style="{StaticResource InlineStatValue}" />
                                                     <TextBlock Text="Average listed selling price across visible records."
                                                                Style="{StaticResource PageSubtitleText}" />
                                                 </StackPanel>
@@ -364,8 +364,8 @@
                                         <Border Background="#ECFDF5" BorderBrush="#BBF7D0" BorderThickness="1" CornerRadius="16" Padding="16">
                                             <StackPanel>
                                                 <TextBlock Text="Pricing" Style="{StaticResource InlineStatLabel}" />
-                                                <TextBlock Text="{Binding SelectedProduct.SellingPrice, StringFormat=Selling: {0:N2}, TargetNullValue=Selling: -}" Style="{StaticResource PageSubtitleText}" Margin="0,8,0,0" />
-                                                <TextBlock Text="{Binding SelectedProduct.CostPrice, StringFormat=Cost: {0:N2}, TargetNullValue=Cost: -}" Style="{StaticResource PageSubtitleText}" />
+                                                <TextBlock Text="{Binding SelectedProduct.SellingPrice, StringFormat=Selling: LKR {0:N2}, TargetNullValue=Selling: -}" Style="{StaticResource PageSubtitleText}" Margin="0,8,0,0" />
+                                                <TextBlock Text="{Binding SelectedProduct.CostPrice, StringFormat=Cost: LKR {0:N2}, TargetNullValue=Cost: -}" Style="{StaticResource PageSubtitleText}" />
                                                 <TextBlock Text="{Binding SelectedProduct.IsActive, StringFormat=Active: {0}, TargetNullValue=Active: -}" Style="{StaticResource PageSubtitleText}" />
                                             </StackPanel>
                                         </Border>
@@ -455,8 +455,8 @@
                                                 <DataGridTextColumn Header="Name" Binding="{Binding Name}" Width="260" />
                                                 <DataGridTextColumn Header="Category" Binding="{Binding ProductCategory.Name}" Width="220" />
                                                 <DataGridTextColumn Header="Unit" Binding="{Binding Unit}" Width="90" />
-                                                <DataGridTextColumn Header="Cost" Binding="{Binding CostPrice, StringFormat=N2}" Width="120" />
-                                                <DataGridTextColumn Header="Selling" Binding="{Binding SellingPrice, StringFormat=N2}" Width="120" />
+                                                <DataGridTextColumn Header="Cost" Binding="{Binding CostPrice, StringFormat=LKR {0:N2}}" Width="120" />
+                                                <DataGridTextColumn Header="Selling" Binding="{Binding SellingPrice, StringFormat=LKR {0:N2}}" Width="120" />
                                                 <DataGridTemplateColumn Header="Track Batch" Width="120">
                                                     <DataGridTemplateColumn.CellTemplate>
                                                         <DataTemplate>
@@ -478,14 +478,14 @@
                                                     <DataGridTemplateColumn.CellTemplate>
                                                         <DataTemplate>
                                                             <Border x:Name="StatusBadge" Background="#FEE2E2" BorderBrush="#FECACA" BorderThickness="1" CornerRadius="999" Padding="10,4" HorizontalAlignment="Left">
-                                                                <TextBlock x:Name="StatusText" Text="Inactive" Foreground="#B91C1C" FontWeight="SemiBold" />
+                                                                <TextBlock x:Name="StatusText" Text="Inactive" Foreground="{StaticResource AppDangerBrush}" FontWeight="SemiBold" />
                                                             </Border>
                                                             <DataTemplate.Triggers>
                                                                 <DataTrigger Binding="{Binding IsActive}" Value="True">
                                                                     <Setter TargetName="StatusBadge" Property="Background" Value="#DCFCE7" />
                                                                     <Setter TargetName="StatusBadge" Property="BorderBrush" Value="#BBF7D0" />
                                                                     <Setter TargetName="StatusText" Property="Text" Value="Active" />
-                                                                    <Setter TargetName="StatusText" Property="Foreground" Value="#15803D" />
+                                                                    <Setter TargetName="StatusText" Property="Foreground" Value="{StaticResource AppSuccessBrush}" />
                                                                 </DataTrigger>
                                                             </DataTemplate.Triggers>
                                                         </DataTemplate>
@@ -496,13 +496,13 @@
                                                         <DataTemplate>
                                                             <StackPanel Orientation="Horizontal">
                                                                 <Button Style="{StaticResource TableActionIconButton}" ToolTip="View" Command="{Binding DataContext.SelectProductCommand, RelativeSource={RelativeSource AncestorType=UserControl}}" CommandParameter="{Binding}">
-                                                                    <materialDesign:PackIcon Kind="EyeOutline" Width="18" Height="18" Foreground="#2563EB" />
+                                                                    <materialDesign:PackIcon Kind="EyeOutline" Width="18" Height="18" Foreground="{StaticResource AppPrimaryBrush}" />
                                                                 </Button>
                                                                 <Button Style="{StaticResource TableActionIconButton}" ToolTip="Edit" Command="{Binding DataContext.EditCommand, RelativeSource={RelativeSource AncestorType=UserControl}}" CommandParameter="{Binding}">
-                                                                    <materialDesign:PackIcon Kind="PencilOutline" Width="18" Height="18" Foreground="#D97706" />
+                                                                    <materialDesign:PackIcon Kind="PencilOutline" Width="18" Height="18" Foreground="{StaticResource AppWarningBrush}" />
                                                                 </Button>
                                                                 <Button Style="{StaticResource TableActionIconButton}" ToolTip="Delete" Command="{Binding DataContext.DeleteCommand, RelativeSource={RelativeSource AncestorType=UserControl}}" CommandParameter="{Binding}" Margin="0">
-                                                                    <materialDesign:PackIcon Kind="TrashCanOutline" Width="18" Height="18" Foreground="#DC2626" />
+                                                                    <materialDesign:PackIcon Kind="TrashCanOutline" Width="18" Height="18" Foreground="{StaticResource AppDangerBrush}" />
                                                                 </Button>
                                                             </StackPanel>
                                                         </DataTemplate>

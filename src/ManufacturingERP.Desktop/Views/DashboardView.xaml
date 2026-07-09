@@ -58,30 +58,30 @@
                                 </Grid.ColumnDefinitions>
                                 <StackPanel>
                                     <TextBlock Text="Outstanding Balance"
-                                               Foreground="#93C5FD"
+                                               Foreground="{StaticResource AppPrimaryLightBrush}"
                                                FontWeight="SemiBold" />
-                                    <TextBlock Text="{Binding Summary.OutstandingBalance, StringFormat=N2}"
+                                    <TextBlock Text="{Binding Summary.OutstandingBalance, StringFormat=LKR {0:N2}}"
                                                Foreground="White"
                                                FontSize="24"
                                                FontWeight="Bold"
                                                Margin="0,8,0,0" />
                                     <TextBlock Text="Open customer exposure needing attention."
-                                               Foreground="#CBD5E1"
+                                               Foreground="{StaticResource AppMutedLightBrush}"
                                                Margin="0,8,0,0"
                                                TextWrapping="Wrap" />
                                 </StackPanel>
 
                                 <StackPanel Grid.Column="1" Margin="20,0,0,0">
                                     <TextBlock Text="Collections This Month"
-                                               Foreground="#93C5FD"
+                                               Foreground="{StaticResource AppPrimaryLightBrush}"
                                                FontWeight="SemiBold" />
-                                    <TextBlock Text="{Binding Summary.Analytics.CollectionsThisMonth, StringFormat=N2}"
+                                    <TextBlock Text="{Binding Summary.Analytics.CollectionsThisMonth, StringFormat=LKR {0:N2}}"
                                                Foreground="White"
                                                FontSize="24"
                                                FontWeight="Bold"
                                                Margin="0,8,0,0" />
                                     <TextBlock Text="Cash recovery posted during the current period."
-                                               Foreground="#CBD5E1"
+                                               Foreground="{StaticResource AppMutedLightBrush}"
                                                Margin="0,8,0,0"
                                                TextWrapping="Wrap" />
                                 </StackPanel>
@@ -97,43 +97,43 @@
                             <RowDefinition Height="*" />
                         </Grid.RowDefinitions>
 
-                        <Border Background="#172554"
-                                BorderBrush="#2563EB"
+                        <Border Background="{StaticResource AppDarkPanelBrush}"
+                                BorderBrush="{StaticResource AppPrimaryBrush}"
                                 BorderThickness="1"
                                 CornerRadius="18"
                                 Padding="20">
                             <StackPanel VerticalAlignment="Center">
                                 <TextBlock Text="Today's Sales"
-                                           Foreground="#93C5FD"
+                                           Foreground="{StaticResource AppPrimaryLightBrush}"
                                            FontWeight="SemiBold" />
-                                <TextBlock Text="{Binding Summary.TodaySales, StringFormat=N2}"
+                                <TextBlock Text="{Binding Summary.TodaySales, StringFormat=LKR {0:N2}}"
                                            Foreground="White"
                                            FontSize="28"
                                            FontWeight="Bold"
                                            Margin="0,10,0,0" />
                                 <TextBlock Text="Live daily billing total."
-                                           Foreground="#CBD5E1"
+                                           Foreground="{StaticResource AppMutedLightBrush}"
                                            Margin="0,8,0,0" />
                             </StackPanel>
                         </Border>
 
                         <Border Grid.Row="2"
-                                Background="#172554"
-                                BorderBrush="#2563EB"
+                                Background="{StaticResource AppDarkPanelBrush}"
+                                BorderBrush="{StaticResource AppPrimaryBrush}"
                                 BorderThickness="1"
                                 CornerRadius="18"
                                 Padding="20">
                             <StackPanel VerticalAlignment="Center">
                                 <TextBlock Text="Inventory Value"
-                                           Foreground="#93C5FD"
+                                           Foreground="{StaticResource AppPrimaryLightBrush}"
                                            FontWeight="SemiBold" />
-                                <TextBlock Text="{Binding Summary.Analytics.InventoryValue, StringFormat=N2}"
+                                <TextBlock Text="{Binding Summary.Analytics.InventoryValue, StringFormat=LKR {0:N2}}"
                                            Foreground="White"
                                            FontSize="28"
                                            FontWeight="Bold"
                                            Margin="0,10,0,0" />
                                 <TextBlock Text="Current stock value on hand."
-                                           Foreground="#CBD5E1"
+                                           Foreground="{StaticResource AppMutedLightBrush}"
                                            Margin="0,8,0,0" />
                             </StackPanel>
                         </Border>
@@ -159,7 +159,7 @@
                         <TextBlock Text="Revenue This Month"
                                    Style="{StaticResource CardTitleText}"
                                    Margin="0,6,0,0" />
-                        <TextBlock Text="{Binding Summary.Analytics.MonthlySales, StringFormat=N2}"
+                        <TextBlock Text="{Binding Summary.Analytics.MonthlySales, StringFormat=LKR {0:N2}}"
                                    Style="{StaticResource MetricValueText}" />
                         <TextBlock Text="Recognized sales performance across the current month."
                                    Style="{StaticResource PageSubtitleText}" />
@@ -183,7 +183,7 @@
                         <TextBlock Text="Collections"
                                    Style="{StaticResource CardTitleText}"
                                    Margin="0,6,0,0" />
-                        <TextBlock Text="{Binding Summary.Analytics.CollectionsThisMonth, StringFormat=N2}"
+                        <TextBlock Text="{Binding Summary.Analytics.CollectionsThisMonth, StringFormat=LKR {0:N2}}"
                                    Style="{StaticResource MetricValueText}" />
                         <TextBlock Text="Receipts collected from customers this month."
                                    Style="{StaticResource PageSubtitleText}" />
@@ -207,7 +207,7 @@
                         <TextBlock Text="Customer Receivables"
                                    Style="{StaticResource CardTitleText}"
                                    Margin="0,6,0,0" />
-                        <TextBlock Text="{Binding Summary.Analytics.CustomerReceivables, StringFormat=N2}"
+                        <TextBlock Text="{Binding Summary.Analytics.CustomerReceivables, StringFormat=LKR {0:N2}}"
                                    Style="{StaticResource MetricValueText}" />
                         <TextBlock Text="Open balances still waiting to be collected."
                                    Style="{StaticResource PageSubtitleText}" />
@@ -231,7 +231,7 @@
                         <TextBlock Text="Inventory Value"
                                    Style="{StaticResource CardTitleText}"
                                    Margin="0,6,0,0" />
-                        <TextBlock Text="{Binding Summary.Analytics.InventoryValue, StringFormat=N2}"
+                        <TextBlock Text="{Binding Summary.Analytics.InventoryValue, StringFormat=LKR {0:N2}}"
                                    Style="{StaticResource MetricValueText}" />
                         <TextBlock Text="Book value of available inventory across warehouses."
                                    Style="{StaticResource PageSubtitleText}" />
@@ -327,7 +327,7 @@
                         <TextBlock Text="Production Cost"
                                    Style="{StaticResource CardTitleText}"
                                    Margin="0,6,0,0" />
-                        <TextBlock Text="{Binding Summary.Analytics.ProductionCostThisMonth, StringFormat=N2}"
+                        <TextBlock Text="{Binding Summary.Analytics.ProductionCostThisMonth, StringFormat=LKR {0:N2}}"
                                    Style="{StaticResource MetricValueText}" />
                         <TextBlock Text="Tracked manufacturing spend posted this month."
                                    Style="{StaticResource PageSubtitleText}" />
@@ -372,7 +372,7 @@
                                 <StackPanel>
                                     <TextBlock Text="Today's Sales"
                                                Style="{StaticResource InlineStatLabel}" />
-                                    <TextBlock Text="{Binding Summary.TodaySales, StringFormat=N2}"
+                                <TextBlock Text="{Binding Summary.TodaySales, StringFormat=LKR {0:N2}}"
                                                Style="{StaticResource InlineStatValue}" />
                                     <TextBlock Text="Live billing completed today."
                                                Style="{StaticResource PageSubtitleText}" />
@@ -390,7 +390,7 @@
                                 <StackPanel>
                                     <TextBlock Text="Monthly Sales"
                                                Style="{StaticResource InlineStatLabel}" />
-                                    <TextBlock Text="{Binding Summary.Analytics.MonthlySales, StringFormat=N2}"
+                        <TextBlock Text="{Binding Summary.Analytics.MonthlySales, StringFormat=LKR {0:N2}}"
                                                Style="{StaticResource InlineStatValue}" />
                                     <TextBlock Text="Recognized revenue in the current month."
                                                Style="{StaticResource PageSubtitleText}" />
@@ -408,7 +408,7 @@
                                 <StackPanel>
                                     <TextBlock Text="Collections This Month"
                                                Style="{StaticResource InlineStatLabel}" />
-                                    <TextBlock Text="{Binding Summary.Analytics.CollectionsThisMonth, StringFormat=N2}"
+                                    <TextBlock Text="{Binding Summary.Analytics.CollectionsThisMonth, StringFormat=LKR {0:N2}}"
                                                Style="{StaticResource InlineStatValue}" />
                                     <TextBlock Text="Cash received and posted this month."
                                                Style="{StaticResource PageSubtitleText}" />
@@ -425,7 +425,7 @@
                                 <StackPanel>
                                     <TextBlock Text="Customer Receivables"
                                                Style="{StaticResource InlineStatLabel}" />
-                                    <TextBlock Text="{Binding Summary.Analytics.CustomerReceivables, StringFormat=N2}"
+                        <TextBlock Text="{Binding Summary.Analytics.CustomerReceivables, StringFormat=LKR {0:N2}}"
                                                Style="{StaticResource InlineStatValue}" />
                                     <TextBlock Text="Outstanding customer exposure awaiting collection."
                                                Style="{StaticResource PageSubtitleText}" />
@@ -453,7 +453,7 @@
                             <StackPanel>
                                 <TextBlock Text="Supplier Payables"
                                            Style="{StaticResource InlineStatLabel}" />
-                                <TextBlock Text="{Binding Summary.Analytics.SupplierPayables, StringFormat=N2}"
+                                <TextBlock Text="{Binding Summary.Analytics.SupplierPayables, StringFormat=LKR {0:N2}}"
                                            Style="{StaticResource InlineStatValue}" />
                                 <TextBlock Text="Open supplier obligations still due for settlement."
                                            Style="{StaticResource PageSubtitleText}" />
@@ -469,7 +469,7 @@
                             <StackPanel>
                                 <TextBlock Text="Inventory Value"
                                            Style="{StaticResource InlineStatLabel}" />
-                                <TextBlock Text="{Binding Summary.Analytics.InventoryValue, StringFormat=N2}"
+                                <TextBlock Text="{Binding Summary.Analytics.InventoryValue, StringFormat=LKR {0:N2}}"
                                            Style="{StaticResource InlineStatValue}" />
                                 <TextBlock Text="Current stock value available across the business."
                                            Style="{StaticResource PageSubtitleText}" />
@@ -484,7 +484,7 @@
                             <StackPanel>
                                 <TextBlock Text="Production Cost This Month"
                                            Style="{StaticResource InlineStatLabel}" />
-                                <TextBlock Text="{Binding Summary.Analytics.ProductionCostThisMonth, StringFormat=N2}"
+                        <TextBlock Text="{Binding Summary.Analytics.ProductionCostThisMonth, StringFormat=LKR {0:N2}}"
                                            Style="{StaticResource InlineStatValue}" />
                                 <TextBlock Text="Tracked manufacturing spend posted against active work."
                                            Style="{StaticResource PageSubtitleText}" />
@@ -502,10 +502,10 @@
                 <WrapPanel>
                     <Border Style="{StaticResource DashboardQuickCard}">
                         <StackPanel>
-                            <TextBlock Text="Today Sales"
-                                       Style="{StaticResource InlineStatLabel}" />
-                            <TextBlock Text="{Binding Summary.TodaySales, StringFormat=N2}"
-                                       Style="{StaticResource InlineStatValue}" />
+                        <TextBlock Text="Today Sales"
+                                   Style="{StaticResource InlineStatLabel}" />
+                        <TextBlock Text="{Binding Summary.TodaySales, StringFormat=LKR {0:N2}}"
+                                   Style="{StaticResource InlineStatValue}" />
                             <TextBlock Text="Current same-day recognized sales."
                                        Style="{StaticResource PageSubtitleText}" />
                         </StackPanel>

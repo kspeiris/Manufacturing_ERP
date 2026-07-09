@@ -4,6 +4,8 @@ using ManufacturingERP.Shared.Constants;
 using Microsoft.Data.Sqlite;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.Logging;
+using Serilog;
 
 namespace ManufacturingERP.Desktop;
 
@@ -18,12 +20,35 @@ public partial class App : System.Windows.Application
         base.OnStartup(e);
         ShutdownMode = System.Windows.ShutdownMode.OnExplicitShutdown;
 
+        // Bootstrap Serilog before DI so startup errors are captured.
+        var logDirectory = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "logs");
+        Log.Logger = new LoggerConfiguration()
+            .MinimumLevel.Debug()
+            .Enrich.FromLogContext()
+            .WriteTo.Debug(outputTemplate: "[{Timestamp:HH:mm:ss} {Level:u3}] {Message:lj}{NewLine}{Exception}")
+            .WriteTo.File(
+                path: Path.Combine(logDirectory, "app-.log"),
+                rollingInterval: RollingInterval.Day,
+                retainedFileCountLimit: 7,
+                outputTemplate: "{Timestamp:yyyy-MM-dd HH:mm:ss.fff zzz} [{Level:u3}] {SourceContext} {Message:lj}{NewLine}{Exception}")
+            .CreateLogger();
+
+        Log.Information("ManufacturingERP starting up");
+
         try
         {
             var serviceCollection = new ServiceCollection();
             var appBaseDirectory = AppDomain.CurrentDomain.BaseDirectory;
             var databasePath = Path.Combine(appBaseDirectory, AppConstants.DatabaseFileName);
             serviceCollection.AddInfrastructure(appBaseDirectory);
+
+            // Wire Serilog into Microsoft.Extensions.Logging (ILogger<T>).
+            serviceCollection.AddLogging(builder =>
+            {
+                builder.ClearProviders();
+                builder.AddSerilog(dispose: true);
+            });
+
             RegisterDesktopServices(serviceCollection);
 
             Services = serviceCollection.BuildServiceProvider(new ServiceProviderOptions
@@ -39,10 +64,12 @@ public partial class App : System.Windows.Application
             await db.Database.MigrateAsync();
             await DbSeeder.SeedAsync(db);
 
+            Log.Information("Database migration and seeding complete");
             ShowLoginWindow();
         }
         catch (Exception ex)
         {
+            Log.Fatal(ex, "Fatal error during startup");
             System.Windows.MessageBox.Show(
                 ex.ToString(),
                 "Startup Error",
@@ -59,6 +86,9 @@ public partial class App : System.Windows.Application
 
         if (Services is IDisposable disposable)
             disposable.Dispose();
+
+        Log.Information("ManufacturingERP shutting down");
+        Log.CloseAndFlush();
 
         base.OnExit(e);
     }

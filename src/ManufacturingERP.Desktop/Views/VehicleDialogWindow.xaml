@@ -7,7 +7,7 @@
         Width="520"
         WindowStartupLocation="CenterOwner"
         ResizeMode="NoResize"
-        Background="#EAF1FA">
+        Background="{StaticResource AppCanvasBrush}">
     <Grid Margin="18">
         <Border Style="{StaticResource SectionCard}" Padding="24">
             <Grid>

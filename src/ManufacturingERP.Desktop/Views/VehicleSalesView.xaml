@@ -29,14 +29,14 @@
                 <Border Grid.Column="1" Style="{StaticResource InlineStatCard}" Margin="0,0,16,0">
                     <StackPanel>
                         <TextBlock Text="Invoice Total" Style="{StaticResource InlineStatLabel}" />
-                        <TextBlock Text="{Binding InvoiceTotal, StringFormat=N2}" Style="{StaticResource InlineStatValue}" />
+                        <TextBlock Text="{Binding InvoiceTotal, StringFormat=LKR {0:N2}}" Style="{StaticResource InlineStatValue}" />
                     </StackPanel>
                 </Border>
 
                 <Border Grid.Column="2" Style="{StaticResource UtilityPanel}">
                     <StackPanel>
                         <TextBlock Text="Collection Position" Style="{StaticResource InlineStatLabel}" />
-                        <TextBlock Text="{Binding BalanceDue, StringFormat=Balance Due: {0:N2}}" Style="{StaticResource PageSubtitleText}" Margin="0,8,0,0" />
+                        <TextBlock Text="{Binding BalanceDue, StringFormat=Balance Due: LKR {0:N2}}" Style="{StaticResource PageSubtitleText}" Margin="0,8,0,0" />
                         <TextBlock Text="{Binding StatusMessage}" Style="{StaticResource PageSubtitleText}" Margin="0,8,0,0" />
                     </StackPanel>
                 </Border>
@@ -93,8 +93,8 @@
                                 </DataGridTemplateColumn.CellTemplate>
                             </DataGridTemplateColumn>
                             <DataGridTextColumn Header="Qty" Binding="{Binding Quantity}" Width="120" />
-                            <DataGridTextColumn Header="Unit Price" Binding="{Binding UnitPrice}" Width="140" />
-                            <DataGridTextColumn Header="Line Total" Binding="{Binding LineTotal}" Width="140" IsReadOnly="True" />
+                             <DataGridTextColumn Header="Unit Price" Binding="{Binding UnitPrice, StringFormat=LKR {0:N2}}" Width="140" />
+                             <DataGridTextColumn Header="Line Total" Binding="{Binding LineTotal, StringFormat=LKR {0:N2}}" Width="140" IsReadOnly="True" />
                         </DataGrid.Columns>
                     </DataGrid>
                 </Grid>
