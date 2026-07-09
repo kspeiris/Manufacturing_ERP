@@ -70,7 +70,7 @@
                                        Style="{StaticResource PageSubtitleText}"
                                        Margin="0" />
                         </StackPanel>
-                        <DataGrid ItemsSource="{Binding Payments}" AutoGenerateColumns="False" CanUserAddRows="False">
+                        <DataGrid ItemsSource="{Binding Payments}" AutoGenerateColumns="False" CanUserAddRows="False" MaxHeight="420">
                             <DataGrid.Columns>
                                 <DataGridTextColumn Header="Payment No" Binding="{Binding PaymentNo}" Width="160" />
                                 <DataGridTextColumn Header="Date" Binding="{Binding PaymentDate}" Width="150" />

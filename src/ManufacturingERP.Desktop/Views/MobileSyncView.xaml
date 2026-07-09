@@ -66,7 +66,7 @@
                                        Style="{StaticResource PageSubtitleText}"
                                        Margin="0" />
                         </StackPanel>
-                        <DataGrid ItemsSource="{Binding SyncLogs}" AutoGenerateColumns="False" CanUserAddRows="False">
+                         <DataGrid ItemsSource="{Binding SyncLogs}" AutoGenerateColumns="False" CanUserAddRows="False" MaxHeight="420">
                             <DataGrid.Columns>
                                 <DataGridTextColumn Header="Type" Binding="{Binding SyncType}" Width="140" />
                                 <DataGridTextColumn Header="Device" Binding="{Binding DeviceId}" Width="140" />
