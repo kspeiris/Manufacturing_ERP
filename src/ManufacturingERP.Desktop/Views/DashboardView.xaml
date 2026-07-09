@@ -27,6 +27,8 @@
     <ScrollViewer VerticalScrollBarVisibility="Auto"
                   HorizontalScrollBarVisibility="Disabled">
         <StackPanel Margin="0,0,0,8">
+            <TextBlock Text="{Binding ErrorMessage}" Foreground="{StaticResource AppDangerBrush}" FontWeight="SemiBold" FontSize="14"
+                       Margin="24,0,24,0" VerticalAlignment="Top" HorizontalAlignment="Left" Panel.ZIndex="10" />
             <Border Style="{StaticResource HeroCard}">
                 <Grid>
                     <Grid.ColumnDefinitions>
@@ -545,6 +547,34 @@
                     </Border>
                 </WrapPanel>
             </StackPanel>
+
+            <Border Style="{StaticResource SectionCard}" Margin="0,0,0,16">
+                <StackPanel>
+                    <TextBlock Text="Performance Snapshot" Style="{StaticResource CardTitleText}" />
+                    <TextBlock Text="Visual comparison of key operational metrics." Style="{StaticResource PageSubtitleText}" Margin="0,-2,0,18" />
+                    <ItemsControl ItemsSource="{Binding ChartPoints}">
+                        <ItemsControl.ItemsPanel>
+                            <ItemsPanelTemplate>
+                                <StackPanel />
+                            </ItemsPanelTemplate>
+                        </ItemsControl.ItemsPanel>
+                        <ItemsControl.ItemTemplate>
+                            <DataTemplate>
+                                <Grid Margin="0,0,0,10">
+                                    <Grid.ColumnDefinitions>
+                                        <ColumnDefinition Width="Auto" />
+                                        <ColumnDefinition Width="*" />
+                                        <ColumnDefinition Width="Auto" />
+                                    </Grid.ColumnDefinitions>
+                                    <TextBlock Text="{Binding Label}" VerticalAlignment="Center" Width="110" FontSize="13" FontWeight="SemiBold" Foreground="#334155" />
+                                    <Border Grid.Column="1" Background="{Binding FillBrush}" Height="22" Width="{Binding BarWidth}" Margin="12,0,0,0" CornerRadius="6" />
+                                    <TextBlock Grid.Column="2" Text="{Binding Value, StringFormat=LKR {0:N0}}" VerticalAlignment="Center" Margin="12,0,0,0" FontSize="13" FontWeight="SemiBold" Foreground="#0F172A" />
+                                </Grid>
+                            </DataTemplate>
+                        </ItemsControl.ItemTemplate>
+                    </ItemsControl>
+                </StackPanel>
+            </Border>
         </StackPanel>
     </ScrollViewer>
 </UserControl>
