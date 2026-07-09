@@ -23,17 +23,19 @@
                                Style="{StaticResource PageSubtitleText}" />
                 </StackPanel>
 
-                <StackPanel Grid.Row="1">
-                    <TextBlock Text="Code" Style="{StaticResource FormLabel}" />
-                    <TextBox Text="{Binding Code}" materialDesign:HintAssist.Hint="Route code" />
-                    <TextBlock Text="Name" Style="{StaticResource FormLabel}" Margin="0,12,0,4" />
-                    <TextBox Text="{Binding Name}" materialDesign:HintAssist.Hint="Route name" />
-                    <TextBlock Text="Territory" Style="{StaticResource FormLabel}" Margin="0,12,0,4" />
-                    <TextBox Text="{Binding Territory}" materialDesign:HintAssist.Hint="Territory" />
-                    <TextBlock Text="Notes" Style="{StaticResource FormLabel}" Margin="0,12,0,4" />
-                    <TextBox Text="{Binding Notes}" Height="100" AcceptsReturn="True" TextWrapping="Wrap" materialDesign:HintAssist.Hint="Operational notes" />
-                    <CheckBox Content="Active" IsChecked="{Binding IsActive}" Margin="0,16,0,0" />
-                </StackPanel>
+                <ScrollViewer Grid.Row="1" VerticalScrollBarVisibility="Auto">
+                    <StackPanel>
+                        <TextBlock Text="Code" Style="{StaticResource FormLabel}" />
+                        <TextBox Text="{Binding Code}" materialDesign:HintAssist.Hint="Route code" />
+                        <TextBlock Text="Name" Style="{StaticResource FormLabel}" Margin="0,12,0,4" />
+                        <TextBox Text="{Binding Name}" materialDesign:HintAssist.Hint="Route name" />
+                        <TextBlock Text="Territory" Style="{StaticResource FormLabel}" Margin="0,12,0,4" />
+                        <TextBox Text="{Binding Territory}" materialDesign:HintAssist.Hint="Territory" />
+                        <TextBlock Text="Notes" Style="{StaticResource FormLabel}" Margin="0,12,0,4" />
+                        <TextBox Text="{Binding Notes}" Height="100" AcceptsReturn="True" TextWrapping="Wrap" materialDesign:HintAssist.Hint="Operational notes" />
+                        <CheckBox Content="Active" IsChecked="{Binding IsActive}" Margin="0,16,0,0" />
+                    </StackPanel>
+                </ScrollViewer>
 
                 <StackPanel Grid.Row="2" Orientation="Horizontal" HorizontalAlignment="Right" Margin="0,18,0,0">
                     <Button Content="Save" Width="110" Margin="0,0,8,0" Click="Save_Click" />

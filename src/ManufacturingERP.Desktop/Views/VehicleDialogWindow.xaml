@@ -23,17 +23,19 @@
                                Style="{StaticResource PageSubtitleText}" />
                 </StackPanel>
 
-                <StackPanel Grid.Row="1">
-                    <TextBlock Text="Vehicle Number" Style="{StaticResource FormLabel}" />
-                    <TextBox Text="{Binding VehicleNumber}" materialDesign:HintAssist.Hint="Vehicle number" />
-                    <TextBlock Text="Description" Style="{StaticResource FormLabel}" Margin="0,12,0,4" />
-                    <TextBox Text="{Binding Description}" materialDesign:HintAssist.Hint="Vehicle description" />
-                    <TextBlock Text="Driver" Style="{StaticResource FormLabel}" Margin="0,12,0,4" />
-                    <TextBox Text="{Binding DriverName}" materialDesign:HintAssist.Hint="Assigned driver" />
-                    <TextBlock Text="Sales Rep" Style="{StaticResource FormLabel}" Margin="0,12,0,4" />
-                    <TextBox Text="{Binding SalesRepName}" materialDesign:HintAssist.Hint="Assigned sales representative" />
-                    <CheckBox Content="Active" IsChecked="{Binding IsActive}" Margin="0,16,0,0" />
-                </StackPanel>
+                <ScrollViewer Grid.Row="1" VerticalScrollBarVisibility="Auto">
+                    <StackPanel>
+                        <TextBlock Text="Vehicle Number" Style="{StaticResource FormLabel}" />
+                        <TextBox Text="{Binding VehicleNumber}" materialDesign:HintAssist.Hint="Vehicle number" />
+                        <TextBlock Text="Description" Style="{StaticResource FormLabel}" Margin="0,12,0,4" />
+                        <TextBox Text="{Binding Description}" materialDesign:HintAssist.Hint="Vehicle description" />
+                        <TextBlock Text="Driver" Style="{StaticResource FormLabel}" Margin="0,12,0,4" />
+                        <TextBox Text="{Binding DriverName}" materialDesign:HintAssist.Hint="Assigned driver" />
+                        <TextBlock Text="Sales Rep" Style="{StaticResource FormLabel}" Margin="0,12,0,4" />
+                        <TextBox Text="{Binding SalesRepName}" materialDesign:HintAssist.Hint="Assigned sales representative" />
+                        <CheckBox Content="Active" IsChecked="{Binding IsActive}" Margin="0,16,0,0" />
+                    </StackPanel>
+                </ScrollViewer>
 
                 <StackPanel Grid.Row="2" Orientation="Horizontal" HorizontalAlignment="Right" Margin="0,18,0,0">
                     <Button Content="Save" Width="110" Margin="0,0,8,0" Click="Save_Click" />

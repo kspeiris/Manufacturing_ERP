@@ -23,16 +23,18 @@
                                Style="{StaticResource PageSubtitleText}" />
                 </StackPanel>
 
-                <StackPanel Grid.Row="1">
-                    <TextBlock Text="Supplier Code" Style="{StaticResource FormLabel}" />
-                    <TextBox Text="{Binding SupplierCode}" materialDesign:HintAssist.Hint="Supplier code" />
-                    <TextBlock Text="Name" Style="{StaticResource FormLabel}" Margin="0,12,0,4" />
-                    <TextBox Text="{Binding Name}" materialDesign:HintAssist.Hint="Supplier name" />
-                    <TextBlock Text="Phone" Style="{StaticResource FormLabel}" Margin="0,12,0,4" />
-                    <TextBox Text="{Binding ContactNumber}" materialDesign:HintAssist.Hint="Primary phone number" />
-                    <TextBlock Text="Address" Style="{StaticResource FormLabel}" Margin="0,12,0,4" />
-                    <TextBox Text="{Binding Address}" Height="110" AcceptsReturn="True" TextWrapping="Wrap" materialDesign:HintAssist.Hint="Registered address" />
-                </StackPanel>
+                <ScrollViewer Grid.Row="1" VerticalScrollBarVisibility="Auto">
+                    <StackPanel>
+                        <TextBlock Text="Supplier Code" Style="{StaticResource FormLabel}" />
+                        <TextBox Text="{Binding SupplierCode}" materialDesign:HintAssist.Hint="Supplier code" />
+                        <TextBlock Text="Name" Style="{StaticResource FormLabel}" Margin="0,12,0,4" />
+                        <TextBox Text="{Binding Name}" materialDesign:HintAssist.Hint="Supplier name" />
+                        <TextBlock Text="Phone" Style="{StaticResource FormLabel}" Margin="0,12,0,4" />
+                        <TextBox Text="{Binding ContactNumber}" materialDesign:HintAssist.Hint="Primary phone number" />
+                        <TextBlock Text="Address" Style="{StaticResource FormLabel}" Margin="0,12,0,4" />
+                        <TextBox Text="{Binding Address}" Height="110" AcceptsReturn="True" TextWrapping="Wrap" materialDesign:HintAssist.Hint="Registered address" />
+                    </StackPanel>
+                </ScrollViewer>
 
                 <StackPanel Grid.Row="2" Orientation="Horizontal" HorizontalAlignment="Right" Margin="0,18,0,0">
                     <Button Content="Save" Width="110" Margin="0,0,8,0" Click="Save_Click" />
