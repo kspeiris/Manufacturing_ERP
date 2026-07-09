@@ -35,27 +35,41 @@ public partial class WarehouseViewModel : ViewModelBase
 
     public async Task LoadAsync()
     {
-        using var scope = App.Services.CreateScope();
-        var db = scope.ServiceProvider.GetRequiredService<AppDbContext>();
+        try
+        {
+            using var scope = App.Services.CreateScope();
+            var db = scope.ServiceProvider.GetRequiredService<AppDbContext>();
 
-        Products.Clear();
-        foreach (var item in await db.Products.Where(x => x.IsActive).OrderBy(x => x.Name).ToListAsync()) Products.Add(item);
+            Products.Clear();
+            foreach (var item in await db.Products.Where(x => x.IsActive).OrderBy(x => x.Name).ToListAsync()) Products.Add(item);
 
-        Warehouses.Clear();
-        foreach (var item in await db.Warehouses.Where(x => x.IsActive).OrderBy(x => x.Name).ToListAsync()) Warehouses.Add(item);
+            Warehouses.Clear();
+            foreach (var item in await db.Warehouses.Where(x => x.IsActive).OrderBy(x => x.Name).ToListAsync()) Warehouses.Add(item);
 
-        await RefreshStockAsync();
+            await RefreshStockAsync();
+        }
+        catch (Exception ex)
+        {
+            StatusMessage = $"Failed to load warehouse data: {ex.Message}";
+        }
     }
 
     [RelayCommand]
     public async Task RefreshStockAsync()
     {
-        StockRows.Clear();
-        foreach (var row in await _warehouseService.GetStockAsync()) StockRows.Add(row);
-        MovementRows.Clear();
-        foreach (var row in await _warehouseService.GetStockMovementsAsync(SelectedProduct?.Id, SelectedWarehouse?.Id)) MovementRows.Add(row);
-        OnPropertyChanged(nameof(TotalQuantityOnHand));
-        OnPropertyChanged(nameof(TotalStockValue));
+        try
+        {
+            StockRows.Clear();
+            foreach (var row in await _warehouseService.GetStockAsync()) StockRows.Add(row);
+            MovementRows.Clear();
+            foreach (var row in await _warehouseService.GetStockMovementsAsync(SelectedProduct?.Id, SelectedWarehouse?.Id)) MovementRows.Add(row);
+            OnPropertyChanged(nameof(TotalQuantityOnHand));
+            OnPropertyChanged(nameof(TotalStockValue));
+        }
+        catch (Exception ex)
+        {
+            StatusMessage = $"Failed to load stock data: {ex.Message}";
+        }
     }
 
     [RelayCommand]

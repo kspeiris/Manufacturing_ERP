@@ -40,20 +40,27 @@ public partial class VehicleSalesViewModel : ViewModelBase
 
     public async Task LoadAsync()
     {
-        using var scope = App.Services.CreateScope();
-        var db = scope.ServiceProvider.GetRequiredService<AppDbContext>();
+        try
+        {
+            using var scope = App.Services.CreateScope();
+            var db = scope.ServiceProvider.GetRequiredService<AppDbContext>();
 
-        Customers.Clear();
-        foreach (var item in await db.Customers.Where(x => x.IsActive).OrderBy(x => x.ShopName).ToListAsync()) Customers.Add(item);
+            Customers.Clear();
+            foreach (var item in await db.Customers.Where(x => x.IsActive).OrderBy(x => x.ShopName).ToListAsync()) Customers.Add(item);
 
-        Vehicles.Clear();
-        foreach (var item in await db.Vehicles.Where(x => x.IsActive).OrderBy(x => x.VehicleNumber).ToListAsync()) Vehicles.Add(item);
+            Vehicles.Clear();
+            foreach (var item in await db.Vehicles.Where(x => x.IsActive).OrderBy(x => x.VehicleNumber).ToListAsync()) Vehicles.Add(item);
 
-        Products.Clear();
-        foreach (var item in await db.Products.Where(x => x.IsActive && x.SellingPrice > 0).OrderBy(x => x.Name).ToListAsync()) Products.Add(item);
+            Products.Clear();
+            foreach (var item in await db.Products.Where(x => x.IsActive && x.SellingPrice > 0).OrderBy(x => x.Name).ToListAsync()) Products.Add(item);
 
-        if (!Lines.Any())
-            AddEmptyLine();
+            if (!Lines.Any())
+                AddEmptyLine();
+        }
+        catch (Exception ex)
+        {
+            StatusMessage = $"Failed to load vehicle sales data: {ex.Message}";
+        }
     }
 
     [RelayCommand]

@@ -20,10 +20,20 @@ public partial class DashboardViewModel : ViewModelBase
         _ = LoadAsync();
     }
 
+    [ObservableProperty] private string _errorMessage = string.Empty;
+
     public async Task LoadAsync()
     {
-        Summary = await _dashboardService.GetSummaryAsync();
-        BuildCharts();
+        try
+        {
+            ErrorMessage = string.Empty;
+            Summary = await _dashboardService.GetSummaryAsync();
+            BuildCharts();
+        }
+        catch (Exception ex)
+        {
+            ErrorMessage = $"Failed to load dashboard: {ex.Message}";
+        }
     }
 
     private void BuildCharts()

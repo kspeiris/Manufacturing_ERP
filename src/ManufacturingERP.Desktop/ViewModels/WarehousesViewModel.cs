@@ -23,11 +23,18 @@ public partial class WarehousesViewModel : ViewModelBase
     [RelayCommand]
     public async Task LoadAsync()
     {
-        using var scope = App.Services.CreateScope();
-        var db = scope.ServiceProvider.GetRequiredService<AppDbContext>();
-        _allWarehouses.Clear();
-        _allWarehouses.AddRange(await db.Warehouses.OrderBy(x => x.Name).ToListAsync());
-        ApplyFilter();
+        try
+        {
+            using var scope = App.Services.CreateScope();
+            var db = scope.ServiceProvider.GetRequiredService<AppDbContext>();
+            _allWarehouses.Clear();
+            _allWarehouses.AddRange(await db.Warehouses.OrderBy(x => x.Name).ToListAsync());
+            ApplyFilter();
+        }
+        catch (Exception ex)
+        {
+            StatusMessage = $"Failed to load warehouses: {ex.Message}";
+        }
     }
 
     [RelayCommand]
@@ -36,6 +43,7 @@ public partial class WarehousesViewModel : ViewModelBase
         var auth = _authorizationService.EnsureAdminAccess();
         if (!auth.IsSuccess) { StatusMessage = auth.Message; return; }
         var dialog = new Views.WarehouseDialogWindow(new Warehouse { Name = "New Warehouse", Location = "", IsActive = true });
+        dialog.Owner = System.Windows.Application.Current.MainWindow;
         if (dialog.ShowDialog() == true)
         {
             using var scope = App.Services.CreateScope();
@@ -68,6 +76,7 @@ public partial class WarehousesViewModel : ViewModelBase
         if (SelectedWarehouse is null) { StatusMessage = "Select a warehouse."; return; }
         var clone = new Warehouse { Id = SelectedWarehouse.Id, Name = SelectedWarehouse.Name, Location = SelectedWarehouse.Location, IsActive = SelectedWarehouse.IsActive };
         var dialog = new Views.WarehouseDialogWindow(clone);
+        dialog.Owner = System.Windows.Application.Current.MainWindow;
         if (dialog.ShowDialog() == true)
         {
             using var scope = App.Services.CreateScope();

@@ -33,32 +33,46 @@ public partial class ProductionViewModel : ViewModelBase
 
     public async Task LoadAsync()
     {
-        using var scope = App.Services.CreateScope();
-        var db = scope.ServiceProvider.GetRequiredService<AppDbContext>();
+        try
+        {
+            using var scope = App.Services.CreateScope();
+            var db = scope.ServiceProvider.GetRequiredService<AppDbContext>();
 
-        FinishedProducts.Clear();
-        foreach (var item in await db.Products
-                     .Include(x => x.ProductCategory)
-                     .Where(x => x.ProductCategory!.Name == "Finished Goods")
-                     .OrderBy(x => x.Name)
-                     .ToListAsync())
-            FinishedProducts.Add(item);
+            FinishedProducts.Clear();
+            foreach (var item in await db.Products
+                         .Include(x => x.ProductCategory)
+                         .Where(x => x.ProductCategory!.Name == "Finished Goods")
+                         .OrderBy(x => x.Name)
+                         .ToListAsync())
+                FinishedProducts.Add(item);
 
-        Warehouses.Clear();
-        foreach (var item in await db.Warehouses.OrderBy(x => x.Name).ToListAsync()) Warehouses.Add(item);
+            Warehouses.Clear();
+            foreach (var item in await db.Warehouses.OrderBy(x => x.Name).ToListAsync()) Warehouses.Add(item);
 
-        await RefreshOrdersAsync();
+            await RefreshOrdersAsync();
+        }
+        catch (Exception ex)
+        {
+            StatusMessage = $"Failed to load production data: {ex.Message}";
+        }
     }
 
     [RelayCommand]
     public async Task RefreshOrdersAsync()
     {
-        using var scope = App.Services.CreateScope();
-        var db = scope.ServiceProvider.GetRequiredService<AppDbContext>();
+        try
+        {
+            using var scope = App.Services.CreateScope();
+            var db = scope.ServiceProvider.GetRequiredService<AppDbContext>();
 
-        ProductionOrders.Clear();
-        foreach (var item in await db.ProductionOrders.Include(x => x.FinishedProduct).OrderByDescending(x => x.OrderDate).ToListAsync())
-            ProductionOrders.Add(item);
+            ProductionOrders.Clear();
+            foreach (var item in await db.ProductionOrders.Include(x => x.FinishedProduct).OrderByDescending(x => x.OrderDate).ToListAsync())
+                ProductionOrders.Add(item);
+        }
+        catch (Exception ex)
+        {
+            StatusMessage = $"Failed to load production orders: {ex.Message}";
+        }
     }
 
     [RelayCommand]

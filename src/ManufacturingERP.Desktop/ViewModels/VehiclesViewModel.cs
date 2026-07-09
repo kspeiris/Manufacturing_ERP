@@ -23,11 +23,18 @@ public partial class VehiclesViewModel : ViewModelBase
     [RelayCommand]
     public async Task LoadAsync()
     {
-        using var scope = App.Services.CreateScope();
-        var db = scope.ServiceProvider.GetRequiredService<AppDbContext>();
-        _allVehicles.Clear();
-        _allVehicles.AddRange(await db.Vehicles.OrderBy(x => x.VehicleNumber).ToListAsync());
-        ApplyFilter();
+        try
+        {
+            using var scope = App.Services.CreateScope();
+            var db = scope.ServiceProvider.GetRequiredService<AppDbContext>();
+            _allVehicles.Clear();
+            _allVehicles.AddRange(await db.Vehicles.OrderBy(x => x.VehicleNumber).ToListAsync());
+            ApplyFilter();
+        }
+        catch (Exception ex)
+        {
+            StatusMessage = $"Failed to load vehicles: {ex.Message}";
+        }
     }
 
     [RelayCommand]
@@ -36,6 +43,7 @@ public partial class VehiclesViewModel : ViewModelBase
         var auth = _authorizationService.EnsureAdminAccess();
         if (!auth.IsSuccess) { StatusMessage = auth.Message; return; }
         var dialog = new Views.VehicleDialogWindow(new Vehicle { VehicleNumber = "NEW-0000", Description = "Vehicle", IsActive = true });
+        dialog.Owner = System.Windows.Application.Current.MainWindow;
         if (dialog.ShowDialog() == true)
         {
             using var scope = App.Services.CreateScope();
@@ -68,6 +76,7 @@ public partial class VehiclesViewModel : ViewModelBase
         if (SelectedVehicle is null) { StatusMessage = "Select a vehicle."; return; }
         var clone = new Vehicle { Id = SelectedVehicle.Id, VehicleNumber = SelectedVehicle.VehicleNumber, Description = SelectedVehicle.Description, DriverName = SelectedVehicle.DriverName, SalesRepName = SelectedVehicle.SalesRepName, IsActive = SelectedVehicle.IsActive };
         var dialog = new Views.VehicleDialogWindow(clone);
+        dialog.Owner = System.Windows.Application.Current.MainWindow;
         if (dialog.ShowDialog() == true)
         {
             using var scope = App.Services.CreateScope();

@@ -28,12 +28,19 @@ public partial class CustomersViewModel : ViewModelBase
     [RelayCommand]
     public async Task LoadAsync()
     {
-        using var scope = App.Services.CreateScope();
-        var db = scope.ServiceProvider.GetRequiredService<AppDbContext>();
-        var items = await db.Customers.OrderBy(x => x.ShopName).ToListAsync();
-        _allCustomers.Clear();
-        _allCustomers.AddRange(items);
-        ApplyFilter();
+        try
+        {
+            using var scope = App.Services.CreateScope();
+            var db = scope.ServiceProvider.GetRequiredService<AppDbContext>();
+            var items = await db.Customers.OrderBy(x => x.ShopName).ToListAsync();
+            _allCustomers.Clear();
+            _allCustomers.AddRange(items);
+            ApplyFilter();
+        }
+        catch (Exception ex)
+        {
+            StatusMessage = $"Failed to load customers: {ex.Message}";
+        }
     }
 
     [RelayCommand]
@@ -52,6 +59,7 @@ public partial class CustomersViewModel : ViewModelBase
             CreditLimit = 0,
             IsActive = true
         });
+        dialog.Owner = System.Windows.Application.Current.MainWindow;
 
         if (dialog.ShowDialog() == true)
         {
@@ -107,6 +115,7 @@ public partial class CustomersViewModel : ViewModelBase
         };
 
         var dialog = new Views.CustomerDialogWindow(clone);
+        dialog.Owner = System.Windows.Application.Current.MainWindow;
         if (dialog.ShowDialog() == true)
         {
             using var scope = App.Services.CreateScope();

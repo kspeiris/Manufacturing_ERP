@@ -62,36 +62,43 @@ public partial class InventoryAccuracyViewModel : ViewModelBase
     [RelayCommand]
     public async Task LoadAsync()
     {
-        using var scope = App.Services.CreateScope();
-        var db = scope.ServiceProvider.GetRequiredService<AppDbContext>();
+        try
+        {
+            using var scope = App.Services.CreateScope();
+            var db = scope.ServiceProvider.GetRequiredService<AppDbContext>();
 
-        Products.Clear();
-        foreach (var item in await db.Products.Where(x => x.IsActive).OrderBy(x => x.Code).ToListAsync())
-            Products.Add(item);
+            Products.Clear();
+            foreach (var item in await db.Products.Where(x => x.IsActive).OrderBy(x => x.Code).ToListAsync())
+                Products.Add(item);
 
-        Warehouses.Clear();
-        foreach (var item in await db.Warehouses.Where(x => x.IsActive).OrderBy(x => x.Name).ToListAsync())
-            Warehouses.Add(item);
+            Warehouses.Clear();
+            foreach (var item in await db.Warehouses.Where(x => x.IsActive).OrderBy(x => x.Name).ToListAsync())
+                Warehouses.Add(item);
 
-        WarehouseBins.Clear();
-        foreach (var item in await db.WarehouseBins.Include(x => x.Warehouse).OrderBy(x => x.Warehouse!.Name).ThenBy(x => x.BinCode).ToListAsync())
-            WarehouseBins.Add(item);
+            WarehouseBins.Clear();
+            foreach (var item in await db.WarehouseBins.Include(x => x.Warehouse).OrderBy(x => x.Warehouse!.Name).ThenBy(x => x.BinCode).ToListAsync())
+                WarehouseBins.Add(item);
 
-        BatchLots.Clear();
-        foreach (var item in await db.BatchLots.Include(x => x.Product).Include(x => x.Warehouse).Include(x => x.WarehouseBin).OrderBy(x => x.Product!.Code).ThenBy(x => x.ExpiryDate).ToListAsync())
-            BatchLots.Add(item);
+            BatchLots.Clear();
+            foreach (var item in await db.BatchLots.Include(x => x.Product).Include(x => x.Warehouse).Include(x => x.WarehouseBin).OrderBy(x => x.Product!.Code).ThenBy(x => x.ExpiryDate).ToListAsync())
+                BatchLots.Add(item);
 
-        StockTransfers.Clear();
-        foreach (var item in await db.StockTransfers.Include(x => x.FromWarehouse).Include(x => x.ToWarehouse).OrderByDescending(x => x.TransferDate).Take(100).ToListAsync())
-            StockTransfers.Add(item);
+            StockTransfers.Clear();
+            foreach (var item in await db.StockTransfers.Include(x => x.FromWarehouse).Include(x => x.ToWarehouse).OrderByDescending(x => x.TransferDate).Take(100).ToListAsync())
+                StockTransfers.Add(item);
 
-        StockCounts.Clear();
-        foreach (var item in await db.StockCounts.Include(x => x.Warehouse).OrderByDescending(x => x.CountDate).Take(100).ToListAsync())
-            StockCounts.Add(item);
+            StockCounts.Clear();
+            foreach (var item in await db.StockCounts.Include(x => x.Warehouse).OrderByDescending(x => x.CountDate).Take(100).ToListAsync())
+                StockCounts.Add(item);
 
-        ReorderAlerts.Clear();
-        foreach (var item in await _inventoryService.GetReorderAlertsAsync())
-            ReorderAlerts.Add(item);
+            ReorderAlerts.Clear();
+            foreach (var item in await _inventoryService.GetReorderAlertsAsync())
+                ReorderAlerts.Add(item);
+        }
+        catch (Exception ex)
+        {
+            StatusMessage = $"Failed to load inventory data: {ex.Message}";
+        }
     }
 
     [RelayCommand]

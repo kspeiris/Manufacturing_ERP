@@ -30,11 +30,18 @@ public partial class SuppliersViewModel : ViewModelBase
     [RelayCommand]
     public async Task LoadAsync()
     {
-        using var scope = App.Services.CreateScope();
-        var db = scope.ServiceProvider.GetRequiredService<AppDbContext>();
-        _allSuppliers.Clear();
-        _allSuppliers.AddRange(await db.Suppliers.OrderBy(x => x.Name).ToListAsync());
-        ApplyFilter();
+        try
+        {
+            using var scope = App.Services.CreateScope();
+            var db = scope.ServiceProvider.GetRequiredService<AppDbContext>();
+            _allSuppliers.Clear();
+            _allSuppliers.AddRange(await db.Suppliers.OrderBy(x => x.Name).ToListAsync());
+            ApplyFilter();
+        }
+        catch (Exception ex)
+        {
+            StatusMessage = $"Failed to load suppliers: {ex.Message}";
+        }
     }
 
     [RelayCommand]
@@ -43,6 +50,7 @@ public partial class SuppliersViewModel : ViewModelBase
         var auth = _authorizationService.EnsureAdminAccess();
         if (!auth.IsSuccess) { StatusMessage = auth.Message; return; }
         var dialog = new Views.SupplierDialogWindow(new Supplier { SupplierCode = $"S{DateTime.Now:HHmmss}", Name = "New Supplier" });
+        dialog.Owner = System.Windows.Application.Current.MainWindow;
         if (dialog.ShowDialog() == true)
         {
             using var scope = App.Services.CreateScope();
@@ -82,6 +90,7 @@ public partial class SuppliersViewModel : ViewModelBase
             Address = SelectedSupplier.Address
         };
         var dialog = new Views.SupplierDialogWindow(clone);
+        dialog.Owner = System.Windows.Application.Current.MainWindow;
         if (dialog.ShowDialog() == true)
         {
             using var scope = App.Services.CreateScope();

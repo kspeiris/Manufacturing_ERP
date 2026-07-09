@@ -39,15 +39,19 @@ public partial class PosSalesViewModel : ViewModelBase
         IsBusy = true;
         try
         {
-        using var scope = App.Services.CreateScope();
-        var db = scope.ServiceProvider.GetRequiredService<AppDbContext>();
-        Customers.Clear();
-        foreach (var x in await db.Customers.Where(x => x.IsActive).OrderBy(x => x.ShopName).ToListAsync()) Customers.Add(x);
-        Vehicles.Clear();
-        foreach (var x in await db.Vehicles.Where(x => x.IsActive).OrderBy(x => x.VehicleNumber).ToListAsync()) Vehicles.Add(x);
-        Products.Clear();
-        foreach (var x in await db.Products.Where(x => x.IsActive && x.SellingPrice > 0).OrderBy(x => x.Name).ToListAsync()) Products.Add(x);
-        if (!Lines.Any()) AddEmptyLine();
+            using var scope = App.Services.CreateScope();
+            var db = scope.ServiceProvider.GetRequiredService<AppDbContext>();
+            Customers.Clear();
+            foreach (var x in await db.Customers.Where(x => x.IsActive).OrderBy(x => x.ShopName).ToListAsync()) Customers.Add(x);
+            Vehicles.Clear();
+            foreach (var x in await db.Vehicles.Where(x => x.IsActive).OrderBy(x => x.VehicleNumber).ToListAsync()) Vehicles.Add(x);
+            Products.Clear();
+            foreach (var x in await db.Products.Where(x => x.IsActive && x.SellingPrice > 0).OrderBy(x => x.Name).ToListAsync()) Products.Add(x);
+            if (!Lines.Any()) AddEmptyLine();
+        }
+        catch (Exception ex)
+        {
+            StatusMessage = $"Failed to load POS data: {ex.Message}";
         }
         finally
         {

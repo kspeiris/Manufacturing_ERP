@@ -23,11 +23,18 @@ public partial class RoutesViewModel : ViewModelBase
     [RelayCommand]
     public async Task LoadAsync()
     {
-        using var scope = App.Services.CreateScope();
-        var db = scope.ServiceProvider.GetRequiredService<AppDbContext>();
-        _allRoutes.Clear();
-        _allRoutes.AddRange(await db.RoutePlans.OrderBy(x => x.Name).ToListAsync());
-        ApplyFilter();
+        try
+        {
+            using var scope = App.Services.CreateScope();
+            var db = scope.ServiceProvider.GetRequiredService<AppDbContext>();
+            _allRoutes.Clear();
+            _allRoutes.AddRange(await db.RoutePlans.OrderBy(x => x.Name).ToListAsync());
+            ApplyFilter();
+        }
+        catch (Exception ex)
+        {
+            StatusMessage = $"Failed to load routes: {ex.Message}";
+        }
     }
 
     [RelayCommand]
@@ -36,6 +43,7 @@ public partial class RoutesViewModel : ViewModelBase
         var auth = _authorizationService.EnsureAdminAccess();
         if (!auth.IsSuccess) { StatusMessage = auth.Message; return; }
         var dialog = new Views.RouteDialogWindow(new RoutePlan { Code = $"R{DateTime.Now:HHmmss}", Name = "New Route", Territory = "", IsActive = true });
+        dialog.Owner = System.Windows.Application.Current.MainWindow;
         if (dialog.ShowDialog() == true)
         {
             using var scope = App.Services.CreateScope();
@@ -68,6 +76,7 @@ public partial class RoutesViewModel : ViewModelBase
         if (SelectedRoute is null) { StatusMessage = "Select a route."; return; }
         var clone = new RoutePlan { Id = SelectedRoute.Id, Code = SelectedRoute.Code, Name = SelectedRoute.Name, Territory = SelectedRoute.Territory, Notes = SelectedRoute.Notes, IsActive = SelectedRoute.IsActive };
         var dialog = new Views.RouteDialogWindow(clone);
+        dialog.Owner = System.Windows.Application.Current.MainWindow;
         if (dialog.ShowDialog() == true)
         {
             using var scope = App.Services.CreateScope();

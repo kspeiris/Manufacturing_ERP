@@ -37,9 +37,16 @@ public partial class UserManagementViewModel : ViewModelBase
     [RelayCommand]
     public async Task LoadAsync()
     {
-        _allUsers.Clear();
-        _allUsers.AddRange(await _userManagementService.GetUsersAsync());
-        ApplyFilter();
+        try
+        {
+            _allUsers.Clear();
+            _allUsers.AddRange(await _userManagementService.GetUsersAsync());
+            ApplyFilter();
+        }
+        catch (Exception ex)
+        {
+            StatusMessage = $"Failed to load users: {ex.Message}";
+        }
     }
 
     partial void OnSelectedUserChanged(User? value)

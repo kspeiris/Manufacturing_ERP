@@ -65,7 +65,20 @@ public partial class ReportViewerViewModel : ViewModelBase
             return;
         }
 
-        StatusMessage = $"Previewing {Path.GetFileName(SelectedFilePath)}";
+        try
+        {
+            var psi = new System.Diagnostics.ProcessStartInfo
+            {
+                FileName = SelectedFilePath,
+                UseShellExecute = true
+            };
+            System.Diagnostics.Process.Start(psi);
+            StatusMessage = $"Opening {Path.GetFileName(SelectedFilePath)}";
+        }
+        catch (Exception ex)
+        {
+            StatusMessage = $"Failed to open file: {ex.Message}";
+        }
     }
 
     partial void OnSearchTextChanged(string value) => ApplyFilter();
