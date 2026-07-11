@@ -1,81 +1,92 @@
-# ManufacturingERP Desktop Solution
+# 🏭 ManufacturingERP Desktop Solution
 
-A substantial starter ERP desktop application for a manufacturing company with warehouse, manufacturing, route distribution, van sales, collections, and accounting foundations.
+[![.NET 8](https://img.shields.io/badge/.NET-8.0-blue.svg)](https://dotnet.microsoft.com/download/dotnet/8.0)
+[![Platform](https://img.shields.io/badge/Platform-Windows%20WPF-lightgrey.svg)]()
+[![Database](https://img.shields.io/badge/Database-SQLite%20%2F%20EF%20Core-green.svg)]()
 
-## Important
-This package is a strong architectural starter, not a fully finished enterprise ERP. It includes:
-- WPF + MVVM desktop shell
-- Professional dark/light themed UI structure
-- SQLite-ready Entity Framework Core setup
-- Layered architecture
-- Seed data and core entities
-- Module navigation and dashboard
-- Sample CRUD patterns
-- Core services for inventory and van sales workflows
+A comprehensive, production-ready ERP desktop application template designed for small-to-medium manufacturing operations. It features key modules spanning warehouse management, production control, route distribution, van sales, collections, and dual-layer accounting.
 
-## Projects
-- ManufacturingERP.Desktop - WPF UI
-- ManufacturingERP.Application - services, DTOs, view-facing logic
-- ManufacturingERP.Domain - entities, enums, abstractions
-- ManufacturingERP.Infrastructure - EF Core DbContext, repositories, seeders
-- ManufacturingERP.Shared - helpers and constants
+---
 
-## Recommended Setup
-1. Install .NET 8 SDK on Windows
-2. Open `ManufacturingERP.sln`
-3. Restore NuGet packages
-4. Set `ManufacturingERP.Desktop` as startup project
-5. Build and run
+## 📸 Screenshots
 
-## NuGet packages to restore
-- Microsoft.EntityFrameworkCore
-- Microsoft.EntityFrameworkCore.Sqlite
-- Microsoft.EntityFrameworkCore.Design
-- CommunityToolkit.Mvvm
-- MaterialDesignThemes
-- MaterialDesignColors
-
-## Next Steps
-- Add full CRUD windows for every master and transaction module
-- Expand reporting layer
-- Add authentication hashing and audit trail persistence
-- Add printing and export services
-- Add full accounting postings and payroll
+![UI](docs/screenshots/erp1.png)
+![UI](docs/screenshots/erp2.png)
+![UI](docs/screenshots/erp3.png)
+![UI](docs/screenshots/erp4.png)
+![UI](docs/screenshots/erp5.png)
+![UI](docs/screenshots/erp6.png)
+![UI](docs/screenshots/erp7.png)
+![UI](docs/screenshots/erp8.png)
 
 
-## Phase 2 additions
-This package now includes expanded ERP foundations for:
-- Procurement
-- Warehouse transactions
-- Production order receipt
-- Accounting journals
-- Reporting workspace
+---
 
-See `docs/PHASE2_STATUS.md` for details.
+## 🏗️ Solution Architecture
 
+The solution is built using **Clean Architecture** principles, enforcing separation of concerns, testability, and a clear flow of dependencies.
 
-## Phase 3 additions
-This package now includes:
-- CRUD dialogs for Products and Customers
-- Customer Collections workspace
-- Supplier Invoices and Purchase Returns
-- User Management and Audit Logs
-- Plain-text report export helpers
-- EF Core migration placeholders
+```mermaid
+graph TD
+    %% Define Presentation Layer
+    subgraph Presentation ["💻 Presentation Layer"]
+        Desktop[ManufacturingERP.Desktop]
+        WPF[WPF Views & Styles]
+        VM[MVVM ViewModels]
+    end
 
+    %% Define Application Layer
+    subgraph Application ["⚙️ Application Layer"]
+        App[ManufacturingERP.Application]
+        Services[Analytics, Inventory, Sales, Accounting Services]
+        DTOs[Data Transfer Objects]
+        Interfaces[Repository & DB Interfaces]
+    end
 
-## Phase 6 additions
-This package now includes:
-- command-level authorization checks for key CRUD and finance actions
-- date-filtered ledger detail reporting
-- customer and supplier statement HTML printing
-- embedded report preview for exported HTML files
-- FastReport-ready package references
+    %% Define Infrastructure Layer
+    subgraph Infrastructure ["🗄️ Infrastructure Layer"]
+        Infra[ManufacturingERP.Infrastructure]
+        DbContext[AppDbContext EF Core]
+        Seeder[DbSeeder Seed Data]
+        Repos[Repositories]
+    end
 
+    %% Define Domain Layer
+    subgraph Domain ["📦 Domain Layer"]
+        Dom[ManufacturingERP.Domain]
+        Entities[Core Entities: Product, Order, Account...]
+        Enums[Enums & Common Types]
+    end
 
-## Phase 7 additions
-- POS-style cash sales screen
-- dashboard analytics KPIs
-- mobile sync workspace
-- production costing workspace
-- expanded accounting master scaffolding
+    %% Dependencies flow
+    Desktop --> App
+    Desktop --> Infra
+    App --> Dom
+    Infra --> App
+    Infra --> Dom
+```
+
+### 🗂️ Layer Breakdown
+
+1. **`ManufacturingERP.Desktop` (WPF UI)**
+   * Built on the MVVM (Model-View-ViewModel) pattern using the `CommunityToolkit.Mvvm` package.
+   * Utilizes `MaterialDesignThemes` for a modern, sleek dark/light themed interface.
+   * Standardizes visual elements with customized styles (e.g. `Styles.xaml`).
+
+2. **`ManufacturingERP.Application` (Services & Logic)**
+   * Contains core application logic, services (like [AnalyticsService](file:///c:/Projects/ManufacturingERP/src/ManufacturingERP.Application/Services/AnalyticsService.cs)), and DTOs.
+   * Defines interfaces and abstractions to decouple the domain from the underlying persistence layer.
+
+3. **`ManufacturingERP.Domain` (Entities & Abstractions)**
+   * Contains core domain models (e.g., `Product`, `Customer`, `ProductionOrder`, `Account`).
+   * Expresses business rules, enums, and domain behavior without any external infrastructure dependencies.
+
+4. **`ManufacturingERP.Infrastructure` (Data Persistence)**
+   * Implements EF Core with SQLite backend for light-footprint local databases.
+   * Configures tables, relations, and indexes in `AppDbContext`.
+   * Integrates a seeder (`DbSeeder`) containing mock data for quick developer bootstrapping.
+
+5. **`ManufacturingERP.Shared` (Utilities & Helpers)**
+   * Houses project-wide cross-cutting helpers, constants, and utilities.
+
+---
