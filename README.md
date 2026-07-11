@@ -90,3 +90,75 @@ graph TD
    * Houses project-wide cross-cutting helpers, constants, and utilities.
 
 ---
+
+## 🛠️ Modules & Features
+
+### 📈 1. Executive Dashboard & Analytics
+* **Summary Cards**: Quick-glance metrics for Monthly Sales, Collections, Supplier Payables, Customer Receivables, and Total Inventory Value.
+* **Operational Control**: Direct insights from the [AnalyticsService](file:///c:/Projects/ManufacturingERP/src/ManufacturingERP.Application/Services/AnalyticsService.cs) showing charts, trends, and recent transaction logs.
+
+### 🛒 2. POS & Vehicle Sales
+* **POS Sales**: Quick checkout terminal for over-the-counter cash sales.
+* **Vehicle & Route Sales**: Supports distribution scenarios where sales reps carry stock on vehicles and issue invoices on active routes.
+
+### 📦 3. Warehouse & Inventory Control
+* **Physical Stock Counts**: Track inventory balances across multiple physical warehouses.
+* **Movement Log**: Log transactions for stock additions, adjustments, and purchase returns.
+
+### ⚙️ 4. Production & Manufacturing Costing
+* **Production Orders**: Initiate, schedule, and track production batches.
+* **Production Costing**: Automated calculations breaking down costs into **Raw Materials**, **Direct Labor**, and **Factory Overheads** to derive accurate unit costs.
+
+### 📒 5. Accounting & Ledger Management
+* **Chart of Accounts Setup**: Initialize and structure asset, liability, equity, revenue, and expense accounts.
+* **Journal Entries**: Post manual and automated entries to double-entry ledgers.
+* **Statements Printing**: Export clean, professional customer and supplier account statements directly to HTML with embedded previews.
+
+### 🛡️ 6. Administration & Security
+* **User Management**: Add/modify users with role-based permissions (Administrator, Manager, Operator).
+* **Command-Level Authorization**: Enforces permission checks on sensitive actions (e.g., editing ledger parameters, posting journals, finalizing sales).
+* **Audit Logs**: Transparent logs capturing user sessions and core mutations.
+* **Database Explorer**: Integrated view permitting system administrators to directly query and inspect local database states.
+
+---
+
+## ⚙️ Technology Stack & Dependencies
+
+* **Runtime**: .NET 8.0 SDK
+* **WPF Framework**: standard Windows presentation framework
+* **MVVM Framework**: [CommunityToolkit.Mvvm](https://www.nuget.org/packages/CommunityToolkit.Mvvm/)
+* **Material Design**: [MaterialDesignThemes](https://www.nuget.org/packages/MaterialDesignThemes/) & [MaterialDesignColors](https://www.nuget.org/packages/MaterialDesignColors/)
+* **ORM Engine**: Entity Framework Core (`Microsoft.EntityFrameworkCore.Sqlite`, `Microsoft.EntityFrameworkCore.Design`)
+* **Reports Export**: Ready for HTML-based export and [FastReport](https://www.fastreport.ru/en/) integration
+
+---
+
+## 🚀 Getting Started
+
+### Prerequisites
+* **Windows OS**
+* **.NET 8.0 SDK** (or later)
+* **Visual Studio 2022** or **VS Code** with C# Dev Kit extension
+
+### Quick Setup
+
+1. **Clone & Open**: Clone the repository and navigate to the project directory:
+   ```bash
+   git clone <repository-url>
+   cd ManufacturingERP
+   ```
+2. **Restore NuGet Packages**:
+   ```bash
+   dotnet restore
+   ```
+3. **Build the Solution**:
+   ```bash
+   dotnet build
+   ```
+4. **Run the Application**:
+   Set `ManufacturingERP.Desktop` as your startup project and run:
+   ```bash
+   dotnet run --project src/ManufacturingERP.Desktop/ManufacturingERP.Desktop.csproj
+   ```
+
+---
